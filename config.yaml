@@ -1,0 +1,188 @@
+baseurl: https://lijohnny.com
+languageCode: en-us
+theme: 
+    - hugo-theme-stack
+    - hugo-cite
+paginate: 10
+title: Johnny's Blog
+copyright: Johnny Li
+author:
+    display_name: Johnny Li
+
+# Change it to your Disqus shortname before using
+disqusShortname: lijohnny
+
+# GA Tracking ID
+googleAnalytics: UA-136585559-1
+
+# Theme i18n support
+# Available values: en, fr, id, ja, ko, pt-br, zh-cn
+DefaultContentLanguage: en
+hasCJKLanguage: true
+
+permalinks:
+    post: /p/:slug/
+    page: /:slug/
+
+params:
+    mainSections:
+        - post
+    featuredImageField: image
+    rssFullContent: true
+    favicon:
+
+    footer:
+        since: 2019
+        customText: All contents licensed under CC BY-NC-SA 4.0 本站所有内容基于CC BY-NC-SA 4.0协议发布，转载需要署名
+
+    dateFormat:
+        published: Jan 02, 2006
+        lastUpdated: Jan 02, 2006 15:04 MST
+
+    sidebar:
+        emoji: 🖖
+        subtitle: Data Scientist | ML Engineer
+        avatar:
+            enabled: true
+            local: true
+            src: img/avatar.jpg
+
+    article:
+        math: false
+        toc: true
+        readingTime: true
+        license:
+            enabled: true
+            default: Licensed under CC BY-NC-SA 4.0 本文内容基于CC BY-NC-SA 4.0协议发布，转载需要署名。
+
+
+    comments:
+        enabled: true
+        provider: disqus
+
+        utterances:
+            repo: itslijohnny/itslijohnny.github.io
+            issueTerm: pathname
+            label:
+
+        remark42:
+            host:
+            site:
+            locale:
+
+    widgets:
+        homepage:
+            - type: search
+            - type: categories
+              params: 
+                  limit: 10
+            - type: tag-cloud
+              params:
+                  limit: 10
+        # page:
+        #     - type: toc
+
+
+    opengraph:
+        twitter:
+            # Your Twitter username
+            site: lijohnnyds
+
+            # Available values: summary, summary_large_image
+            card: summary_large_image
+
+    defaultImage:
+        opengraph:
+            enabled: false
+            local: false
+            src:
+
+    colorScheme:
+        # Display toggle
+        toggle: true
+
+        # Available values: auto, light, dark
+        default: auto
+
+    imageProcessing:
+        cover:
+            enabled: true
+        content:
+            enabled: true
+
+menu:
+    main:
+        - identifier: home
+          name: Home
+          url: /
+          weight: -100
+          params:
+            icon: home
+            newTab: false
+        #   pre: home
+
+        - identifier: about
+          name: About
+          url: /about
+          weight: -90
+          params:
+            icon: user
+            newTab: false
+        #   pre: user
+
+        - identifier: archives
+          name: Categories
+          url: /archives
+          weight: -70
+          params:
+            icon: archives
+            newTab: false
+        #   pre: archives
+
+        - identifier: til
+          name: Today I Learned
+          url: https://lijohnny.com/Today-I-Learned/
+          weight: -65
+          params:
+            icon: notes
+            newTab: true
+        #   pre: archives
+
+        - identifier: search
+          name: Search
+          url: /search
+          weight: -60
+          params:
+            icon: search
+            newTab: false
+        #   pre: search
+
+
+related:
+    includeNewer: true
+    threshold: 60
+    toLower: false
+    indices:
+        - name: tags
+          weight: 100
+
+        - name: categories
+          weight: 200
+
+markup:
+    highlight:
+        noClasses: false
+        codeFences: true
+        guessSyntax: true
+        lineNoStart: 1
+        lineNos: true
+        lineNumbersInTable: true
+        tabWidth: 4
+
+enableRobotsTXT: true
+canonifyURLs: true
+
+sitemap:
+  changefreq: daily
+  filename: sitemap.xml
+  priority: 0.5

@@ -1,0 +1,17 @@
+
+<style>
+span.spoiler {
+    color: transparent;
+    text-shadow: 0 0 0.5em var(--card-text-color-main);
+    transition: 0.1s all;
+    }
+span.spoiler:hover {
+    color: var(--card-text-color-main);
+    text-shadow: none;
+    }
+
+</style>
+
+<span class="spoiler">
+    {{.Inner}}
+</span>

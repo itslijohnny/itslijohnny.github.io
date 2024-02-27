@@ -1,0 +1,47 @@
+<meta name="keywords" content={{ delimit .Keywords " " }} />
+
+<meta name="tags" content={{ with .Params.Tags }}{{ delimit . ", " }}{{ else }}{{ .Site.Params.keywords }}{{ end }} />
+
+<script type="application/ld+json">
+    {
+        "@context" : "http://lijohnny.com",
+        "@type" : "BlogPosting",
+        "mainEntityOfPage": {
+             "@type": "WebPage",
+             "@id": "{{ .Site.BaseURL }}"
+        },
+        "articleSection" : "{{ .Section }}",
+        "name" : "{{ .Title }}",
+        "headline" : "{{ .Title }}",
+        "description" : "{{ if .Description }}{{ .Description }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ end }}{{ end }}",
+        "inLanguage" : "en-US",
+        "author" : "{{ range .Site.Author }}{{ . }}{{ end }}",
+        "creator" : "{{ range .Site.Author }}{{ . }}{{ end }}",
+        "publisher": "{{ range .Site.Author }}{{ . }}{{ end }}",
+        "accountablePerson" : "{{ range .Site.Author }}{{ . }}{{ end }}",
+        "copyrightHolder" : "{{ range .Site.Author }}{{ . }}{{ end }}",
+        "copyrightYear" : "{{ .Date.Format "2006" }}",
+        "datePublished": "{{ .Date }}",
+        "dateModified" : "{{ .Date }}",
+        "url" : "{{ .Permalink }}",
+        "wordCount" : "{{ .WordCount }}",
+        "keywords" : [ {{ if isset .Params "tags" }}{{ range .Params.tags }}"{{ . }}",{{ end }}{{ end }}"Blog" ]
+    }
+</script>
+
+<link href="/scss/all.min.css" rel="stylesheet"> <!--load all styles -->
+<link rel="stylesheet" type="text/css" href="{{ "/hugo-cite.css" | relURL }}" />
+<link href="/scss/animate.css" rel="stylesheet">
+<link rel="stylesheet" href="/dist/morphext.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/dist/morphext.min.js"></script>
+
+
+
+
+
+{{ if (.Params.mermaid) }}
+<!-- MermaidJS support -->
+<script async src="https://unpkg.com/mermaid@8.2.3/dist/mermaid.min.js"></script>
+
+{{ end }}

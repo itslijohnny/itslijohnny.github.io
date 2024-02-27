@@ -1,0 +1,97 @@
+<style>
+    .about-brief { 
+        margin: auto;
+        max-width: 540px;
+        text-align: center;
+        position: relative;
+        margin-bottom: 40px;
+        }
+    .about-brief p {
+        margin: 1.5em; 
+    }
+    .about-brief li {
+        margin-right: 1.5rem !important;
+    }
+    .about-brief i {
+        /* color:#353353; */
+        font-size: 24px;
+    }
+    .social {
+        margin-top: 3rem!important;
+        margin-bottom: 0!important;
+        padding-left: 0;
+        list-style: none;
+    }
+    .social li:not(:last-child) { 
+        margin-right: 1.5rem;
+    }
+    .social li {
+        list-style: none;
+        display: inline-block;
+    }
+    .askme {
+        margin-top: 1.5rem!important;
+    }
+    .btn {
+        cursor: pointer;
+        color: #FFF;
+        background: #FF4C60;
+        display: inline-block;
+        vertical-align: middle;
+        
+        transform: perspective(1px) translateZ(0);
+        box-shadow: 0 0 1px rgb(0 0 0 / 0%);
+        border-radius: 10px;
+        
+        font-size: 18px;
+        font-weight: 700;
+        overflow: hidden;
+        line-height: 1;
+        padding: 16px 36px;
+    }
+    .btn:hover {
+        color: #FFF;
+        background: #fd6b7c;
+        
+    }
+    .first {
+        margin-left: 1.5rem; 
+    }
+</style>
+
+    
+
+<div class="about-brief fadeIn animated">
+
+    <h1 style="border-left:none !important;">Johnny Li</h1>
+    <span>I'm a <span id="js-rotating">Data Scientist, UX Researcher, Program Manager</span></span>
+
+    
+    <ul class="social">
+        <li class="first"><a href="https://www.linkedin.com/in/johnny-li/"><i class="fab fa-linkedin"></i></a></li>
+        <li class=""><a href="https://github.com/itslijohnny"><i class="fab fa-github"></i></a></li>
+        
+    </ul>
+    <p style="margin-top:2em;margin-bottom: 2em;">I’m a passionate and motivated explorer with experience and passion in Data Science and UX. I have extensive professional backgrounds in data analytics, product management, and user research, focusing on using data to drive products and improve user experience.
+    </p>
+    <!-- buttons -->
+    <div class="askme">
+        <a href="#disqus_thread" class="btn">Ask me anything</a>
+    </div>
+
+</div>
+
+
+<script>
+    $("#js-rotating").Morphext({
+        // The [in] animation type. Refer to Animate.css for a list of available animations.
+        animation: "bounceIn",
+        // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
+        separator: ",",
+        // The delay between the changing of each phrase in milliseconds.
+        speed: 2000,
+        complete: function () {
+            // Called after the entrance animation is executed.
+        }
+    });
+</script>
