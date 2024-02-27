@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Jupyter Notebok on Johnny's Blog</title><link>https://lijohnny.com/tags/jupyter-notebok/</link><description>Recent content in Jupyter Notebok on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Wed, 20 Mar 2019 02:02:28 +0000</lastBuildDate><atom:link href="https://lijohnny.com/tags/jupyter-notebok/index.xml" rel="self" type="application/rss+xml"/><item><title>Data Analysis with Docker</title><link>https://lijohnny.com/p/data-analysis-with-docker/</link><pubDate>Wed, 20 Mar 2019 02:02:28 +0000</pubDate><guid>https://lijohnny.com/p/data-analysis-with-docker/</guid><description>&lt;img src="https://lijohnny.com/p/data-analysis-with-docker/5cc38cc0066e1.jpg" alt="Featured image of post Data Analysis with Docker" />&lt;p>Data Analysis is not all about reports or visualization. The correctness and reproducibility are also important for scientific research. A consistent environment is critical for reproducibility. There are several ways to achieve that. However, I find out using &lt;a class="link" href="%28https://www.docker.com/why-docker%29" >Docker&lt;/a> at any time can repeat the experiment in the same environment. It is easy to scale up and scale horizontally.&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>My docker image is based on Ubuntu. It includes common Data Science tools such as Jupyter Notebook wiht Python 3 and R kernel. With the help of R Magic, I can run both Python and R in the same .ipynb file. To learn more about R Magic, you can click &lt;a class="link" href="https://www.datacamp.com/community/blog/jupyter-notebook-r?utm_source=adwords_ppc&amp;amp;utm_campaignid=1565261270&amp;amp;utm_adgroupid=67750485268&amp;amp;utm_device=c&amp;amp;utm_keyword=&amp;amp;utm_matchtype=b&amp;amp;utm_network=g&amp;amp;utm_adpostion=1t1&amp;amp;utm_creative=295208661496&amp;amp;utm_targetid=dsa-473406574235&amp;amp;utm_loc_interest_ms=&amp;amp;utm_loc_physical_ms=9033309&amp;amp;gclid=EAIaIQobChMIt5Xy39jq4AIVbiCtBh3FdQ4IEAAYASAAEgLEZ_D_BwE" target="_blank" rel="noopener"
+>here&lt;/a>.
+I also installed Nbextensions for Jupyter Notebook. For more information, you can click &lt;a class="link" href="https://github.com/ipython-contrib/jupyter_contrib_nbextensions" target="_blank" rel="noopener"
+>here&lt;/a>&lt;/p>
+&lt;blockquote>
+&lt;p>You can find my Dockerfile in my &lt;a class="link" href="https://github.com/itslijohnny/data-analyst-notebook-docker" target="_blank" rel="noopener"
+>GitHub Repository&lt;/a>.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="how-to-use-my-dockerfile">HOW TO USE MY DOCKERFILE&lt;/h2>
+&lt;h3 id="install-docker">Install Docker&lt;/h3>
+&lt;p>The Docker community have an explicit tutorial about how to install Docker. Please check &lt;a class="link" href="https://www.docker.com/community-edition#/download" target="_blank" rel="noopener"
+>here&lt;/a>&lt;/p>
+&lt;h3 id="build">Build&lt;/h3>
+&lt;p>In the terminal, direct to the folder that contains the dockerfile and run the following command:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">docker build -t data-analyst-notebook .
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Don&amp;rsquo;t forget the &amp;ldquo;.&amp;rdquo; at the end. data-analyst-notebook is the name of the image. You can change to whatever you prefer.&lt;/p>
+&lt;h3 id="start-server">Start server&lt;/h3>
+&lt;p>I use following code to start server:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">docker run --rm -p 8888:8888 -e &lt;span class="nv">JUPYTER_ENABLE_LAB&lt;/span>&lt;span class="o">=&lt;/span>yes -v ~/:/home/jovyan/work data-analyst-notebook
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>There is more detailed instruction from &lt;a class="link" href="https://jupyter-docker-stacks.readthedocs.io/en/latest/" target="_blank" rel="noopener"
+>User Guide on ReadTheDocs&lt;/a>&lt;/p>
+&lt;p>If you feel like that the command is too long to run. You can add an alias to your .bashrc file like this:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">dslab&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;docker run -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v ~/:/home/jovyan/work data-analyst-notebook&amp;#39;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Now you can use &lt;code>dslab&lt;/code> in the terminal as a replacement for typing the long command.&lt;/p></description></item></channel></rss>

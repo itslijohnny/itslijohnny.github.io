@@ -1,0 +1,323 @@
+<!doctype html><html lang=en-us dir=ltr>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Customer reviews contain a large amount of information. One of the recurring subjects of NLP is to understand customer opinion through statement analysis of customer reviews. However, Basic Sentimental Classification can only tell customers' overall impression about the product. It can&amp;rsquo;t tell customers' opinions of specific features of the product. But, if we dive deeper into the customer reviews, we can get more information. My goal is to extract features from reviews, identify each feature&amp;rsquo;s opinion, quantify the sentiment using econometrics, and then generate a price strategy based on it.">
+<title>Price Strategy Based on Features Reputation</title>
+<link rel=canonical href=https://lijohnny.com/p/price-strategy-based-on-features-reputation/>
+<link rel=stylesheet href=https://lijohnny.com/scss/style.min.abbd69b2908fdfcd5179898beaafd374514a86538d81639ddd2c58c06ae54e40.css><meta property="og:title" content="Price Strategy Based on Features Reputation">
+<meta property="og:description" content="Customer reviews contain a large amount of information. One of the recurring subjects of NLP is to understand customer opinion through statement analysis of customer reviews. However, Basic Sentimental Classification can only tell customers' overall impression about the product. It can&amp;rsquo;t tell customers' opinions of specific features of the product. But, if we dive deeper into the customer reviews, we can get more information. My goal is to extract features from reviews, identify each feature&amp;rsquo;s opinion, quantify the sentiment using econometrics, and then generate a price strategy based on it.">
+<meta property="og:url" content="https://lijohnny.com/p/price-strategy-based-on-features-reputation/">
+<meta property="og:site_name" content="Johnny's Blog">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="Python"><meta property="article:published_time" content="2021-03-14T22:18:37-07:00"><meta property="article:modified_time" content="2021-03-14T22:18:37-07:00"><meta property="og:image" content="https://lijohnny.com/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y.jpg">
+<meta name=twitter:site content="@lijohnnyds">
+<meta name=twitter:creator content="@lijohnnyds"><meta name=twitter:title content="Price Strategy Based on Features Reputation">
+<meta name=twitter:description content="Customer reviews contain a large amount of information. One of the recurring subjects of NLP is to understand customer opinion through statement analysis of customer reviews. However, Basic Sentimental Classification can only tell customers' overall impression about the product. It can&amp;rsquo;t tell customers' opinions of specific features of the product. But, if we dive deeper into the customer reviews, we can get more information. My goal is to extract features from reviews, identify each feature&amp;rsquo;s opinion, quantify the sentiment using econometrics, and then generate a price strategy based on it."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://lijohnny.com/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y.jpg">
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-136585559-1','auto'),ga('send','pageview'))</script><meta name=keywords content="/">
+<meta name=tags content="Python">
+<script type=application/ld+json>{"@context":"http://lijohnny.com","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/lijohnny.com"},"articleSection":"post","name":"Price Strategy Based on Features Reputation","headline":"Price Strategy Based on Features Reputation","description":"Customer reviews contain a large amount of information. One of the recurring subjects of NLP is to understand customer opinion through statement analysis of customer reviews. However, Basic Sentimental Classification can only tell customers\u0027 overall impression about the product. It can\u0026rsquo;t tell customers\u0027 opinions of specific features of the product. But, if we dive deeper into the customer reviews, we can get more information. My goal is to extract features from reviews, identify each feature\u0026rsquo;s opinion, quantify the sentiment using econometrics, and then generate a price strategy based on it.","inLanguage":"en-US","author":"Johnny Li","creator":"Johnny Li","publisher":"Johnny Li","accountablePerson":"Johnny Li","copyrightHolder":"Johnny Li","copyrightYear":"2021","datePublished":"2021-03-14 22:18:37 -0700 -0700","dateModified":"2021-03-14 22:18:37 -0700 -0700","url":"https:\/\/lijohnny.com\/p\/price-strategy-based-on-features-reputation\/","wordCount":"338","keywords":["Python","Blog"]}</script>
+<link href=https://lijohnny.com/scss/all.min.css rel=stylesheet>
+<link rel=stylesheet type=text/css href=https://lijohnny.com/hugo-cite.css>
+<link href=https://lijohnny.com/scss/animate.css rel=stylesheet>
+<link rel=stylesheet href=https://lijohnny.com/dist/morphext.css>
+<script src=//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js></script>
+<script src=https://lijohnny.com/dist/morphext.min.js></script>
+<script async src=https://unpkg.com/mermaid@8.2.3/dist/mermaid.min.js></script>
+</head>
+<body class=article-page>
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky">
+<button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box>
+<span class=hamburger-inner></span>
+</span>
+</button>
+<header>
+<figure class=site-avatar>
+<a href=https://lijohnny.com/>
+<img src=https://lijohnny.com/img/avatar_hua0986efb83853d2923c77d3b90f65b4d_41306_300x0_resize_q75_box.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a>
+<span class=emoji>🖖</span>
+</figure>
+<div class=site-meta>
+<h1 class=site-name><a href=https://lijohnny.com/>Johnny's Blog</a></h1>
+<h2 class=site-description>Data Scientist | ML Engineer</h2>
+</div>
+</header><ol class=menu id=main-menu>
+<li>
+<a href=https://lijohnny.com/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span>
+</a>
+</li>
+<li>
+<a href=https://lijohnny.com/about><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://lijohnny.com/archives><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Categories</span>
+</a>
+</li>
+<li>
+<a href=https://lijohnny.com/Today-I-Learned/ target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notes" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2z"/><path d="M9 7h6"/><path d="M9 11h6"/><path d="M9 15h4"/></svg>
+<span>Today I Learned</span>
+</a>
+</li>
+<li>
+<a href=https://lijohnny.com/search><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span>
+</a>
+</li>
+<div class=menu-bottom-section>
+<li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span>
+</li>
+</div>
+</ol>
+</aside>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=https://lijohnny.com/p/price-strategy-based-on-features-reputation/>
+<img src=https://lijohnny.com/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y_hue3bb56a18a536ed35c90b3582bf24783_132999_800x0_resize_q75_box.jpg srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y_hue3bb56a18a536ed35c90b3582bf24783_132999_800x0_resize_q75_box.jpg 800w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y_hue3bb56a18a536ed35c90b3582bf24783_132999_1600x0_resize_q75_box.jpg 1600w" width=800 height=400 loading=lazy alt="Featured image of post Price Strategy Based on Features Reputation">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=https://lijohnny.com/categories/data-analysis/>
+Data Analysis
+</a>
+<a href=https://lijohnny.com/categories/machine-learning/>
+Machine Learning
+</a>
+<a href=https://lijohnny.com/categories/python/ style=background-color:#2a9d8f;color:#fff>
+Python
+</a>
+</header>
+<div class=article-title-wrapper>
+<h2 class=article-title>
+<a href=https://lijohnny.com/p/price-strategy-based-on-features-reputation/>Price Strategy Based on Features Reputation</a>
+</h2>
+</div>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Mar 14, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+2 minute read
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<p><a class=link href=https://github.com/itslijohnny/ama target=_blank rel=noopener><img src=https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg loading=lazy alt="Ask Me Anything !"></a> <a class=link href=https://www.python.org/ target=_blank rel=noopener><img src=https://img.shields.io/badge/Made%20with-Python-1f425f.svg loading=lazy alt=made-with-python></a> <a class=link href=https://www.mathjax.org/ target=_blank rel=noopener><img src=https://img.shields.io/badge/Made%20with-MathJax-1f425f.svg loading=lazy alt=made-with-mathjax></a></p>
+<p>Customer reviews contain a large amount of information. One of the recurring subjects of NLP is to understand customer opinion through statement analysis of customer reviews. However, Basic Sentimental Classification can only tell customers' overall impression about the product. It can&rsquo;t tell customers' opinions of specific features of the product. But, if we dive deeper into the customer reviews, we can get more information.
+My goal is to extract features from reviews, identify each feature&rsquo;s opinion, quantify the sentiment using econometrics, and then generate a price strategy based on it.</p>
+<p>The main techniques I used are:</p>
+<ol>
+<li>Web Clawing: Get customer reviews from Amazon.</li>
+<li>Nature Language Processing: Identify product features.</li>
+<li>Sentiment Analysis: Identify polarity of opinions regarding product features.</li>
+<li>Linear Regression: Regression analysis for opinions of the features and the price.</li>
+</ol>
+<blockquote>
+<p>The <code>Jupyter Notebook</code> goes along with this post <strong>will</strong> be available in my Repo on <a class=link href>my Github</a> soon.</p>
+</blockquote>
+<h2 id=data-overview>Data Overview</h2>
+<p>The product category I was working on is the home security camera. I scraped reviews of targe product and its competitors from Amazon.com. The dataset contains 53,657 reviews of 15 different home security cameras from Amazon.com with the following information for each one:</p>
+<div class=table-wrapper><table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Product</strong></td>
+<td>Name of the Product</td>
+</tr>
+<tr>
+<td><strong>Username</strong></td>
+<td>User&rsquo;s ID</td>
+</tr>
+<tr>
+<td><strong>Stars</strong></td>
+<td>1-5 rating for the product</td>
+</tr>
+<tr>
+<td><strong>Title</strong></td>
+<td>The subject of the review</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>The review date</td>
+</tr>
+<tr>
+<td><strong>Review</strong></td>
+<td>Review text</td>
+</tr>
+<tr>
+<td><strong>Helpfulcount</strong></td>
+<td>How many people click &ldquo;Helpful&rdquo; button</td>
+</tr>
+<tr>
+<td><strong>ReviewTotal</strong></td>
+<td>How many comments under this review</td>
+</tr>
+</tbody>
+</table></div>
+<p>The average length of reviews of the product is around 200 words, and most of the product has 2000 reviews.
+<img src=https://lijohnny.com/p/price-strategy-based-on-features-reputation/bptextlenall.png width=398 height=378 srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_1024x0_resize_box_3.png 1024w" loading=lazy class=gallery-image data-flex-grow=105 data-flex-basis=252px>
+<img src=https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewcount.png width=398 height=378 srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_1024x0_resize_box_3.png 1024w" loading=lazy class=gallery-image data-flex-grow=105 data-flex-basis=252px></p>
+<p>Most of reviews are in the range of 4 years.
+<img src=https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewdate.png width=1173 height=375 srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_1024x0_resize_box_3.png 1024w" loading=lazy class=gallery-image data-flex-grow=312 data-flex-basis=750px></p>
+<h2 id=methodology>Methodology</h2>
+<p>My approach includes 9 steps.</p>
+<div class=mermaid style="margin:1.5em 0;padding:0 var(--card-padding)">
+graph TD
+A( Amazon Review Raw Data ) --> B( Data Cleaning )
+B --> C( Sentences Separation )
+C --> D( Subject/Object Separation )
+D --> E( Sentiment Scoring )
+D --> F( Feature Extraction )
+E --> G( Feature Reputation )
+F --> G( Feature Reputation )
+G --> H( Sentiment Quantifying )
+H --> I( Price Premiums Prediction )
+</div>
+<h2 id=conclusion>Conclusion</h2>
+<p><img src=https://lijohnny.com/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30.png width=636 height=487 srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_1024x0_resize_box_3.png 1024w" loading=lazy class=gallery-image data-flex-grow=130 data-flex-basis=313px></p>
+<p>To Be Continued.</p>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=https://lijohnny.com/tags/python/>Python</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0 本文内容基于CC BY-NC-SA 4.0协议发布，转载需要署名。</span>
+</section>
+</footer>
+</article>
+<aside class=related-content--wrapper>
+<h2 class=section-title>Related content</h2>
+<div class=related-content>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=https://lijohnny.com/p/identify-customer-segments/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/identify-customer-segments/7dfc3OoaYZAnejX.205270d4850a1a665dc775d5694f9568_hu6422aa484a4a450a6cb8ea5e52a35a00_155749_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Identify Customer Segments" data-hash="md5-IFJw1IUKGmZdx3XVaU+VaA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Identify Customer Segments</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=https://lijohnny.com/p/disaster-response-web-app/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/disaster-response-web-app/ArpiP6q2msCtGnU.f82ad8c7e1aa314c9f30dd43a0156622_hu457b68f1b299c99b4ae6562f4e0f55f0_178477_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Disaster Response Web App" data-hash="md5-+CrYx+GqMUyfMN1DoBVmIg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Disaster Response Web App</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=https://lijohnny.com/p/donors-identification-for-charityml/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/donors-identification-for-charityml/5cef9192b167778174.b6ebd4790e90456040b64d990cadf25b_hua2b97d798d80bf04515e8d7c3343e69b_64782_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Donors Identification for CharityML" data-hash="md5-tuvUeQ6QRWBAtk2ZDK3yWw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Donors Identification for CharityML</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/j4dzCfs1YINnUeP.a81951d12596e6d777d021ef9cbfe959_hu2e33a0807f480dffb7d29605e6b641f0_179685_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Pyforest - Automate Package Import Process for Your Data Science Project" data-hash="md5-qBlR0SWW5td30CHvnL/pWQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Pyforest - Automate Package Import Process for Your Data Science Project</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=https://lijohnny.com/p/automate-image-processing-for-my-blog/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/automate-image-processing-for-my-blog/5cd7b069e734a.b79d5fcdfe73296fbdd0e0539b42702d_hu7215694eb30026f581cb7820db2005c7_69790_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Automate Image Processing for My Blog" data-hash="md5-t51fzf5zKW+90OBTm0JwLQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Automate Image Processing for My Blog</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div class=disqus-container>
+<div id=disqus_thread></div>
+<script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var b=document,a=b.createElement('script');a.async=!0,a.src='//lijohnny.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a)})()</script>
+<noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript>
+<a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a>
+</div>
+<style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style>
+<script>window.addEventListener('onColorSchemeChange',a=>{typeof DISQUS=='object'&&DISQUS.reset({reload:!0})})</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2019 -
+2024 Johnny Li
+</section>
+<section class=powerby>
+All contents licensed under CC BY-NC-SA 4.0 本站所有内容基于CC BY-NC-SA 4.0协议发布，转载需要署名 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.22.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous>
+</main>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=https://lijohnny.com/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

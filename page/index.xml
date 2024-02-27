@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on Johnny's Blog</title><link>https://lijohnny.com/page/</link><description>Recent content in Pages on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Wed, 03 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://lijohnny.com/page/index.xml" rel="self" type="application/rss+xml"/><item><title>About</title><link>https://lijohnny.com/about/</link><pubDate>Wed, 03 Mar 2021 00:00:00 +0000</pubDate><guid>https://lijohnny.com/about/</guid><description>&lt;style>
+.about-brief {
+margin: auto;
+max-width: 540px;
+text-align: center;
+position: relative;
+margin-bottom: 40px;
+}
+.about-brief p {
+margin: 1.5em;
+}
+.about-brief li {
+margin-right: 1.5rem !important;
+}
+.about-brief i {
+font-size: 24px;
+}
+.social {
+margin-top: 3rem!important;
+margin-bottom: 0!important;
+padding-left: 0;
+list-style: none;
+}
+.social li:not(:last-child) {
+margin-right: 1.5rem;
+}
+.social li {
+list-style: none;
+display: inline-block;
+}
+.askme {
+margin-top: 1.5rem!important;
+}
+.btn {
+cursor: pointer;
+color: #FFF;
+background: #FF4C60;
+display: inline-block;
+vertical-align: middle;
+transform: perspective(1px) translateZ(0);
+box-shadow: 0 0 1px rgb(0 0 0 / 0%);
+border-radius: 10px;
+font-size: 18px;
+font-weight: 700;
+overflow: hidden;
+line-height: 1;
+padding: 16px 36px;
+}
+.btn:hover {
+color: #FFF;
+background: #fd6b7c;
+}
+.first {
+margin-left: 1.5rem;
+}
+&lt;/style>
+&lt;div class="about-brief fadeIn animated">
+&lt;h1 style="border-left:none !important;">Johnny Li&lt;/h1>
+&lt;span>I'm a &lt;span id="js-rotating">Data Scientist, UX Researcher, Program Manager&lt;/span>&lt;/span>
+&lt;ul class="social">
+&lt;li class="first">&lt;a href="https://www.linkedin.com/in/johnny-li/">&lt;i class="fab fa-linkedin">&lt;/i>&lt;/a>&lt;/li>
+&lt;li class="">&lt;a href="https://github.com/itslijohnny">&lt;i class="fab fa-github">&lt;/i>&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p style="margin-top:2em;margin-bottom: 2em;">I’m a passionate and motivated explorer with experience and passion in Data Science and UX. I have extensive professional backgrounds in data analytics, product management, and user research, focusing on using data to drive products and improve user experience.
+&lt;/p>
+&lt;div class="askme">
+&lt;a href="#disqus_thread" class="btn">Ask me anything&lt;/a>
+&lt;/div>
+&lt;/div>
+&lt;script>
+$("#js-rotating").Morphext({
+animation: "bounceIn",
+separator: ",",
+speed: 2000,
+complete: function () {
+}
+});
+&lt;/script>
+&lt;h2 id="skills">Skills&lt;/h2>
+&lt;style>
+.row {
+display: flex;
+flex-wrap: wrap;
+margin-right: -15px;
+margin-left: -15px;
+}
+@media (min-width: 1519px) {
+.col-md-4 {
+-ms-flex: 0 0 33.333333%;
+flex: 0 0 33.333333%;
+max-width: 33.333333%;
+}
+}
+.col-md-4 {
+position: relative;
+width: 100%;
+padding-right: 15px;
+padding-left: 15px;
+display: block;
+}
+.skill {
+padding: 30px;
+border-radius: 20px !important;
+transition: all 0.3s ease-in-out;
+text-align: center!important;
+}
+.skill h3 {
+border-left: 0;
+}
+&lt;/style>
+&lt;div class="about-skills fadeIn animated">
+&lt;div class="row">
+&lt;div class="col-md-4">
+&lt;div class="skill">
+&lt;img src="../img/sci.png" alt="UI/UX design" style="height: 80px">
+&lt;h3 class="mb-3 mt-0">Data Scientist&lt;/h3>
+&lt;p class="mb-0">SQL, Python, R, Power BI, Tableau, ETL Pipeline, Excel, HTML Dashboard Machine Learning, Nature Language Processing, Web Crawler, Keras&lt;/p>
+&lt;/div>
+&lt;div class="spacer d-md-none d-lg-none" data-height="30" style="height: 30px;">&lt;/div>
+&lt;/div>
+&lt;div class="col-md-4">
+&lt;div class="skill">
+&lt;img src="../img/files.png" alt="UI/UX design" style="height: 80px">
+&lt;h3 class="mb-3 mt-0">Project Management&lt;/h3>
+&lt;p class="mb-0">Agile, Lean, Six Sigma, Azure Devops, Jira, Business Process Mapping, Process Optimization, KPI/ORK&lt;/p>
+&lt;/div>
+&lt;div class="spacer d-md-none d-lg-none" data-height="30" style="height: 30px;">&lt;/div>
+&lt;/div>
+&lt;div class="col-md-4">
+&lt;div class="skill">
+&lt;img src="../img/paint.png" alt="UI/UX design" style="height: 80px">
+&lt;h3 class="mb-3 mt-0">UX Research&lt;/h3>
+&lt;p class="mb-0">User Research, A/B Testing, Journey Map, Usability Test, Funnel analysis, Google Analytics&lt;/p>
+&lt;/div>
+&lt;div class="spacer d-md-none d-lg-none" data-height="30" style="height: 30px;">&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;script>
+&lt;/script>
+&lt;h2 id="experience">Experience&lt;/h2>
+&lt;style>
+.about-exp {
+display: -ms-flexbox;
+display: flex;
+-ms-flex-wrap: wrap;
+flex-wrap: wrap;
+margin-right: -15px;
+margin-left: -15px;
+}
+.about-exp h3 {
+border-left: 0;
+padding: 0;
+font-size: 20px;
+margin: 0px 0;
+}
+.about-exp p {
+border-left: 0;
+padding: 0;
+margin: 0px 0;
+}
+@media (min-width: 1023px){
+.col-md-6 {
+-ms-flex: 0 0 50%;
+flex: 0 0 50%;
+max-width: 50%;
+}
+}
+@media (min-width: 1023px) and (max-width: 1518px){
+.timeline {
+padding-left: 30px !important;
+}
+.com-timeline {
+padding-left: 0px !important;
+}
+}
+@media (min-width: 1518px)and (max-width: 1919px){
+.timeline {
+padding-left: 50px !important;
+}
+.com-timeline {
+padding-left: 0px !important;
+}
+}
+@media (min-width: 1919px){
+.timeline {
+padding-left: 80px !important;
+}
+.com-timeline {
+padding-left: 50px !important;
+}
+}
+.col-md-6 {
+display: block;
+position: relative;
+width: 100%;
+padding-right: 15px;
+padding-left: 15px;
+}
+.edu {
+padding: 30px;
+position: relative;
+}
+.com{
+padding: 30px 30px 30px 0px;
+position: relative;
+}
+.timeline {
+padding-left: 30px;
+margin-bottom: 20px;
+position: relative;
+background-color: inherit;
+width: 100%;
+}
+.timeline .content .time {
+color: #A6D7FB;
+font-size: 14px;
+}
+&lt;/style>
+&lt;div class="about-exp">
+&lt;div class="col-md-6">
+&lt;div class="edu">
+&lt;div class="timeline fadeIn animated" style="visibility: visible; animation-delay: 0.2s;">
+&lt;div class="content">
+&lt;span class="time">2020&lt;/span>
+&lt;h3 class="title">Data Scientist Nanodegree&lt;/h3>
+&lt;p>Udacity&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="timeline fadeIn animated" style="visibility: visible;">
+&lt;div class="content">
+&lt;span class="time">2019&lt;/span>
+&lt;h3 class="title">MS. Information System&lt;/h3>
+&lt;p>University of Washginton&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="col-md-6">
+&lt;div class="com">
+&lt;div class="timeline com-timeline fadeIn animated" style="visibility: visible;">
+&lt;div class="content">
+&lt;span class="time">2021 - Present&lt;/span>
+&lt;h3 class="title">Data Analysis PM&lt;/h3>
+&lt;p>Microsoft Azure Sphere Team&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="timeline com-timeline fadeIn animated" style="visibility: visible;">
+&lt;div class="content">
+&lt;span class="time">2019 - 2021&lt;/span>
+&lt;h3 class="title">Data analytics Program Manager at Microsoft and Amazon&lt;/h3>
+&lt;p>Pactera&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="timeline com-timeline fadeIn animated" style="visibility: visible; animation-delay: 0.2s;">
+&lt;div class="content">
+&lt;span class="time">2013 - 2018&lt;/span>
+&lt;h3 class="title">Product Manager&lt;/h3>
+&lt;p>Harbin Bank&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div></description></item><item><title>Archives</title><link>https://lijohnny.com/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://lijohnny.com/archives/</guid><description/></item><item><title>Search</title><link>https://lijohnny.com/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lijohnny.com/search/</guid><description/></item></channel></rss>

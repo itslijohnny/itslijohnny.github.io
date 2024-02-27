@@ -1,0 +1,1031 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>HTML on Johnny's Blog</title><link>https://lijohnny.com/tags/html/</link><description>Recent content in HTML on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Thu, 09 May 2019 21:47:43 +0000</lastBuildDate><atom:link href="https://lijohnny.com/tags/html/index.xml" rel="self" type="application/rss+xml"/><item><title>Spam Detection and Analysis (Part 2 - Analysis with R)</title><link>https://lijohnny.com/p/spam-detection-and-analysis-part-2-analysis-with-r/</link><pubDate>Thu, 09 May 2019 21:47:43 +0000</pubDate><guid>https://lijohnny.com/p/spam-detection-and-analysis-part-2-analysis-with-r/</guid><description>&lt;img src="https://lijohnny.com/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png" alt="Featured image of post Spam Detection and Analysis (Part 2 - Analysis with R)" />&lt;p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;blockquote>
+&lt;p>This is the Part 2 of the series. For how to parsing email, please check &lt;a class="link" href="https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/" >Part 1&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="data-exploration">Data Exploration&lt;/h2>
+&lt;h3 id="import-the-data-to-r">Import the data to R&lt;/h3>
+&lt;p>For This part of the script, I used &lt;strong>R language&lt;/strong> to explore the data and the build model. Therefore We need to import CSV to R first.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="n">em&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">read.csv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;gamilspamedited.csv&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">stringsAsFactors&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">F&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;pre>&lt;code>'data.frame': 272 obs. of 18 variables:
+$ Subject : chr
+$ Return.Path.Address: chr
+$ Date : chr
+$ Reply.To.Address : chr
+$ Content.Type : chr
+$ From.Address : chr
+$ IP : chr
+$ SPF : chr
+$ DMARC : chr
+$ DKIM : chr
+$ Country : chr
+$ Regin : chr
+$ City : chr
+$ IPv6.Indicator : int
+$ CAT : chr
+$ Reputation : chr
+&lt;/code>&lt;/pre>
+&lt;p>After cleaning the data, there are 272 entries and 18 columns left.&lt;/p>
+&lt;h3 id="preprocess-the-date">Preprocess the date&lt;/h3>
+&lt;h4 id="create-variables">Create Variables&lt;/h4>
+&lt;p>Create &lt;code>hashtml&lt;/code> and &lt;code>hasattach&lt;/code> columns to label if the email use html for main content and if the email has attachment.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="nf">library&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dplyr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">hashtml.func&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">function&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">c1&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="n">x&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">case_when&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;multipart/alternative&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;multipart/mixed&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;multipart/related&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;text/html&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;text/plain&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hashtml&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">apply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">hashtml.func&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">c1&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#39;Content.Type&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">hasattach.func&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">function&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">c1&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="n">x&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">case_when&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;multipart/alternative&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;multipart/mixed&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;multipart/related&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;text/html&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="s">&amp;#34;text/plain&amp;#34;&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hasattach&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">apply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">hasattach.func&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">c1&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#39;Content.Type&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Compare Email&amp;rsquo;s From address and reply address and label if they are different.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="nf">library&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">stringr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">rpavsfrom.func&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">function&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="n">fa&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="n">x[&lt;/span>&lt;span class="s">&amp;#39;From.Address&amp;#39;&lt;/span>&lt;span class="n">]&lt;/span>
+&lt;span class="n">fa&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fa&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;@&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]][2]&lt;/span>
+&lt;span class="n">fasplit&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fa&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>
+&lt;span class="n">fareal&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">paste&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fa&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>&lt;span class="nf">[&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">length&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fasplit&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="m">-1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;.&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fa&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>&lt;span class="nf">[&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">length&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fasplit&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="n">]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">sep&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">rp&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="n">x[&lt;/span>&lt;span class="s">&amp;#39;Return.Path.Address&amp;#39;&lt;/span>&lt;span class="n">]&lt;/span>
+&lt;span class="n">rp&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rp&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;@&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]][2]&lt;/span>
+&lt;span class="n">rpsplit&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rp&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>
+&lt;span class="n">rpreal&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">paste&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rp&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>&lt;span class="nf">[&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">length&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rpsplit&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="m">-1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;.&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rp&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>&lt;span class="nf">[&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">length&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rpsplit&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="n">]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">sep&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">if &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fareal&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">rpreal&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;span class="p">}&lt;/span>&lt;span class="n">else&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="m">0&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="nf">return&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">rpavsfrom&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">apply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">rpavsfrom.func&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="nf">library&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">stringr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">replyvsfrom.func&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">function&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="n">fa&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="n">x[&lt;/span>&lt;span class="s">&amp;#39;From.Address&amp;#39;&lt;/span>&lt;span class="n">]&lt;/span>
+&lt;span class="n">fa&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fa&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;@&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]][2]&lt;/span>
+&lt;span class="n">fasplit&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fa&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>
+&lt;span class="n">fareal&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">paste&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fa&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>&lt;span class="nf">[&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">length&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fasplit&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="m">-1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;.&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fa&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>&lt;span class="nf">[&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">length&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fasplit&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="n">]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">sep&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">ra&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="n">x[&lt;/span>&lt;span class="s">&amp;#39;Reply.To.Address&amp;#39;&lt;/span>&lt;span class="n">]&lt;/span>
+&lt;span class="n">ra&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ra&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;@&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]][2]&lt;/span>
+&lt;span class="n">rasplit&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ra&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>
+&lt;span class="n">rareal&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">paste&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ra&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>&lt;span class="nf">[&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">length&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rasplit&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="m">-1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;.&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ra&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;[.]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>&lt;span class="nf">[&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">length&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rasplit&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="n">]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">sep&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">if &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fareal&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">rareal&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;span class="p">}&lt;/span>&lt;span class="n">else&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="m">0&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="nf">return&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">replyvsfrom&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">apply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">replyvsfrom.func&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Bin and Categorize the Time and the Day.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="nf">library&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lubridate&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">weekday.func&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">function&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">c1&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="n">weekday&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">wday&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">as.Date&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39; &amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]][1]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#39;%m/%d/%Y&amp;#39;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="nf">return&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">weekday&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Weekday&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">apply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">weekday.func&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">c1&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#39;Date&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Weekday&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Weekday&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Weekday&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Mon&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;Tue&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;Wed&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;Thu&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;Fri&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;Sat&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;Sun&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="n">time.func&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">function&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">c1&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="n">time&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">gsub&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nf">str_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x[c1]&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39; &amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]][2]&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">return&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">time&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Time&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">apply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">time.func&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">c1&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#39;Date&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Time&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">round&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Time&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="m">100&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Convert the data to proper formats.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">SPF&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">SPF&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">levels&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;pass&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#34;neutral&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#34;fail&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#34;temperror&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DMARC&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DMARC&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">levels&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;pass&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#34;fail&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#34;None&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DKIM&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DKIM&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">levels&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;pass&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#34;None&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Country&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Country&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">IPv6.Indicator&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">IPv6.Indicator&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">CAT&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">CAT&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Reputation&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Reputation&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hashtml&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hashtml&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hasattach&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hasattach&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">rpavsfrom&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">rpavsfrom&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">replyvsfrom&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">replyvsfrom&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Set base level.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Country&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">relevel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Country&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">ref&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;US&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Reputation&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">relevel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Reputation&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">ref&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;Unsuspicious&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Re-code the target to numeric.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">CAT&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">CAT&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s">&amp;#34;Spam&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Explore the Relationship.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="nf">set.seed&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">11&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">selected.var&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">7&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">9&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">10&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">11&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">12&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">15&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">16&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">17&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">18&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">19&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">20&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">21&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">22&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">23&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="m">24&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">selected.df&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="n">em[&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">selected.var]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="n">emnum&lt;/span>&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="n">selected.df&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">SPF&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;3&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;4&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">SPF&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">SPF&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DMARC&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;3&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DMARC&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DMARC&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DKIM&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DKIM&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">DKIM&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Country&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Country&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Country&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">IPv6.Indicator&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">IPv6.Indicator&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">IPv6.Indicator&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Reputation&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Reputation&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Reputation&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hashtml&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hashtml&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hashtml&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hasattach&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hasattach&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">hasattach&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">rpavsfrom&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">rpavsfrom&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">rpavsfrom&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">replyvsfrom&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">replyvsfrom&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">replyvsfrom&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Weekday&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;3&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;4&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;5&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;6&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;7&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Weekday&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Weekday&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">levels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Time&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">c&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;3&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;4&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;5&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;6&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;7&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;8&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;9&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;10&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;11&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;12&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;13&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;14&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#34;15&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;16&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;17&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;18&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;19&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;20&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;21&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;22&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;23&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;24&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;25&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Time&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">as.numeric&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">selected.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">Time&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Create correlation matrix.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="nf">library&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;PerformanceAnalytics&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">chart.Correlation&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">emnum&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">method&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;spearman&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">histogram&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">TRUE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">pch&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;16&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://ws1.sinaimg.cn/large/006tNc79ly1g280ych5v7j30nc0nc3yv.jpg"
+loading="lazy"
+alt="png"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="nf">library&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">corrr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emnum&lt;/span> &lt;span class="o">%&amp;gt;%&lt;/span> &lt;span class="nf">cor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">method&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;spearman&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">%&amp;gt;%&lt;/span> &lt;span class="nf">network_plot&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">min_cor&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">0.1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://ws4.sinaimg.cn/large/006tNc79ly1g280yddafpj30nc0ncwfs.jpg"
+loading="lazy"
+alt="png"
+>&lt;/p>
+&lt;h2 id="build-model">Build Model&lt;/h2>
+&lt;h3 id="partition-data">Partition Data&lt;/h3>
+&lt;p>Create Training and Validation Sets&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="c1"># partition the data&lt;/span>
+&lt;span class="n">train.index&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">sample&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="nf">nrow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="nf">nrow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">em&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="m">0.6&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">train.df&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="n">selected.df[train.index&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">]&lt;/span>
+&lt;span class="n">valid.df&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="n">selected.df[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">train.index&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Fit a Logistic Regression Model&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="n">logit.reg&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">glm&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CAT&lt;/span> &lt;span class="o">~&lt;/span> &lt;span class="n">Message&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">DMARC&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">Country&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">DKIM&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">Reputation&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">replyvsfrom&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">rpavsfrom&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">Weekday&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">train.df&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">family&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;binomial&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">summary&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">logit.reg&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;pre>&lt;code>Call:
+glm(formula = CAT ~ Message + DMARC + Country + DKIM + Reputation +
+replyvsfrom + rpavsfrom + Weekday, family = &amp;quot;binomial&amp;quot;, data = train.df)
+Deviance Residuals:
+Min 1Q Median 3Q Max
+-3.09465 -0.18311 -0.04540 -0.00298 2.73259
+Coefficients:
+Estimate Std. Error z value Pr(&amp;gt;|z|)
+(Intercept) -4.880e+00 1.891e+00 -2.581 0.009848 **
+Message -2.864e-05 1.803e-05 -1.589 0.112145
+DMARC2 -1.101e+01 2.400e+03 -0.005 0.996340
+DMARC3 6.306e+00 1.445e+00 4.364 1.28e-05 ***
+Country2 4.332e+00 1.767e+00 2.451 0.014247 *
+DKIM2 -3.987e+00 2.255e+00 -1.768 0.077077 .
+Reputation2 9.137e+00 2.607e+00 3.505 0.000457 ***
+replyvsfrom2 -5.052e+00 1.214e+00 -4.162 3.16e-05 ***
+rpavsfrom2 -2.141e+00 1.044e+00 -2.052 0.040209 *
+Weekday2 3.313e+00 1.764e+00 1.878 0.060359 .
+Weekday3 3.392e+00 1.544e+00 2.197 0.028011 *
+Weekday4 6.549e-01 1.684e+00 0.389 0.697268
+Weekday5 5.326e+00 1.607e+00 3.315 0.000918 ***
+Weekday6 1.686e+00 1.216e+00 1.387 0.165409
+Weekday7 2.898e+00 1.634e+00 1.773 0.076224 .
+---
+Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+(Dispersion parameter for binomial family taken to be 1)
+Null deviance: 172.126 on 162 degrees of freedom
+Residual deviance: 56.569 on 148 degrees of freedom
+AIC: 86.569
+Number of Fisher Scoring iterations: 15
+&lt;/code>&lt;/pre>
+&lt;p>Predict with validation dataset and find the best threshold.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="n">logit.reg.pred&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">predict&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">logit.reg&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">valid.df&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">type&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;response&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">library&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pROC&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">r&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">roc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">valid.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">CAT&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">logit.reg.pred&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">plot.roc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">r&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">pred&lt;/span> &lt;span class="o">&amp;lt;-&lt;/span> &lt;span class="nf">ifelse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">logit.reg.pred&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nf">coords&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">r&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;best&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">[[1]]&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">coords&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">r&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;best&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;pre>&lt;code>Type 'citation(&amp;quot;pROC&amp;quot;)' for a citation.
+Attaching package: 'pROC'
+The following objects are masked from 'package:stats':
+cov, smooth, var
+threshold specificity sensitivity
+0.3222076 0.9625000 0.9655172
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="https://ws1.sinaimg.cn/large/006tNc79ly1g280ydomsdj30nc0nc3yf.jpg"
+loading="lazy"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-R" data-lang="R">&lt;span class="nf">library&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">caret&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nf">confusionMatrix&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pred&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">valid.df&lt;/span>&lt;span class="o">$&lt;/span>&lt;span class="n">CAT&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">positive&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;pre>&lt;code>Loading required package: lattice
+Loading required package: ggplot2
+Confusion Matrix and Statistics
+Reference
+Prediction 0 1
+0 77 1
+1 3 28
+Accuracy : 0.9633
+95% CI : (0.9087, 0.9899)
+No Information Rate : 0.7339
+P-Value [Acc &amp;gt; NIR] : 2.433e-10
+Kappa : 0.9081
+Mcnemar's Test P-Value : 0.6171
+Sensitivity : 0.9655
+Specificity : 0.9625
+Pos Pred Value : 0.9032
+Neg Pred Value : 0.9872
+Prevalence : 0.2661
+Detection Rate : 0.2569
+Detection Prevalence : 0.2844
+Balanced Accuracy : 0.9640
+'Positive' Class : 1
+&lt;/code>&lt;/pre></description></item><item><title>Spam Detection and Analysis (Part 1 - Parsing)</title><link>https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/</link><pubDate>Fri, 19 Apr 2019 01:24:59 +0000</pubDate><guid>https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/</guid><description>&lt;img src="https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f.png" alt="Featured image of post Spam Detection and Analysis (Part 1 - Parsing)" />&lt;p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="get-email-header-information">Get Email Header information&lt;/h2>
+&lt;p>First thing we need to do is the get the data. Email Header contents a lots of information that usually a email client do not show that to the users. However, most of those informations reveal more information about the sender. Therefore, we need to get Email Headers and parsing them for analysis.
+I use Python&amp;rsquo;s &lt;code>imaplib&lt;/code> library to get email headers from my Gmail account Spam folder.&lt;/p>
+&lt;blockquote>
+&lt;p>For the script to work, Gmail IMAP Access need to be enabled. To enable IMAP for Gmail, please check this &lt;a class="link" href="https://support.google.com/mail/answer/7126229" target="_blank" rel="noopener"
+>instruction&lt;/a>. You also need to either turn off 2-Step Verification for your Google account or set up an app password &lt;a class="link" href="https://myaccount.google.com/u/1/security" target="_blank" rel="noopener"
+>here&lt;/a>.&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="setup-connection">Setup connection&lt;/h3>
+&lt;ol>
+&lt;li>Import the required libraries.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="kn">import&lt;/span> &lt;span class="nn">getpass&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">imaplib&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">email&lt;/span>
+&lt;span class="kn">from&lt;/span> &lt;span class="nn">email.parser&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">HeaderParser&lt;/span>
+&lt;span class="kn">from&lt;/span> &lt;span class="nn">email.header&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">decode_header&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">re&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">csv&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">pandas&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="nn">pd&lt;/span>
+&lt;span class="kn">from&lt;/span> &lt;span class="nn">bs4&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">BeautifulSoup&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">requests&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">json&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="2">
+&lt;li>Login to the Gmail&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Email:&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">un&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">input&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Password&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">pw&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">getpass&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">getpass&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="c1"># hide passowrad with getpass() function.&lt;/span>
+&lt;span class="n">conn&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">imaplib&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">IMAP4_SSL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">port&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;993&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">host&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;imap.gmail.com&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">conn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">login&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">un&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">pw&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="download-email-and-parsing-email-header">Download Email and Parsing Email Header&lt;/h3>
+&lt;ol>
+&lt;li>Get email list.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="n">conn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;[Gmail]/Spam&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1"># Get email form spam folder.&lt;/span>
+&lt;span class="nb">type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">emaildata&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">conn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">search&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;ALL&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">emaillist&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">emaildata&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="c1"># Get email list.&lt;/span>
+&lt;span class="n">parser&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">HeaderParser&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="n">header_list&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[]&lt;/span>
+&lt;span class="n">msg_text&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[]&lt;/span>
+&lt;span class="c1"># Read API key for ipstack.com from key.txt file.&lt;/span>
+&lt;span class="n">key_f&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;key.txt&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s2">&amp;#34;r&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">key&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">key_f&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readlines&lt;/span>&lt;span class="p">()[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="2">
+&lt;li>Parsing email&lt;/li>
+&lt;/ol>
+&lt;p>Usually an email header looks like this:
+&lt;!-- raw HTML omitted -->
+What we want are:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Name&lt;/th>
+&lt;th>Description&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>Subject&lt;/code>&lt;/td>
+&lt;td>The Subject of Email&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>Reply-To&lt;/code>&lt;/td>
+&lt;td>The reply address that when you click reply button in you Email client&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>Return-Path&lt;/code>&lt;/td>
+&lt;td>The reply address that when you click reply button in you Email client&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>IP&lt;/code>&lt;/td>
+&lt;td>The sender&amp;rsquo;s IP address&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>Received Time&lt;/code>&lt;/td>
+&lt;td>When is the email received&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>From&lt;/code>&lt;/td>
+&lt;td>The senders&amp;rsquo;s address&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>Date&lt;/code>&lt;/td>
+&lt;td>The date the message was sent&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>Content-Type&lt;/code>&lt;/td>
+&lt;td>Indicated what contents in the email&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>Message&lt;/code>&lt;/td>
+&lt;td>The email content&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>DMARC&lt;/code>&lt;/td>
+&lt;td>Domain-Based Message Authentication Reporting and Conformance&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>DKIM&lt;/code>&lt;/td>
+&lt;td>Domain Keys Identified Mail&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>ARC-Authentication-Results&lt;/code>&lt;/td>
+&lt;td>Authenticated Received Chain&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>SPF&lt;/code>&lt;/td>
+&lt;td>Sender Policy Framework&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>Now we need to parse each email in the emaillist by using for loop.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="k">for&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">emaillist&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="nb">type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">emaildata2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">conn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fetch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;(RFC822)&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">h&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">parser&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">parsestr&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">emaildata2&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">][&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">decode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;utf-8&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;ignore&amp;#39;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Some emails have an html format message. The html tags are not helping us in this project. Therefore, we can use &lt;code>BeautifulSoup&lt;/code> to get text from the email message.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python"> &lt;span class="k">for&lt;/span> &lt;span class="n">txt&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">h&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">walk&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="ow">not&lt;/span> &lt;span class="n">txt&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">is_multipart&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;span class="n">msg_text&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">txt&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get_payload&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">decode&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">decode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;utf-8&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;ignore&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">soup&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">BeautifulSoup&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">msg_text&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;lxml&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">msg_text&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="n">soup&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get_text&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Most information is clear and do not need clean and edit.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python"> &lt;span class="n">header&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Subject&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">decode_header&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Subject&amp;#39;&lt;/span>&lt;span class="p">])[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">][&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;ARC-Authentication-Results&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;ARC-Authentication-Results&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Return-Path&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Return-Path&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Return-Path Address&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\b@\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Return-Path&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()))[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Received&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Received&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Received-SPF&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Received-SPF&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Date&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">to_datetime&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Date&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="s1">&amp;#39;Reply-To&amp;#39;&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">h&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Reply-To&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Reply-To&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Reply-To Address&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\b@\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Reply-To&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()))[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Reply-To&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Reply-To Address&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Content-Type&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Content-Type&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;;&amp;#39;&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;From&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;From&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>However, for the data contents many irrelevant information and need to be cleaned. I use Regular expression operations to extract only useful information.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python"> &lt;span class="k">if&lt;/span> &lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\b@\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;From&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">())):&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;From Address&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\b@\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;From&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()))[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;From Address&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>
+&lt;span class="c1">#header[&amp;#39;Sender-ip&amp;#39;]= re.findall(r&amp;#39;(?:(?:25[0-5]|2[0-4]\d|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)&amp;#39;,str(header))&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Message&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">msg_text&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\bip=\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">)):&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;IP&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\bip=\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">))[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;=&amp;#39;&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;IP&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\bspf=\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">)):&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;SPF&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\bspf=\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">))[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;=&amp;#39;&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;SPF&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\bdmarc=\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">)):&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;DMARC&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\bdmarc=\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">))[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;=&amp;#39;&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;DMARC&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\bdkim=\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">)):&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;DKIM&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">findall&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;\bdkim=\S*\b&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">))[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;=&amp;#39;&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;DKIM&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>I use the api of ipstack.com to convert IP to geographic location.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python"> &lt;span class="n">address&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;http://api.ipstack.com/&amp;#34;&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;IP&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="s2">&amp;#34;?access_key=&amp;#34;&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">key&lt;/span>
+&lt;span class="n">response&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">requests&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">address&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">ipjason&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">text&lt;/span>
+&lt;span class="n">iplist&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">json&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">loads&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ipjason&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Country&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="n">iplist&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;country_name&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Regin&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="n">iplist&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;region_name&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;City&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="n">iplist&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;city&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="n">iplist&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;type&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">==&lt;/span> &lt;span class="s1">&amp;#39;ipv6&amp;#39;&lt;/span> &lt;span class="p">:&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;IPv6 Indicator&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;span class="k">elif&lt;/span> &lt;span class="n">iplist&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;type&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">==&lt;/span> &lt;span class="s1">&amp;#39;ipv4&amp;#39;&lt;/span> &lt;span class="p">:&lt;/span>
+&lt;span class="n">header&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;IPv6 Indicator&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;span class="n">header_list&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># For Loop END&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>For consistent analysis, I save the DataFrame into a CSV file for further analysis.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="n">keys&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">header_list&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">keys&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;File Name:&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">fn&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">input&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="k">with&lt;/span> &lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fn&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="s1">&amp;#39;.csv&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;w&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">output_file&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="n">dict_writer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">csv&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">DictWriter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">output_file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">keys&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">dict_writer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">writeheader&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="n">dict_writer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">writerows&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">header_list&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>This is the Part 1 of the series. For how to user R analysis the email, please check &lt;a class="link" href="https://lijohnny.com/p/spam-detection-and-analysis-part-2-analysis-with-r/" >Part 2&lt;/a>&lt;/p>
+&lt;/blockquote></description></item><item><title>Craigslist Vacation House Data Crawling</title><link>https://lijohnny.com/p/craigslist-vacation-house-data-crawling/</link><pubDate>Tue, 12 Feb 2019 01:13:34 -0800</pubDate><guid>https://lijohnny.com/p/craigslist-vacation-house-data-crawling/</guid><description>&lt;img src="https://lijohnny.com/p/craigslist-vacation-house-data-crawling/5cd7d789264a1.jpg" alt="Featured image of post Craigslist Vacation House Data Crawling" />&lt;p>In this &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist" target="_blank" rel="noopener"
+>tutorial&lt;/a> I use &lt;a class="link" href="https://scrapy.org/" target="_blank" rel="noopener"
+>Scrapy&lt;/a> to collect data from Craigslist.com. Specifically, the data under craigslist.org/Seattle/housing/vacation rentals. You can find the page under the link: &lt;a class="link" href="https://seattle.craigslist.org/d/vacation%e2%80%90rentals/search/vac" target="_blank" rel="noopener"
+>https://seattle.craigslist.org/d/vacation‐rentals/search/vac&lt;/a>&lt;/p>
+&lt;p>In the example, I collected following information:&lt;/p>
+&lt;ol>
+&lt;li>Title&lt;/li>
+&lt;li>Posted Date&lt;/li>
+&lt;li>Rental Price&lt;/li>
+&lt;li>Number of bedrooms&lt;/li>
+&lt;li>Neighborhood&lt;/li>
+&lt;li>Description&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>For more information or the code, please go to my &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist" target="_blank" rel="noopener"
+>github page&lt;/a>.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="preparation">PREPARATION&lt;/h2>
+&lt;h3 id="installation">INSTALLATION&lt;/h3>
+&lt;p>You can install scrapy through &lt;code>pip install&lt;/code> command:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ pip install scrapy
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>or use &lt;code>conda install&lt;/code> command:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ conda install scrapy
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="creat-project">CREAT PROJECT&lt;/h3>
+&lt;p>Before we start coding, we can use &lt;code>scrapy startproject&lt;/code> command to quickly create a project.
+In terminal or CMD, navigate to your desired folder and execute following command:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ scrapy startproject scrapy_craigslist
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Here &lt;em>scrapy_craigslist&lt;/em> is the name of the project.&lt;/p>
+&lt;p>After that, we can use &lt;code>genspider&lt;/code> command to create a Scrapy Spider. Here, we name it vacation_rentals and designated a URL. We user craiglist.org Seattle vacation house list page as an example.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ scrapy genspider vacation_rentals seattle.craigslist.org/d/vacation‐rentals/search/vac
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>This will create a directory with the following structure:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">─── scrapy_craigslist
+├── __init__.py
+├── __pycache__
+│   ├── __init__.cpython-36.pyc
+│   └── settings.cpython-36.pyc
+├── items.py
+├── middlewares.py
+├── pipelines.py
+├── settings.py
+└── spiders
+├── __init__.py
+├── __pycache__
+│   ├── __init__.cpython-36.pyc
+│   └── vacation_rentals.cpython-36.pyc
+└── vacation_rentals.py
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="editing">EDITING&lt;/h2>
+&lt;p>Navigate to the spiders folder and open the spider py file in your favorite editor.
+There are some pre written code, but you need to make sure that &lt;code>allowed_domains&lt;/code> and &lt;code>start_urls&lt;/code> are in the right form.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="kn">import&lt;/span> &lt;span class="nn">scrapy&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">CarSpider&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">scrapy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Spider&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;car&amp;#39;&lt;/span>
+&lt;span class="n">allowed_domains&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;craigslist.org&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="n">start_urls&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;https://seattle.craigslist.org/d/vacation‐rentals/search/vac/&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">def&lt;/span> &lt;span class="nf">parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="k">pass&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Let&amp;rsquo;s write our own code under &lt;code>def parse(self, response):&lt;/code>. You can check the code &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/blob/master/scrapy_craigslist/scrapy_craigslist/spiders/vacation_rentals.py" target="_blank" rel="noopener"
+>here&lt;/a>.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="c1"># -*- coding: utf-8 -*-&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">scrapy&lt;/span>
+&lt;span class="kn">from&lt;/span> &lt;span class="nn">scrapy&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Request&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">re&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">VacationRentalsSpider&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">scrapy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Spider&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;vacation_rentals&amp;#39;&lt;/span>
+&lt;span class="n">allowed_domains&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;craigslist.org&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="n">start_urls&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;http://seattle.craigslist.org/d/vacation‐rentals/search/vac/&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">def&lt;/span> &lt;span class="nf">parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="c1"># Extract all wrapper for each list item between &amp;lt;p class=&amp;#34;result-info&amp;#34;&amp;gt;&amp;lt;/p&amp;gt;&lt;/span>
+&lt;span class="n">vacs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;//p[@class=&amp;#34;result-info&amp;#34;]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># Get next page button URL &amp;lt;a href=&amp;#34;/search/vac?s=120&amp;#34; class=&amp;#34;button next&amp;#34; title=&amp;#34;next page&amp;#34;&amp;gt;next &amp;amp;gt; &amp;lt;/a&amp;gt;&lt;/span>
+&lt;span class="n">next_rel_url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;//a[@class=&amp;#34;button next&amp;#34;]/@href&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get full address.&lt;/span>
+&lt;span class="n">next_url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">urljoin&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">next_rel_url&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># Go through all the pages.&lt;/span>
+&lt;span class="k">yield&lt;/span> &lt;span class="n">Request&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">next_url&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">callback&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">parse&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># Loop each item to extract title, posted date, rental price, number of bedrooms, and neighborhood&lt;/span>
+&lt;span class="k">for&lt;/span> &lt;span class="n">vac&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">vacs&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="c1"># Get title from &amp;lt;a&amp;gt;&amp;lt;/a&amp;gt; tag.&lt;/span>
+&lt;span class="n">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;a/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get posted date from &amp;lt;time class=&amp;#34;result-date&amp;#34; datetime=&amp;#34;2019-03-06 18:34&amp;#34; title=&amp;#34;Wed 06 Mar 06:34:28 PM&amp;#34;&amp;gt;Mar 6&amp;lt;/time&amp;gt; block. Use @datetime for attribute datetime.&lt;/span>
+&lt;span class="n">pdate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;time/@datetime&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">()[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="c1"># Get rental price form &amp;lt;span class=&amp;#34;result-price&amp;#34;&amp;gt;$84&amp;lt;/span&amp;gt;&lt;/span>
+&lt;span class="n">rprice&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;span/span[@class=&amp;#34;result-price&amp;#34;]/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get Number of bedrooms from &amp;lt;span class=&amp;#34;housing&amp;#34;&amp;gt;2br - 760ft&amp;lt;sup&amp;gt;2&amp;lt;/sup&amp;gt; - &amp;lt;/span&amp;gt; and clean up the extra&lt;/span>
+&lt;span class="n">nbedroom&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;span/span[@class=&amp;#34;housing&amp;#34;]/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;-&amp;#39;&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get Neighborhood from &amp;lt;span class=&amp;#34;result-hood&amp;#34;&amp;gt; (*** - *****)&amp;lt;/span&amp;gt;&lt;/span>
+&lt;span class="n">hood&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sub&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;[()]&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;span/span[@class=&amp;#34;result-hood&amp;#34;]/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()))&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get the address of description page of each vacation house.&lt;/span>
+&lt;span class="n">vacaddress&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;a/@href&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># We needed open the URL of each house and scrape the house description, while passing the meta to parse_page function.&lt;/span>
+&lt;span class="k">yield&lt;/span> &lt;span class="n">Request&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">vacaddress&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">callback&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">parse_page&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">meta&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="s1">&amp;#39;URL&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">vacaddress&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;Title&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">title&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;Posted Date&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">pdate&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s2">&amp;#34;Rental Price&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">rprice&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s2">&amp;#34;Number of bedrooms&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">nbedroom&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Neighborhood&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">hood&lt;/span>&lt;span class="p">})&lt;/span>
+&lt;span class="c1"># Extract description page of the vacation house.&lt;/span>
+&lt;span class="k">def&lt;/span> &lt;span class="nf">parse_page&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="c1"># Pass the variables&lt;/span>
+&lt;span class="n">url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;URL&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Title&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">pdate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Posted Date&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">rprice&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Rental Price&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">nbedroom&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Number of bedrooms&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">hood&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Neighborhood&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># Get the description.&lt;/span>
+&lt;span class="n">description&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">line&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">line&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;//*[@id=&amp;#34;postingbody&amp;#34;]/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="k">yield&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="s1">&amp;#39;Title&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">title&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;Posted Date&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">pdate&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s2">&amp;#34;Rental Price&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">rprice&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s2">&amp;#34;Number of bedrooms&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">nbedroom&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Neighborhood&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">hood&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Description&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">description&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="run-spider">RUN SPIDER&lt;/h3>
+&lt;p>To put our spider to work, run &lt;code>crawl&lt;/code> command in terminal or CMD:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ scrapy crawl vacation_rentals -o result-titles.csv
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>-o&lt;/code> means out put data into file. &lt;code>result-titles.csv&lt;/code> is the files' name.&lt;/p></description></item></channel></rss>

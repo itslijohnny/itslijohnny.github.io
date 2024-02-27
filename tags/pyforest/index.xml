@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pyforest on Johnny's Blog</title><link>https://lijohnny.com/tags/pyforest/</link><description>Recent content in Pyforest on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Fri, 19 Mar 2021 19:56:44 -0700</lastBuildDate><atom:link href="https://lijohnny.com/tags/pyforest/index.xml" rel="self" type="application/rss+xml"/><item><title>Pyforest - Automate Package Import Process for Your Data Science Project</title><link>https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/</link><pubDate>Fri, 19 Mar 2021 19:56:44 -0700</pubDate><guid>https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/</guid><description>&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/j4dzCfs1YINnUeP.jpg" alt="Featured image of post Pyforest - Automate Package Import Process for Your Data Science Project" />&lt;p>Usually, the first step we all do for any Python project is importing required packages. So, the beginning of the file usually looks like this:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="kn">import&lt;/span> &lt;span class="nn">xxxx&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="nn">xxx&lt;/span>
+&lt;span class="kn">from&lt;/span> &lt;span class="nn">xxxx&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">xxxx&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Importing packages is one of my least favorite parts when I&amp;rsquo;m working on a Data Scientist project. Packages like &lt;em>pandas&lt;/em>, &lt;em>numpy&lt;/em>, &lt;em>lighteda&lt;/em>, &lt;em>matplotlib.pyplot&lt;/em>, and &lt;em>seaborn&lt;/em> are commonly used for my projects. I need to repeat this step in every single Jupyter Notebook. Moreover, when the analysis/research dives deeper, and I need to import new packages in the middle, I have to go back to the beginning and import new packages (If you are using Jupyter Notebook, don&amp;rsquo;t forget to press &lt;code>Ctrl&lt;/code> + &lt;code>Enter&lt;/code>).&lt;/p>
+&lt;p>&lt;img src="https://i.loli.net/2021/03/20/mle46dnAb8zsr1K.gif"
+loading="lazy"
+alt="Import in the middle. "
+>
+&lt;p style="font-size:1.4rem;text-align:center; margin-top: -2.8rem; color: var(--card-text-color-secondary);">Going back and forth to import packages is frustrating.&lt;/p>&lt;/p>
+&lt;p>I can reduce some repetitive works by using template tools like cookiecutter.&lt;/p>
+&lt;div class="gallery">
+&lt;p>
+&lt;a href="https://github.com/itslijohnny/cookiecutter_data_analysis">&lt;img src="https://gh-card.dev/repos/itslijohnny/cookiecutter_data_analysis.svg?fullname=" loading='lazy'>&lt;/a>
+&lt;/p>
+&lt;/div>
+&lt;p>But, is there a way to automatically import related packages and add import statements for me, like this?
+&lt;img src="https://github.com/8080labs/pyforest/raw/master/examples/assets/pyforest_demo_in_jupyter_notebook.gif"
+loading="lazy"
+>
+&lt;p style="font-size:1.4rem;text-align:center; margin-top: -2.8rem; color: var(--card-text-color-secondary);">The packages are automatically imported in the first cell.&lt;/p>&lt;/p>
+&lt;p>But how? &lt;strong>Pyforest&lt;/strong> - a package can automatically import packages for you.
+&lt;div class="gallery">
+&lt;p>
+&lt;a href="https://github.com/8080labs/pyforest">&lt;img src="https://gh-card.dev/repos/8080labs/pyforest.svg?fullname=" loading='lazy'>&lt;/a>
+&lt;/p>
+&lt;/div>&lt;/p>
+&lt;p>Pyforest can &amp;ldquo;lazy&amp;rdquo; import the packages and add the import statement to your Jupyter Notebook. It will not import packages you are not using.&lt;/p>
+&lt;p>You can install it using pip:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">pip install --upgrade pyforest
+python -m pyforest install_extensions
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>The installation will add pyforest_autoimport.py to your Jupyter and IPython default startup settings. Therefore, you can start coding in Jupyter or Ipython and don&amp;rsquo;t need to import pyforest.&lt;/p>
+&lt;p>&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo.png"
+width="606"
+height="166"
+srcset="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_480x0_resize_box_3.png 480w, https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="I didn&amp;rsquo;t add the statement for import pandas as pd."
+class="gallery-image"
+data-flex-grow="365"
+data-flex-basis="876px"
+>&lt;/p>
+&lt;p>Also, you can notice that I didn&amp;rsquo;t type the full name of pandas library. Pyforest has already included all the common abbreviations.
+&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode.png"
+width="491"
+height="392"
+srcset="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_480x0_resize_box_3.png 480w, https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Pyforest includes many import statements."
+class="gallery-image"
+data-flex-grow="125"
+data-flex-basis="300px"
+>&lt;/p>
+&lt;p>You can also edit ~/.pyforest/user_imports.py to add your customized import statements.&lt;/p>
+&lt;p>&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports.png"
+width="623"
+height="394"
+srcset="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_480x0_resize_box_3.png 480w, https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="158"
+data-flex-basis="379px"
+>&lt;/p>
+&lt;p>Pyforest works better on Jupyter Notebook or IPython. If you want this feature to work in other editors, you can import Pyforest first. e.g.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="kn">import&lt;/span> &lt;span class="nn">pyforest&lt;/span>
+&lt;span class="n">pyforest&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">active_imports&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>This is my daily dose of Python tricks. I hope this post can help you. I strongly recommend you try &lt;a class="link" href="https://github.com/itslijohnny/cookiecutter_data_analysis" target="_blank" rel="noopener"
+>cookiecutter&lt;/a> and &lt;a class="link" href="https://github.com/8080labs/pyforest" target="_blank" rel="noopener"
+>Pyforest&lt;/a> to automate your Data Science/Analysis workflow.&lt;/p>
+&lt;hr>
+&lt;style>
+.resp-sharing-button__link,
+.resp-sharing-button__icon {
+display: inline-block
+}
+.resp-sharing-button__link {
+text-decoration: none;
+color: #fff;
+margin: 0.5em
+}
+.resp-sharing-button {
+border-radius: 5px;
+transition: 25ms ease-out;
+padding: 0.5em 0.75em;
+font-family: Helvetica Neue,Helvetica,Arial,sans-serif
+}
+.resp-sharing-button__icon svg {
+width: 1em;
+height: 1em;
+margin-right: 0.4em;
+vertical-align: top
+}
+.resp-sharing-button--small svg {
+margin: 0;
+vertical-align: middle
+}
+.resp-sharing-button__icon {
+stroke: #fff;
+fill: none
+}
+.resp-sharing-button__icon--solid,
+.resp-sharing-button__icon--solidcircle {
+fill: #fff;
+stroke: none
+}
+.resp-sharing-button--twitter {
+background-color: #55acee
+}
+.resp-sharing-button--twitter:hover {
+background-color: #2795e9
+}
+.resp-sharing-button--pinterest {
+background-color: #bd081c
+}
+.resp-sharing-button--pinterest:hover {
+background-color: #8c0615
+}
+.resp-sharing-button--facebook {
+background-color: #3b5998
+}
+.resp-sharing-button--facebook:hover {
+background-color: #2d4373
+}
+.resp-sharing-button--tumblr {
+background-color: #35465C
+}
+.resp-sharing-button--tumblr:hover {
+background-color: #222d3c
+}
+.resp-sharing-button--reddit {
+background-color: #5f99cf
+}
+.resp-sharing-button--reddit:hover {
+background-color: #3a80c1
+}
+.resp-sharing-button--google {
+background-color: #dd4b39
+}
+.resp-sharing-button--google:hover {
+background-color: #c23321
+}
+.resp-sharing-button--linkedin {
+background-color: #0077b5
+}
+.resp-sharing-button--linkedin:hover {
+background-color: #046293
+}
+.resp-sharing-button--email {
+background-color: #777
+}
+.resp-sharing-button--email:hover {
+background-color: #5e5e5e
+}
+.resp-sharing-button--xing {
+background-color: #1a7576
+}
+.resp-sharing-button--xing:hover {
+background-color: #114c4c
+}
+.resp-sharing-button--whatsapp {
+background-color: #25D366
+}
+.resp-sharing-button--whatsapp:hover {
+background-color: #1da851
+}
+.resp-sharing-button--hackernews {
+background-color: #FF6600
+}
+.resp-sharing-button--hackernews:hover, .resp-sharing-button--hackernews:focus { background-color: #FB6200 }
+.resp-sharing-button--vk {
+background-color: #507299
+}
+.resp-sharing-button--vk:hover {
+background-color: #43648c
+}
+.resp-sharing-button--facebook {
+background-color: #3b5998;
+border-color: #3b5998;
+}
+.resp-sharing-button--facebook:hover,
+.resp-sharing-button--facebook:active {
+background-color: #2d4373;
+border-color: #2d4373;
+}
+.resp-sharing-button--twitter {
+background-color: #55acee;
+border-color: #55acee;
+}
+.resp-sharing-button--twitter:hover,
+.resp-sharing-button--twitter:active {
+background-color: #2795e9;
+border-color: #2795e9;
+}
+.resp-sharing-button--email {
+background-color: #777777;
+border-color: #777777;
+}
+.resp-sharing-button--email:hover,
+.resp-sharing-button--email:active {
+background-color: #5e5e5e;
+border-color: #5e5e5e;
+}
+.resp-sharing-button--linkedin {
+background-color: #0077b5;
+border-color: #0077b5;
+}
+.resp-sharing-button--linkedin:hover,
+.resp-sharing-button--linkedin:active {
+background-color: #046293;
+border-color: #046293;
+}
+.resp-sharing-button--reddit {
+background-color: #5f99cf;
+border-color: #5f99cf;
+}
+.resp-sharing-button--reddit:hover,
+.resp-sharing-button--reddit:active {
+background-color: #3a80c1;
+border-color: #3a80c1;
+}
+.resp-sharing-button--telegram {
+background-color: #54A9EB;
+}
+.resp-sharing-button--telegram:hover {
+background-color: #4B97D1;}
+.share {
+margin: 1.5em 0;
+padding: 0 var(--card-padding);
+font-size: 0.8em;
+}
+.share svg{
+margin-top: 0.3em;
+}
+.share a:hover{
+color:#dddddd;
+}
+.share p{
+font-size: 1.3em;
+margin:0 auto;
+}
+&lt;/style>
+&lt;div class="share">
+&lt;p>If you think your friends/network would find this useful, please share it with them – I’d really appreciate it.&lt;/p>
+&lt;a class="resp-sharing-button__link" href="https://facebook.com/sharer/sharer.php?u=http%3A%2F%2Flijohnny.com%2Fp%2Fpyforest-automate-package-import-process-for-your-data-science-project" target="_blank" rel="noopener" aria-label="Facebook" style="margin-left: -0.18em;">
+&lt;div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--medium">&lt;div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">&lt;path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.15h-3v4h3v12h5v-12h3.85l.42-4z"/>&lt;/svg>&lt;/div>Facebook&lt;/div>
+&lt;/a>
+&lt;a class="resp-sharing-button__link" href="https://twitter.com/intent/tweet/?text=Pyforest%20-%20Automate%20Package%20Import%20Process%20for%20Your%20Data%20Science%20Project&amp;amp;url=http%3A%2F%2Flijohnny.com%2Fp%2Fpyforest-automate-package-import-process-for-your-data-science-project" target="_blank" rel="noopener" aria-label="Twitter">
+&lt;div class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--medium">&lt;div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">&lt;path d="M23.44 4.83c-.8.37-1.5.38-2.22.02.93-.56.98-.96 1.32-2.02-.88.52-1.86.9-2.9 1.1-.82-.88-2-1.43-3.3-1.43-2.5 0-4.55 2.04-4.55 4.54 0 .36.03.7.1 1.04-3.77-.2-7.12-2-9.36-4.75-.4.67-.6 1.45-.6 2.3 0 1.56.8 2.95 2 3.77-.74-.03-1.44-.23-2.05-.57v.06c0 2.2 1.56 4.03 3.64 4.44-.67.2-1.37.2-2.06.08.58 1.8 2.26 3.12 4.25 3.16C5.78 18.1 3.37 18.74 1 18.46c2 1.3 4.4 2.04 6.97 2.04 8.35 0 12.92-6.92 12.92-12.93 0-.2 0-.4-.02-.6.9-.63 1.96-1.22 2.56-2.14z"/>&lt;/svg>&lt;/div>Twitter&lt;/div>
+&lt;/a>
+&lt;a class="resp-sharing-button__link" href="mailto:?subject=Pyforest%20-%20Automate%20Package%20Import%20Process%20for%20Your%20Data%20Science%20Project&amp;amp;body=http%3A%2F%2Flijohnny.com%2Fp%2Fpyforest-automate-package-import-process-for-your-data-science-project" target="_self" rel="noopener" aria-label="E-Mail">
+&lt;div class="resp-sharing-button resp-sharing-button--email resp-sharing-button--medium">&lt;div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">&lt;path d="M22 4H2C.9 4 0 4.9 0 6v12c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM7.25 14.43l-3.5 2c-.08.05-.17.07-.25.07-.17 0-.34-.1-.43-.25-.14-.24-.06-.55.18-.68l3.5-2c.24-.14.55-.06.68.18.14.24.06.55-.18.68zm4.75.07c-.1 0-.2-.03-.27-.08l-8.5-5.5c-.23-.15-.3-.46-.15-.7.15-.22.46-.3.7-.14L12 13.4l8.23-5.32c.23-.15.54-.08.7.15.14.23.07.54-.16.7l-8.5 5.5c-.08.04-.17.07-.27.07zm8.93 1.75c-.1.16-.26.25-.43.25-.08 0-.17-.02-.25-.07l-3.5-2c-.24-.13-.32-.44-.18-.68s.44-.32.68-.18l3.5 2c.24.13.32.44.18.68z"/>&lt;/svg>&lt;/div>E-Mail&lt;/div>
+&lt;/a>
+&lt;a class="resp-sharing-button__link" href="https://www.linkedin.com/shareArticle?mini=true&amp;amp;url=http%3A%2F%2Flijohnny.com%2Fp%2Fpyforest-automate-package-import-process-for-your-data-science-project&amp;amp;title=Pyforest%20-%20Automate%20Package%20Import%20Process%20for%20Your%20Data%20Science%20Project&amp;amp;summary=Pyforest%20-%20Automate%20Package%20Import%20Process%20for%20Your%20Data%20Science%20Project&amp;amp;source=http%3A%2F%2Flijohnny.com%2Fp%2Fpyforest-automate-package-import-process-for-your-data-science-project" target="_blank" rel="noopener" aria-label="LinkedIn">
+&lt;div class="resp-sharing-button resp-sharing-button--linkedin resp-sharing-button--medium">&lt;div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">&lt;path d="M6.5 21.5h-5v-13h5v13zM4 6.5C2.5 6.5 1.5 5.3 1.5 4s1-2.4 2.5-2.4c1.6 0 2.5 1 2.6 2.5 0 1.4-1 2.5-2.6 2.5zm11.5 6c-1 0-2 1-2 2v7h-5v-13h5V10s1.6-1.5 4-1.5c3 0 5 2.2 5 6.3v6.7h-5v-7c0-1-1-2-2-2z"/>&lt;/svg>&lt;/div>LinkedIn&lt;/div>
+&lt;/a>
+&lt;a class="resp-sharing-button__link" href="https://reddit.com/submit/?url=http%3A%2F%2Flijohnny.com%2Fp%2Fpyforest-automate-package-import-process-for-your-data-science-project&amp;amp;resubmit=true&amp;amp;title=Pyforest%20-%20Automate%20Package%20Import%20Process%20for%20Your%20Data%20Science%20Project" target="_blank" rel="noopener" aria-label="Reddit">
+&lt;div class="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--medium">&lt;div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">&lt;path d="M24 11.5c0-1.65-1.35-3-3-3-.96 0-1.86.48-2.42 1.24-1.64-1-3.75-1.64-6.07-1.72.08-1.1.4-3.05 1.52-3.7.72-.4 1.73-.24 3 .5C17.2 6.3 18.46 7.5 20 7.5c1.65 0 3-1.35 3-3s-1.35-3-3-3c-1.38 0-2.54.94-2.88 2.22-1.43-.72-2.64-.8-3.6-.25-1.64.94-1.95 3.47-2 4.55-2.33.08-4.45.7-6.1 1.72C4.86 8.98 3.96 8.5 3 8.5c-1.65 0-3 1.35-3 3 0 1.32.84 2.44 2.05 2.84-.03.22-.05.44-.05.66 0 3.86 4.5 7 10 7s10-3.14 10-7c0-.22-.02-.44-.05-.66 1.2-.4 2.05-1.54 2.05-2.84zM2.3 13.37C1.5 13.07 1 12.35 1 11.5c0-1.1.9-2 2-2 .64 0 1.22.32 1.6.82-1.1.85-1.92 1.9-2.3 3.05zm3.7.13c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9.8 4.8c-1.08.63-2.42.96-3.8.96-1.4 0-2.74-.34-3.8-.95-.24-.13-.32-.44-.2-.68.15-.24.46-.32.7-.18 1.83 1.06 4.76 1.06 6.6 0 .23-.13.53-.05.67.2.14.23.06.54-.18.67zm.2-2.8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm5.7-2.13c-.38-1.16-1.2-2.2-2.3-3.05.38-.5.97-.82 1.6-.82 1.1 0 2 .9 2 2 0 .84-.53 1.57-1.3 1.87z"/>&lt;/svg>&lt;/div>Reddit&lt;/div>
+&lt;/a>
+&lt;a class="resp-sharing-button__link" href="https://telegram.me/share/url?text=Pyforest%20-%20Automate%20Package%20Import%20Process%20for%20Your%20Data%20Science%20Project&amp;amp;url=http%3A%2F%2Flijohnny.com%2Fp%2Fpyforest-automate-package-import-process-for-your-data-science-project" target="_blank" rel="noopener" aria-label="Telegram">
+&lt;div class="resp-sharing-button resp-sharing-button--telegram resp-sharing-button--medium">&lt;div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">&lt;path d="M.707 8.475C.275 8.64 0 9.508 0 9.508s.284.867.718 1.03l5.09 1.897 1.986 6.38a1.102 1.102 0 0 0 1.75.527l2.96-2.41a.405.405 0 0 1 .494-.013l5.34 3.87a1.1 1.1 0 0 0 1.046.135 1.1 1.1 0 0 0 .682-.803l3.91-18.795A1.102 1.102 0 0 0 22.5.075L.706 8.475z"/>&lt;/svg>&lt;/div>Telegram&lt;/div>
+&lt;/a>
+&lt;/div>
+&lt;hr></description></item></channel></rss>

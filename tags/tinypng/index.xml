@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tinypng on Johnny's Blog</title><link>https://lijohnny.com/tags/tinypng/</link><description>Recent content in Tinypng on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Sat, 11 May 2019 22:28:30 +0000</lastBuildDate><atom:link href="https://lijohnny.com/tags/tinypng/index.xml" rel="self" type="application/rss+xml"/><item><title>Automate Image Processing for My Blog</title><link>https://lijohnny.com/p/automate-image-processing-for-my-blog/</link><pubDate>Sat, 11 May 2019 22:28:30 +0000</pubDate><guid>https://lijohnny.com/p/automate-image-processing-for-my-blog/</guid><description>&lt;img src="https://lijohnny.com/p/automate-image-processing-for-my-blog/5cd7b069e734a.jpg" alt="Featured image of post Automate Image Processing for My Blog" />&lt;blockquote>
+&lt;p>:warning:The old cript is &lt;code>DEPRECATED&lt;/code>. I switch to FastAPI, and updated the code &lt;a class="link" href="https://github.com/itslijohnny/blog-image-processing-automation" target="_blank" rel="noopener"
+>here&lt;/a>. The old code is now in &lt;a class="link" href="https://github.com/itslijohnny/blog-image-processing-automation/tree/V1.0" target="_blank" rel="noopener"
+>v1.0 Branch&lt;/a>.&lt;/p>
+&lt;/blockquote>
+&lt;p>As you can see, my blog contains cover images. Every time I write an article I need to upload a cover image to the image server. However, the process is complicated and trivial. I need to crop the image to a certain proportion and resize and compress the image to reduce the loading time. Moreover, to put the photographer&amp;rsquo;s name on the image, I need to use other software. Therefore, I create two python scripts to automate the process.&lt;/p>
+&lt;blockquote>
+&lt;p>For more information and code script, please go to my &lt;a class="link" href="https://github.com/itslijohnny/blog-image-processing-automation/tree/V1.0" target="_blank" rel="noopener"
+>GitHub page&lt;/a>.&lt;/p>
+&lt;/blockquote>
+&lt;p>These scripts are for automating the process of cropping, resizing, adding author&amp;rsquo;s information, compressing, and uploading an image.&lt;/p>
+&lt;ul>
+&lt;li>The compressing service I use &lt;a class="link" href="https://tinypng.com" target="_blank" rel="noopener"
+>tinypng&lt;/a>&lt;/li>
+&lt;li>The storage for image I user &lt;a class="link" href="https://sm.ms/" target="_blank" rel="noopener"
+>sm.ms&lt;/a>&lt;/li>
+&lt;li>This script works &lt;strong>only&lt;/strong> for the image download from &lt;a class="link" href="https://unsplash.com/" target="_blank" rel="noopener"
+>unsplash.com&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="usage">Usage&lt;/h2>
+&lt;p>To use correctly, you need to create an &lt;code>api.txt&lt;/code> file that contains only the API key for &lt;a class="link" href="https://tinypng.com" target="_blank" rel="noopener"
+>tinypng&lt;/a>. To generate an API key, you can check &lt;a class="link" href="https://tinypng.com/developers" target="_blank" rel="noopener"
+>https://tinypng.com/developers&lt;/a>.&lt;/p>
+&lt;p>&lt;code>main.py&lt;/code> can be easily run in the terminal with the command:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-Bash" data-lang="Bash">python main.py
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Once it launched, you can drag and drop any image on it.&lt;/p>
+&lt;p>&lt;code>automator.py&lt;/code> can be used in Mac&amp;rsquo;s Automator. By building a server with Automator, I can right click on any image and run the script, or use a shortcut to run the script.&lt;/p></description></item></channel></rss>

@@ -1,0 +1,489 @@
+<!doctype html><html lang=en-us dir=ltr>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="The is a tutorial of using Scrayp to get collect data from Craigslist.com.">
+<title>Craigslist Vacation House Data Crawling</title>
+<link rel=canonical href=https://lijohnny.com/p/craigslist-vacation-house-data-crawling/>
+<link rel=stylesheet href=https://lijohnny.com/scss/style.min.abbd69b2908fdfcd5179898beaafd374514a86538d81639ddd2c58c06ae54e40.css><meta property="og:title" content="Craigslist Vacation House Data Crawling">
+<meta property="og:description" content="The is a tutorial of using Scrayp to get collect data from Craigslist.com.">
+<meta property="og:url" content="https://lijohnny.com/p/craigslist-vacation-house-data-crawling/">
+<meta property="og:site_name" content="Johnny's Blog">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="Python"><meta property="article:tag" content="Crawling"><meta property="article:tag" content="Scrapy"><meta property="article:tag" content="Tutorial"><meta property="article:tag" content="HTML"><meta property="article:published_time" content="2019-02-12T01:13:34-08:00"><meta property="article:modified_time" content="2019-02-12T01:13:34-08:00"><meta property="og:image" content="https://lijohnny.com/p/craigslist-vacation-house-data-crawling/5cd7d789264a1.jpg">
+<meta name=twitter:site content="@lijohnnyds">
+<meta name=twitter:creator content="@lijohnnyds"><meta name=twitter:title content="Craigslist Vacation House Data Crawling">
+<meta name=twitter:description content="The is a tutorial of using Scrayp to get collect data from Craigslist.com."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://lijohnny.com/p/craigslist-vacation-house-data-crawling/5cd7d789264a1.jpg">
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-136585559-1','auto'),ga('send','pageview'))</script><meta name=keywords content="/">
+<meta name=tags content="Python, Crawling, Scrapy, Tutorial, HTML">
+<script type=application/ld+json>{"@context":"http://lijohnny.com","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/lijohnny.com"},"articleSection":"post","name":"Craigslist Vacation House Data Crawling","headline":"Craigslist Vacation House Data Crawling","description":"The is a tutorial of using Scrayp to get collect data from Craigslist.com.","inLanguage":"en-US","author":"Johnny Li","creator":"Johnny Li","publisher":"Johnny Li","accountablePerson":"Johnny Li","copyrightHolder":"Johnny Li","copyrightYear":"2019","datePublished":"2019-02-12 01:13:34 -0800 -0800","dateModified":"2019-02-12 01:13:34 -0800 -0800","url":"https:\/\/lijohnny.com\/p\/craigslist-vacation-house-data-crawling\/","wordCount":"660","keywords":["Python","Crawling","Scrapy","Tutorial","HTML","Blog"]}</script>
+<link href=https://lijohnny.com/scss/all.min.css rel=stylesheet>
+<link rel=stylesheet type=text/css href=https://lijohnny.com/hugo-cite.css>
+<link href=https://lijohnny.com/scss/animate.css rel=stylesheet>
+<link rel=stylesheet href=https://lijohnny.com/dist/morphext.css>
+<script src=//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js></script>
+<script src=https://lijohnny.com/dist/morphext.min.js></script>
+</head>
+<body class=article-page>
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky">
+<button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box>
+<span class=hamburger-inner></span>
+</span>
+</button>
+<header>
+<figure class=site-avatar>
+<a href=https://lijohnny.com/>
+<img src=https://lijohnny.com/img/avatar_hua0986efb83853d2923c77d3b90f65b4d_41306_300x0_resize_q75_box.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a>
+<span class=emoji>🖖</span>
+</figure>
+<div class=site-meta>
+<h1 class=site-name><a href=https://lijohnny.com/>Johnny's Blog</a></h1>
+<h2 class=site-description>Data Scientist | ML Engineer</h2>
+</div>
+</header><ol class=menu id=main-menu>
+<li>
+<a href=https://lijohnny.com/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span>
+</a>
+</li>
+<li>
+<a href=https://lijohnny.com/about><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://lijohnny.com/archives><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Categories</span>
+</a>
+</li>
+<li>
+<a href=https://lijohnny.com/Today-I-Learned/ target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notes" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2z"/><path d="M9 7h6"/><path d="M9 11h6"/><path d="M9 15h4"/></svg>
+<span>Today I Learned</span>
+</a>
+</li>
+<li>
+<a href=https://lijohnny.com/search><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span>
+</a>
+</li>
+<div class=menu-bottom-section>
+<li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span>
+</li>
+</div>
+</ol>
+</aside>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=https://lijohnny.com/p/craigslist-vacation-house-data-crawling/>
+<img src=https://lijohnny.com/p/craigslist-vacation-house-data-crawling/5cd7d789264a1_huc7cb634be90cb868cb769f9003ac1e34_106268_800x0_resize_q75_box.jpg srcset="https://lijohnny.com/p/craigslist-vacation-house-data-crawling/5cd7d789264a1_huc7cb634be90cb868cb769f9003ac1e34_106268_800x0_resize_q75_box.jpg 800w, https://lijohnny.com/p/craigslist-vacation-house-data-crawling/5cd7d789264a1_huc7cb634be90cb868cb769f9003ac1e34_106268_1600x0_resize_q75_box.jpg 1600w" width=800 height=364 loading=lazy alt="Featured image of post Craigslist Vacation House Data Crawling">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=https://lijohnny.com/categories/python/ style=background-color:#2a9d8f;color:#fff>
+Python
+</a>
+<a href=https://lijohnny.com/categories/tutorial/>
+Tutorial
+</a>
+</header>
+<div class=article-title-wrapper>
+<h2 class=article-title>
+<a href=https://lijohnny.com/p/craigslist-vacation-house-data-crawling/>Craigslist Vacation House Data Crawling</a>
+</h2>
+<h3 class=article-subtitle>
+The is a tutorial of using Scrayp to get collect data from Craigslist.com.
+</h3>
+</div>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Feb 12, 2019</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+4 minute read
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<p>In this <a class=link href=https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist target=_blank rel=noopener>tutorial</a> I use <a class=link href=https://scrapy.org/ target=_blank rel=noopener>Scrapy</a> to collect data from Craigslist.com. Specifically, the data under craigslist.org/Seattle/housing/vacation rentals. You can find the page under the link: <a class=link href=https://seattle.craigslist.org/d/vacation%e2%80%90rentals/search/vac target=_blank rel=noopener>https://seattle.craigslist.org/d/vacation‐rentals/search/vac</a></p>
+<p>In the example, I collected following information:</p>
+<ol>
+<li>Title</li>
+<li>Posted Date</li>
+<li>Rental Price</li>
+<li>Number of bedrooms</li>
+<li>Neighborhood</li>
+<li>Description</li>
+</ol>
+<blockquote>
+<p>For more information or the code, please go to my <a class=link href=https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist target=_blank rel=noopener>github page</a>.</p>
+</blockquote>
+<h2 id=preparation>PREPARATION</h2>
+<h3 id=installation>INSTALLATION</h3>
+<p>You can install scrapy through <code>pip install</code> command:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ pip install scrapy
+</code></pre></td></tr></table>
+</div>
+</div><p>or use <code>conda install</code> command:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ conda install scrapy
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=creat-project>CREAT PROJECT</h3>
+<p>Before we start coding, we can use <code>scrapy startproject</code> command to quickly create a project.
+In terminal or CMD, navigate to your desired folder and execute following command:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ scrapy startproject scrapy_craigslist
+</code></pre></td></tr></table>
+</div>
+</div><p>Here <em>scrapy_craigslist</em> is the name of the project.</p>
+<p>After that, we can use <code>genspider</code> command to create a Scrapy Spider. Here, we name it vacation_rentals and designated a URL. We user craiglist.org Seattle vacation house list page as an example.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ scrapy genspider vacation_rentals seattle.craigslist.org/d/vacation‐rentals/search/vac
+</code></pre></td></tr></table>
+</div>
+</div><p>This will create a directory with the following structure:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>─── scrapy_craigslist
+    ├── __init__.py
+    ├── __pycache__
+    │   ├── __init__.cpython-36.pyc
+    │   └── settings.cpython-36.pyc
+    ├── items.py
+    ├── middlewares.py
+    ├── pipelines.py
+    ├── settings.py
+    └── spiders
+        ├── __init__.py
+        ├── __pycache__
+        │   ├── __init__.cpython-36.pyc
+        │   └── vacation_rentals.cpython-36.pyc
+        └── vacation_rentals.py
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=editing>EDITING</h2>
+<p>Navigate to the spiders folder and open the spider py file in your favorite editor.
+There are some pre written code, but you need to make sure that <code>allowed_domains</code> and <code>start_urls</code> are in the right form.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>scrapy</span>
+
+<span class=k>class</span> <span class=nc>CarSpider</span><span class=p>(</span><span class=n>scrapy</span><span class=o>.</span><span class=n>Spider</span><span class=p>):</span>
+    <span class=n>name</span> <span class=o>=</span> <span class=s1>&#39;car&#39;</span>
+    <span class=n>allowed_domains</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;craigslist.org&#39;</span><span class=p>]</span>
+    <span class=n>start_urls</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;https://seattle.craigslist.org/d/vacation‐rentals/search/vac/&#39;</span><span class=p>]</span>
+
+    <span class=k>def</span> <span class=nf>parse</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>response</span><span class=p>):</span>
+        <span class=k>pass</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Let&rsquo;s write our own code under <code>def parse(self, response):</code>. You can check the code <a class=link href=https://github.com/itslijohnny/web-crawler-tutorial/blob/master/scrapy_craigslist/scrapy_craigslist/spiders/vacation_rentals.py target=_blank rel=noopener>here</a>.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=c1># -*- coding: utf-8 -*-</span>
+<span class=kn>import</span> <span class=nn>scrapy</span>
+<span class=kn>from</span> <span class=nn>scrapy</span> <span class=kn>import</span> <span class=n>Request</span>
+<span class=kn>import</span> <span class=nn>re</span>
+
+
+<span class=k>class</span> <span class=nc>VacationRentalsSpider</span><span class=p>(</span><span class=n>scrapy</span><span class=o>.</span><span class=n>Spider</span><span class=p>):</span>
+    <span class=n>name</span> <span class=o>=</span> <span class=s1>&#39;vacation_rentals&#39;</span>
+    <span class=n>allowed_domains</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;craigslist.org&#39;</span><span class=p>]</span>
+    <span class=n>start_urls</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;http://seattle.craigslist.org/d/vacation‐rentals/search/vac/&#39;</span><span class=p>]</span>
+
+    <span class=k>def</span> <span class=nf>parse</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>response</span><span class=p>):</span>
+        <span class=c1># Extract all wrapper for each list item between &lt;p class=&#34;result-info&#34;&gt;&lt;/p&gt;</span>
+        <span class=n>vacs</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=n>xpath</span><span class=p>(</span><span class=s1>&#39;//p[@class=&#34;result-info&#34;]&#39;</span><span class=p>)</span>
+        <span class=c1># Get next page button URL &lt;a href=&#34;/search/vac?s=120&#34; class=&#34;button next&#34; title=&#34;next page&#34;&gt;next &amp;gt; &lt;/a&gt;</span>
+        <span class=n>next_rel_url</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=n>xpath</span><span class=p>(</span><span class=s1>&#39;//a[@class=&#34;button next&#34;]/@href&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>extract_first</span><span class=p>()</span>
+        <span class=c1># Get full address.</span>
+        <span class=n>next_url</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=n>urljoin</span><span class=p>(</span><span class=n>next_rel_url</span><span class=p>)</span>
+        <span class=c1># Go through all the pages.</span>
+        <span class=k>yield</span> <span class=n>Request</span><span class=p>(</span><span class=n>next_url</span><span class=p>,</span> <span class=n>callback</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>parse</span><span class=p>)</span>
+
+        <span class=c1># Loop each item to extract title, posted date, rental price, number of bedrooms, and neighborhood</span>
+        <span class=k>for</span> <span class=n>vac</span> <span class=ow>in</span> <span class=n>vacs</span><span class=p>:</span>
+            <span class=c1># Get title from &lt;a&gt;&lt;/a&gt; tag.</span>
+            <span class=n>title</span> <span class=o>=</span> <span class=n>vac</span><span class=o>.</span><span class=n>xpath</span><span class=p>(</span><span class=s1>&#39;a/text()&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>extract_first</span><span class=p>()</span>
+            <span class=c1># Get posted date from &lt;time class=&#34;result-date&#34; datetime=&#34;2019-03-06 18:34&#34; title=&#34;Wed 06 Mar 06:34:28 PM&#34;&gt;Mar  6&lt;/time&gt; block. Use @datetime for attribute datetime.</span>
+            <span class=n>pdate</span> <span class=o>=</span> <span class=n>vac</span><span class=o>.</span><span class=n>xpath</span><span class=p>(</span><span class=s1>&#39;time/@datetime&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>extract_first</span><span class=p>()</span><span class=o>.</span><span class=n>split</span><span class=p>()[</span><span class=mi>0</span><span class=p>]</span>
+            <span class=c1># Get rental price form &lt;span class=&#34;result-price&#34;&gt;$84&lt;/span&gt;</span>
+            <span class=n>rprice</span> <span class=o>=</span> <span class=n>vac</span><span class=o>.</span><span class=n>xpath</span><span class=p>(</span><span class=s1>&#39;span/span[@class=&#34;result-price&#34;]/text()&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>extract_first</span><span class=p>()</span>
+            <span class=c1># Get Number of bedrooms from &lt;span class=&#34;housing&#34;&gt;2br - 760ft&lt;sup&gt;2&lt;/sup&gt; - &lt;/span&gt; and clean up the extra</span>
+            <span class=n>nbedroom</span> <span class=o>=</span> <span class=nb>str</span><span class=p>(</span><span class=n>vac</span><span class=o>.</span><span class=n>xpath</span><span class=p>(</span><span class=s1>&#39;span/span[@class=&#34;housing&#34;]/text()&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>extract_first</span><span class=p>())</span><span class=o>.</span><span class=n>split</span><span class=p>(</span><span class=s1>&#39;-&#39;</span><span class=p>)[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>strip</span><span class=p>()</span>
+            <span class=c1># Get Neighborhood from &lt;span class=&#34;result-hood&#34;&gt; (*** - *****)&lt;/span&gt;</span>
+            <span class=n>hood</span> <span class=o>=</span> <span class=n>re</span><span class=o>.</span><span class=n>sub</span><span class=p>(</span><span class=s1>&#39;[()]&#39;</span><span class=p>,</span> <span class=s1>&#39;&#39;</span><span class=p>,</span> <span class=nb>str</span><span class=p>(</span><span class=n>vac</span><span class=o>.</span><span class=n>xpath</span><span class=p>(</span><span class=s1>&#39;span/span[@class=&#34;result-hood&#34;]/text()&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>extract_first</span><span class=p>()))</span><span class=o>.</span><span class=n>strip</span><span class=p>()</span>
+            <span class=c1># Get the address of description page of each vacation house.</span>
+            <span class=n>vacaddress</span> <span class=o>=</span> <span class=n>vac</span><span class=o>.</span><span class=n>xpath</span><span class=p>(</span><span class=s1>&#39;a/@href&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>extract_first</span><span class=p>()</span>
+            <span class=c1># We needed open the URL of each house and scrape the house description, while passing the meta to parse_page function.</span>
+            <span class=k>yield</span> <span class=n>Request</span><span class=p>(</span><span class=n>vacaddress</span><span class=p>,</span> <span class=n>callback</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>parse_page</span><span class=p>,</span> <span class=n>meta</span><span class=o>=</span><span class=p>{</span><span class=s1>&#39;URL&#39;</span><span class=p>:</span> <span class=n>vacaddress</span><span class=p>,</span> <span class=s1>&#39;Title&#39;</span><span class=p>:</span> <span class=n>title</span><span class=p>,</span> <span class=s1>&#39;Posted Date&#39;</span><span class=p>:</span><span class=n>pdate</span><span class=p>,</span><span class=s2>&#34;Rental Price&#34;</span><span class=p>:</span><span class=n>rprice</span><span class=p>,</span><span class=s2>&#34;Number of bedrooms&#34;</span><span class=p>:</span><span class=n>nbedroom</span><span class=p>,</span> <span class=s2>&#34;Neighborhood&#34;</span><span class=p>:</span><span class=n>hood</span><span class=p>})</span>
+
+    <span class=c1># Extract description page of the vacation house.</span>
+    <span class=k>def</span> <span class=nf>parse_page</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>response</span><span class=p>):</span>
+        <span class=c1># Pass the variables</span>
+        <span class=n>url</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=n>meta</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;URL&#39;</span><span class=p>)</span>
+        <span class=n>title</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=n>meta</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;Title&#39;</span><span class=p>)</span>
+        <span class=n>pdate</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=n>meta</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;Posted Date&#39;</span><span class=p>)</span>
+        <span class=n>rprice</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=n>meta</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;Rental Price&#39;</span><span class=p>)</span>
+        <span class=n>nbedroom</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=n>meta</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;Number of bedrooms&#39;</span><span class=p>)</span>
+        <span class=n>hood</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=n>meta</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;Neighborhood&#39;</span><span class=p>)</span>
+        <span class=c1># Get the description.</span>
+        <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;&#34;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>line</span> <span class=k>for</span> <span class=n>line</span> <span class=ow>in</span> <span class=n>response</span><span class=o>.</span><span class=n>xpath</span><span class=p>(</span><span class=s1>&#39;//*[@id=&#34;postingbody&#34;]/text()&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>extract</span><span class=p>())</span>
+
+        <span class=k>yield</span><span class=p>{</span><span class=s1>&#39;Title&#39;</span><span class=p>:</span> <span class=n>title</span><span class=p>,</span> <span class=s1>&#39;Posted Date&#39;</span><span class=p>:</span><span class=n>pdate</span><span class=p>,</span><span class=s2>&#34;Rental Price&#34;</span><span class=p>:</span><span class=n>rprice</span><span class=p>,</span><span class=s2>&#34;Number of bedrooms&#34;</span><span class=p>:</span><span class=n>nbedroom</span><span class=p>,</span> <span class=s2>&#34;Neighborhood&#34;</span><span class=p>:</span><span class=n>hood</span><span class=p>,</span><span class=s1>&#39;Description&#39;</span><span class=p>:</span><span class=n>description</span><span class=p>}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=run-spider>RUN SPIDER</h3>
+<p>To put our spider to work, run <code>crawl</code> command in terminal or CMD:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ scrapy crawl vacation_rentals -o result-titles.csv
+</code></pre></td></tr></table>
+</div>
+</div><p><code>-o</code> means out put data into file. <code>result-titles.csv</code> is the files' name.</p>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=https://lijohnny.com/tags/python/>Python</a>
+<a href=https://lijohnny.com/tags/crawling/>Crawling</a>
+<a href=https://lijohnny.com/tags/scrapy/>Scrapy</a>
+<a href=https://lijohnny.com/tags/tutorial/>Tutorial</a>
+<a href=https://lijohnny.com/tags/html/>HTML</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0 本文内容基于CC BY-NC-SA 4.0协议发布，转载需要署名。</span>
+</section>
+</footer>
+</article>
+<aside class=related-content--wrapper>
+<h2 class=section-title>Related content</h2>
+<div class=related-content>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/j4dzCfs1YINnUeP.a81951d12596e6d777d021ef9cbfe959_hu2e33a0807f480dffb7d29605e6b641f0_179685_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Pyforest - Automate Package Import Process for Your Data Science Project" data-hash="md5-qBlR0SWW5td30CHvnL/pWQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Pyforest - Automate Package Import Process for Your Data Science Project</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f.3cb4b6dc5eaebc135292d09cb8266e67_hu9b8175d3ba48e13699867e4777819883_306711_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Spam Detection and Analysis (Part 1 - Parsing)" data-hash="md5-PLS23F6uvBNSktCcuCZuZw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Spam Detection and Analysis (Part 1 - Parsing)</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=https://lijohnny.com/p/disaster-response-web-app/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/disaster-response-web-app/ArpiP6q2msCtGnU.f82ad8c7e1aa314c9f30dd43a0156622_hu457b68f1b299c99b4ae6562f4e0f55f0_178477_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Disaster Response Web App" data-hash="md5-+CrYx+GqMUyfMN1DoBVmIg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Disaster Response Web App</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=https://lijohnny.com/p/price-strategy-based-on-features-reputation/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y.ff92b9b764f89b3bde9679a2f294265c_hue3bb56a18a536ed35c90b3582bf24783_132999_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Price Strategy Based on Features Reputation" data-hash="md5-/5K5t2T4mzvelnmi8pQmXA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Price Strategy Based on Features Reputation</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=https://lijohnny.com/p/identify-customer-segments/>
+<div class=article-image>
+<img src=https://lijohnny.com/p/identify-customer-segments/7dfc3OoaYZAnejX.205270d4850a1a665dc775d5694f9568_hu6422aa484a4a450a6cb8ea5e52a35a00_155749_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Identify Customer Segments" data-hash="md5-IFJw1IUKGmZdx3XVaU+VaA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Identify Customer Segments</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div class=disqus-container>
+<div id=disqus_thread></div>
+<script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var b=document,a=b.createElement('script');a.async=!0,a.src='//lijohnny.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a)})()</script>
+<noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript>
+<a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a>
+</div>
+<style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style>
+<script>window.addEventListener('onColorSchemeChange',a=>{typeof DISQUS=='object'&&DISQUS.reset({reload:!0})})</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2019 -
+2024 Johnny Li
+</section>
+<section class=powerby>
+All contents licensed under CC BY-NC-SA 4.0 本站所有内容基于CC BY-NC-SA 4.0协议发布，转载需要署名 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.22.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous>
+</main>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=https://lijohnny.com/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LogisticRegression on Johnny's Blog</title><link>https://lijohnny.com/tags/logisticregression/</link><description>Recent content in LogisticRegression on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Thu, 30 May 2019 01:03:50 +0000</lastBuildDate><atom:link href="https://lijohnny.com/tags/logisticregression/index.xml" rel="self" type="application/rss+xml"/><item><title>Donors Identification for CharityML</title><link>https://lijohnny.com/p/donors-identification-for-charityml/</link><pubDate>Thu, 30 May 2019 01:03:50 +0000</pubDate><guid>https://lijohnny.com/p/donors-identification-for-charityml/</guid><description>&lt;img src="https://lijohnny.com/p/donors-identification-for-charityml/5cef9192b167778174.jpg" alt="Featured image of post Donors Identification for CharityML" />&lt;p>&lt;a class="link" href="https://lijohnny.com" target="_blank" rel="noopener"
+>&lt;img src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg"
+loading="lazy"
+>&lt;/a> &lt;a class="link" href="https://www.python.org/" target="_blank" rel="noopener"
+>&lt;img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg"
+loading="lazy"
+>&lt;/a> &lt;a class="link" href="" >&lt;img src="https://img.shields.io/badge/Kaggle-Project-blue.svg"
+loading="lazy"
+>&lt;/a>&lt;/p>
+&lt;p>In this project, I built machine learning models that best identifies potential donors for CharityML(a fictitious charity organization) with data collected for the U.S. census. To find the best approach, I performed EDA, feature engineering, and building training and predicting pipeline to evaluate and optimize the performance between different machine learning models.&lt;/p>
+&lt;p>The modified census dataset consists of approximately 32,000 data points, with each datapoint having 13 features. This dataset is a modified version of the dataset published in the paper &lt;em>&amp;ldquo;Scaling Up the Accuracy of Naive-Bayes Classifiers: a Decision-Tree Hybrid&amp;rdquo;,&lt;/em> by Ron Kohavi. You may find this paper &lt;a class="link" href="https://www.aaai.org/Papers/KDD/1996/KDD96-033.pdf" target="_blank" rel="noopener"
+>online&lt;/a>, with the original dataset hosted on &lt;a class="link" href="https://archive.ics.uci.edu/ml/datasets/Census&amp;#43;Income" target="_blank" rel="noopener"
+>UCI&lt;/a>.&lt;/p>
+&lt;p>The model I have used:&lt;/p>
+&lt;ul>
+&lt;li>SGD Classifier&lt;/li>
+&lt;li>AdaBoost&lt;/li>
+&lt;li>Logistic Regression&lt;/li>
+&lt;/ul>
+&lt;p>You can see the code(iPython notebook) &lt;a class="link" href="https://github.com/itslijohnny/udacity-data-scientist-nanodegree/blob/master/Supervised/Project-CharityML/finding_donors_done.ipynb" target="_blank" rel="noopener"
+>here&lt;/a>.&lt;/p></description></item></channel></rss>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Crawling on Johnny's Blog</title><link>https://lijohnny.com/tags/crawling/</link><description>Recent content in Crawling on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Tue, 12 Feb 2019 01:13:34 -0800</lastBuildDate><atom:link href="https://lijohnny.com/tags/crawling/index.xml" rel="self" type="application/rss+xml"/><item><title>Craigslist Vacation House Data Crawling</title><link>https://lijohnny.com/p/craigslist-vacation-house-data-crawling/</link><pubDate>Tue, 12 Feb 2019 01:13:34 -0800</pubDate><guid>https://lijohnny.com/p/craigslist-vacation-house-data-crawling/</guid><description>&lt;img src="https://lijohnny.com/p/craigslist-vacation-house-data-crawling/5cd7d789264a1.jpg" alt="Featured image of post Craigslist Vacation House Data Crawling" />&lt;p>In this &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist" target="_blank" rel="noopener"
+>tutorial&lt;/a> I use &lt;a class="link" href="https://scrapy.org/" target="_blank" rel="noopener"
+>Scrapy&lt;/a> to collect data from Craigslist.com. Specifically, the data under craigslist.org/Seattle/housing/vacation rentals. You can find the page under the link: &lt;a class="link" href="https://seattle.craigslist.org/d/vacation%e2%80%90rentals/search/vac" target="_blank" rel="noopener"
+>https://seattle.craigslist.org/d/vacation‐rentals/search/vac&lt;/a>&lt;/p>
+&lt;p>In the example, I collected following information:&lt;/p>
+&lt;ol>
+&lt;li>Title&lt;/li>
+&lt;li>Posted Date&lt;/li>
+&lt;li>Rental Price&lt;/li>
+&lt;li>Number of bedrooms&lt;/li>
+&lt;li>Neighborhood&lt;/li>
+&lt;li>Description&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>For more information or the code, please go to my &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist" target="_blank" rel="noopener"
+>github page&lt;/a>.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="preparation">PREPARATION&lt;/h2>
+&lt;h3 id="installation">INSTALLATION&lt;/h3>
+&lt;p>You can install scrapy through &lt;code>pip install&lt;/code> command:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ pip install scrapy
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>or use &lt;code>conda install&lt;/code> command:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ conda install scrapy
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="creat-project">CREAT PROJECT&lt;/h3>
+&lt;p>Before we start coding, we can use &lt;code>scrapy startproject&lt;/code> command to quickly create a project.
+In terminal or CMD, navigate to your desired folder and execute following command:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ scrapy startproject scrapy_craigslist
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Here &lt;em>scrapy_craigslist&lt;/em> is the name of the project.&lt;/p>
+&lt;p>After that, we can use &lt;code>genspider&lt;/code> command to create a Scrapy Spider. Here, we name it vacation_rentals and designated a URL. We user craiglist.org Seattle vacation house list page as an example.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ scrapy genspider vacation_rentals seattle.craigslist.org/d/vacation‐rentals/search/vac
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>This will create a directory with the following structure:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">─── scrapy_craigslist
+├── __init__.py
+├── __pycache__
+│   ├── __init__.cpython-36.pyc
+│   └── settings.cpython-36.pyc
+├── items.py
+├── middlewares.py
+├── pipelines.py
+├── settings.py
+└── spiders
+├── __init__.py
+├── __pycache__
+│   ├── __init__.cpython-36.pyc
+│   └── vacation_rentals.cpython-36.pyc
+└── vacation_rentals.py
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="editing">EDITING&lt;/h2>
+&lt;p>Navigate to the spiders folder and open the spider py file in your favorite editor.
+There are some pre written code, but you need to make sure that &lt;code>allowed_domains&lt;/code> and &lt;code>start_urls&lt;/code> are in the right form.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="kn">import&lt;/span> &lt;span class="nn">scrapy&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">CarSpider&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">scrapy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Spider&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;car&amp;#39;&lt;/span>
+&lt;span class="n">allowed_domains&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;craigslist.org&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="n">start_urls&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;https://seattle.craigslist.org/d/vacation‐rentals/search/vac/&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">def&lt;/span> &lt;span class="nf">parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="k">pass&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Let&amp;rsquo;s write our own code under &lt;code>def parse(self, response):&lt;/code>. You can check the code &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/blob/master/scrapy_craigslist/scrapy_craigslist/spiders/vacation_rentals.py" target="_blank" rel="noopener"
+>here&lt;/a>.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="c1"># -*- coding: utf-8 -*-&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">scrapy&lt;/span>
+&lt;span class="kn">from&lt;/span> &lt;span class="nn">scrapy&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Request&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="nn">re&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">VacationRentalsSpider&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">scrapy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Spider&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;vacation_rentals&amp;#39;&lt;/span>
+&lt;span class="n">allowed_domains&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;craigslist.org&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="n">start_urls&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;http://seattle.craigslist.org/d/vacation‐rentals/search/vac/&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="k">def&lt;/span> &lt;span class="nf">parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="c1"># Extract all wrapper for each list item between &amp;lt;p class=&amp;#34;result-info&amp;#34;&amp;gt;&amp;lt;/p&amp;gt;&lt;/span>
+&lt;span class="n">vacs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;//p[@class=&amp;#34;result-info&amp;#34;]&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># Get next page button URL &amp;lt;a href=&amp;#34;/search/vac?s=120&amp;#34; class=&amp;#34;button next&amp;#34; title=&amp;#34;next page&amp;#34;&amp;gt;next &amp;amp;gt; &amp;lt;/a&amp;gt;&lt;/span>
+&lt;span class="n">next_rel_url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;//a[@class=&amp;#34;button next&amp;#34;]/@href&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get full address.&lt;/span>
+&lt;span class="n">next_url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">urljoin&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">next_rel_url&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># Go through all the pages.&lt;/span>
+&lt;span class="k">yield&lt;/span> &lt;span class="n">Request&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">next_url&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">callback&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">parse&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># Loop each item to extract title, posted date, rental price, number of bedrooms, and neighborhood&lt;/span>
+&lt;span class="k">for&lt;/span> &lt;span class="n">vac&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">vacs&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="c1"># Get title from &amp;lt;a&amp;gt;&amp;lt;/a&amp;gt; tag.&lt;/span>
+&lt;span class="n">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;a/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get posted date from &amp;lt;time class=&amp;#34;result-date&amp;#34; datetime=&amp;#34;2019-03-06 18:34&amp;#34; title=&amp;#34;Wed 06 Mar 06:34:28 PM&amp;#34;&amp;gt;Mar 6&amp;lt;/time&amp;gt; block. Use @datetime for attribute datetime.&lt;/span>
+&lt;span class="n">pdate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;time/@datetime&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">()[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="c1"># Get rental price form &amp;lt;span class=&amp;#34;result-price&amp;#34;&amp;gt;$84&amp;lt;/span&amp;gt;&lt;/span>
+&lt;span class="n">rprice&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;span/span[@class=&amp;#34;result-price&amp;#34;]/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get Number of bedrooms from &amp;lt;span class=&amp;#34;housing&amp;#34;&amp;gt;2br - 760ft&amp;lt;sup&amp;gt;2&amp;lt;/sup&amp;gt; - &amp;lt;/span&amp;gt; and clean up the extra&lt;/span>
+&lt;span class="n">nbedroom&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;span/span[@class=&amp;#34;housing&amp;#34;]/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;-&amp;#39;&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get Neighborhood from &amp;lt;span class=&amp;#34;result-hood&amp;#34;&amp;gt; (*** - *****)&amp;lt;/span&amp;gt;&lt;/span>
+&lt;span class="n">hood&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sub&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;[()]&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;span/span[@class=&amp;#34;result-hood&amp;#34;]/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()))&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># Get the address of description page of each vacation house.&lt;/span>
+&lt;span class="n">vacaddress&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vac&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;a/@href&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract_first&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="c1"># We needed open the URL of each house and scrape the house description, while passing the meta to parse_page function.&lt;/span>
+&lt;span class="k">yield&lt;/span> &lt;span class="n">Request&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">vacaddress&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">callback&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">parse_page&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">meta&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="s1">&amp;#39;URL&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">vacaddress&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;Title&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">title&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;Posted Date&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">pdate&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s2">&amp;#34;Rental Price&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">rprice&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s2">&amp;#34;Number of bedrooms&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">nbedroom&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Neighborhood&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">hood&lt;/span>&lt;span class="p">})&lt;/span>
+&lt;span class="c1"># Extract description page of the vacation house.&lt;/span>
+&lt;span class="k">def&lt;/span> &lt;span class="nf">parse_page&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="c1"># Pass the variables&lt;/span>
+&lt;span class="n">url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;URL&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Title&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">pdate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Posted Date&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">rprice&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Rental Price&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">nbedroom&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Number of bedrooms&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">hood&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">meta&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Neighborhood&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># Get the description.&lt;/span>
+&lt;span class="n">description&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">line&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">line&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">xpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;//*[@id=&amp;#34;postingbody&amp;#34;]/text()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">extract&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="k">yield&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="s1">&amp;#39;Title&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">title&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;Posted Date&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">pdate&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s2">&amp;#34;Rental Price&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">rprice&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s2">&amp;#34;Number of bedrooms&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">nbedroom&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Neighborhood&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">hood&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Description&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">description&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="run-spider">RUN SPIDER&lt;/h3>
+&lt;p>To put our spider to work, run &lt;code>crawl&lt;/code> command in terminal or CMD:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">$ scrapy crawl vacation_rentals -o result-titles.csv
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>-o&lt;/code> means out put data into file. &lt;code>result-titles.csv&lt;/code> is the files' name.&lt;/p></description></item></channel></rss>
