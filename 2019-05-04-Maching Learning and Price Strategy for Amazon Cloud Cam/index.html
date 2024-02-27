@@ -1,0 +1,517 @@
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136585559-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-136585559-1');
+</script>
+
+
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+<link rel="icon" type="image/png" href="../assets/img/favicon.png">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Johnny's - Maching Learning and Price Strategy for Amazon Cloud Cam</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport">
+<!--     Fonts and icons     -->
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Pacifico" rel="stylesheet">
+
+
+  
+  
+    <link rel="stylesheet" href="/css/af101.css">
+  
+    <link rel="stylesheet" href="/css/material-kit.css">
+  
+    <link rel="stylesheet" href="/css/demo.css">
+  
+    <link rel="stylesheet" href="/css/addon.css">
+  
+    <link rel="stylesheet" href="/css/likely.css">
+  
+
+
+</head>
+<body class="profile-page sidebar-collapse">
+  <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+  <div class="container">
+    <div class="navbar-translate">
+      <a class="navbar-brand page-title" href="/">
+        Johnny's Blog </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a href="/" class="nav-link">
+            <i class="material-icons">home</i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="https://www.linkedin.com/in/johnny-li/" class="nav-link">
+            <i class="material-icons">account_box</i> About Me
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  <div class="page-header" data-parallax="true" style="background-image: url('/img/bg2.jpg');"></div>
+
+  <div class="main main-raised post-raised">
+    <div class="profile-content">
+      <div class="container">
+      <article class="col-md-8 mr-auto ml-auto">
+        <div class="card card-plain card-blog">
+          <h2 class="card-blog-title title post-title">
+          Maching Learning and Price Strategy for Amazon Cloud Cam
+          </h2>
+          <span class="card-bolg-title-date text-muted">
+            <time datetime="2019-05-05T05:13:20.000Z">2019-05-04</time>&nbsp;&nbsp;
+            
+            <a href="/#data" title="View all posts in data" id="datatab">DATA
+            </a>
+            
+              
+            
+          </span>
+          <div class="card-image  mr-auto ml-auto post-image">
+              <img data-opt-src="https://i.loli.net/2019/05/10/5cd50a8799440.png" src="https://i.loli.net/2019/05/10/5cd50a8799440.png" class="img-fluid img-raised rounded" alt data-opt-loaded="true" data-opt-lazy-loaded="true">
+          </div>
+          <div class="post-content">
+            <p><a href="https://lijohnny.com"><img src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg" alt></a>     <a href="https://www.python.org/" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg" alt></a> <a href="https://www.mathjax.org/" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/Made%20with-MathJax-1f425f.svg" alt></a><br>Customer reviews contain a large amount of information. One of the recurring subjects of NLP is to understand customer opinion through statement analysis of customer reviews. However, Basic Sentimental Classification can only tell customers’ overall impression about the product, and it can’t tell customers’ opinion of specific features of the product. But, if we dive deeper into the customer reviews, we can get more information.</p>
+<p>My goal is to extract features from reviews, identify the opinion of each feature, quantify the sentiment using econometrics, and then generate a price strategy based on it.<br><a id="more"></a></p>
+<blockquote>
+<p><strong>NOTE:</strong><br>This post goes along with <strong><em>Jupyter Notebook</em></strong> available in my Repo on Github: [HowToVisualize]</p>
+</blockquote>
+<!-- TOC -->
+<ul>
+<li><a href="#1-introduction">1. Introduction</a><ul>
+<li><a href="#11-sentiment-analysis">1.1 Sentiment Analysis</a></li>
+<li><a href="#12-basic-sentiment-classification">1.2 Basic Sentiment Classification</a></li>
+<li><a href="#13-feature-based-sentiment-analysis">1.3 Feature Based Sentiment Analysis</a></li>
+</ul>
+</li>
+<li><a href="#2-methodology">2. Methodology</a><ul>
+<li><a href="#21-overviews">2.1 Overviews</a></li>
+<li><a href="#data-overview">Data Overview</a></li>
+<li><a href="#data-clean-and-exploration">Data Clean and Exploration</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+<h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h2><h3 id="1-1-Sentiment-Analysis"><a href="#1-1-Sentiment-Analysis" class="headerlink" title="1.1 Sentiment Analysis"></a>1.1 Sentiment Analysis</h3><p>Before going into the methodology, let us refresh Sentiment Analysis. The <strong>Sentiment Analysis</strong> is a process of understanding the opinion of a piece of a subject (text or speech) is positive, neutral or negative. It is in the field of Nature Language Processing (<strong>NLP</strong>).  Several machine learning methods can solve this problem, such as  Logistic Regression, Support Vector Machines (SVM), Naive Bayes, and more. There are also many Python packages and APIs of Several Cloud providers (Google Cloud, AWS, …) can help us on Sentiment Analysis.</p>
+<h3 id="1-2-Basic-Sentiment-Classification"><a href="#1-2-Basic-Sentiment-Classification" class="headerlink" title="1.2 Basic Sentiment Classification"></a>1.2 Basic Sentiment Classification</h3><p>Basic Sentiment Classification classifies <strong>full documents</strong>, such as reviews, articles, based on the overall sentiment. The sentiment is majorly based on sentiment words (good, bad, great) or specific expressions.<br>However, a product review classified as negative sentiment does not mean that the customer doesn’t like any features and vice versa.</p>
+<h3 id="1-3-Feature-Based-Sentiment-Analysis"><a href="#1-3-Feature-Based-Sentiment-Analysis" class="headerlink" title="1.3 Feature Based Sentiment Analysis"></a>1.3 Feature Based Sentiment Analysis</h3><p>To have a clear idea of what a customer like and dislike of a product,<br>We can extract feature and find the customer’s opinions related to these features.</p>
+<h2 id="2-Methodology"><a href="#2-Methodology" class="headerlink" title="2. Methodology"></a>2. Methodology</h2><h3 id="2-1-Overviews"><a href="#2-1-Overviews" class="headerlink" title="2.1 Overviews"></a>2.1 Overviews</h3><p>My approach includes 9 steps.</p>
+<h3 id="Data-Overview"><a href="#Data-Overview" class="headerlink" title="Data Overview"></a>Data Overview</h3><p>The product category I was working on is the home security camera. I scraped reviews of targe product and its competitors from Amazon.com. The dataset contents 53,657 reviews of 15 different home security cameras from Amazon.com. with the following information for each one:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Product</strong></td>
+<td>Name of the Product</td>
+</tr>
+<tr>
+<td><strong>Username</strong></td>
+<td>User’s ID</td>
+</tr>
+<tr>
+<td><strong>Stars</strong></td>
+<td>1-5 rating for the product</td>
+</tr>
+<tr>
+<td><strong>Title</strong></td>
+<td>The subject of the review</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>The review date</td>
+</tr>
+<tr>
+<td><strong>Review</strong></td>
+<td>Review text</td>
+</tr>
+<tr>
+<td><strong>Helpfulcount</strong></td>
+<td>How many people click “Helpful” button</td>
+</tr>
+<tr>
+<td><strong>ReviewTotal</strong></td>
+<td>How many comments under this review</td>
+</tr>
+</tbody>
+</table>
+<p>The average length of reviews of the product is around 200.<br><img src="https://i.loli.net/2019/05/10/5cd50e6d23672.png" alt><br>Most of reviews is in the range of 4 years.<br><img src="https://i.loli.net/2019/05/10/5cd50e701f6ea.png" alt><br>Most of the product has 2000 reviews.<br><img src="https://i.loli.net/2019/05/10/5cd50e6e9cbf1.png" alt></p>
+<h3 id="Data-Clean-and-Exploration"><a href="#Data-Clean-and-Exploration" class="headerlink" title="Data Clean and Exploration"></a>Data Clean and Exploration</h3><p>– Will update soon!</p>
+
+          </div>
+          
+          <div class="row">
+              <ul class="nav card-bolg-title-tag post-title-tag mr-auto ml-auto ">
+                
+                <li class>
+                  <a href="/tags/Python/" title="View all posts in Python">#Python
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/PCA/" title="View all posts in PCA">#PCA
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Regression/" title="View all posts in Regression">#Regression
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Analysis/" title="View all posts in Analysis">#Analysis
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Price-Strategy/" title="View all posts in Price Strategy">#Price Strategy
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Review/" title="View all posts in Review">#Review
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/NPL/" title="View all posts in NPL">#NPL
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Sentiment/" title="View all posts in Sentiment">#Sentiment
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/POC/" title="View all posts in POC">#POC
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Feature-abstraction/" title="View all posts in Feature abstraction">#Feature abstraction
+                  
+                  
+                  </a>
+                </li>
+                
+              </ul>
+           </div>
+           <div class="card-bolg-bottom-line"></div>
+           <div class="row">
+             <div class="post-share mr-auto ml-auto">
+              <div class="likely likely-small">
+                <div class="twitter">Tweet</div>
+                <div class="facebook">Share</div>
+                <div class="linkedin">Link</div>
+                <div class="whatsapp">Send</div>
+              </div>
+            </div>
+           </div>
+           <div class="card-bolg-bottom-line"></div>
+           <div class="row post-prevnext">
+           
+             
+               <div class="post-prev post-prev-small  col-lg-6">
+                <a class="post-prev-arrow" href="/2019-05-09-Spam-Detection-and-Analysis-P2/" title="Spam Detection and Analysis (Part 2 - Analysis with R)" rel="prev">
+                  <i class="fa fa-angle-double-left"></i>
+                </a>
+                <div class="post-prev-img">
+                  <a href="/2019-05-09-Spam-Detection-and-Analysis-P2/" title="Spam Detection and Analysis (Part 2 - Analysis with R)" rel="prev">
+                    <img src="https://i.loli.net/2019/05/10/5cd5051a0e1f9.png" class="rounded" alt="Spam Detection and Analysis (Part 2 - Analysis with R)" srcset=" " data-src="https://i.loli.net/2019/05/10/5cd5051a0e1f9.png" data-sizes data-srcset=" " sizes>
+                  </a>
+                </div>
+                <div class="post-prev-wrapper">
+                  <a href="/2019-05-09-Spam-Detection-and-Analysis-P2/" title="Spam Detection and Analysis (Part 2 - Analysis with R)" rel="prev">
+                    <span class="post_navigation_title title">Previous Post:</span>
+                  </a>
+                  <h4 class="title post-prevnext-title">
+                    <a href="/2019-05-09-Spam-Detection-and-Analysis-P2/">
+                      Spam Detection and Analysis (Part 2 - Analysis with R)
+                    </a>
+                  </h4>
+                </div>
+               </div>
+             
+             
+               <div class="post-next col-lg-6">
+                <a class="post-next-arrow" href="/2019-04-19-Spam-Detection-and-Analysis-P1/" title="Spam Detection and Analysis (Part 1 - Parsing)" rel="next">
+                  <i class="fa fa-angle-double-right"></i>
+                </a>
+                <div class="post-next-img">
+                  <a href="/2019-04-19-Spam-Detection-and-Analysis-P1/" title="Spam Detection and Analysis (Part 1 - Parsing)" rel="next">
+                    <img src="https://i.loli.net/2019/05/10/5cd50420b955f.png" class="rounded" alt="Spam Detection and Analysis (Part 1 - Parsing)" srcset=" " data-src="https://i.loli.net/2019/05/10/5cd50420b955f.png" data-sizes data-srcset=" " sizes>
+                  </a>
+                </div>
+                <div class="post-next-wrapper">
+                  <a href="/2019-04-19-Spam-Detection-and-Analysis-P1/" title="Spam Detection and Analysis (Part 1 - Parsing)" rel="next">
+                    <span class="post_navigation_title title">Next Post:</span>
+                  </a>
+                  <h4 class="title post-prevnext-title">
+                    <a href="/2019-04-19-Spam-Detection-and-Analysis-P1/">Spam Detection and Analysis (Part 1 - Parsing)</a>
+                  </h4>
+                </div>
+              </div>
+            
+           
+           </div>
+           <div class="card-bolg-bottom-line"></div>
+
+
+          
+
+            
+
+          <div class="card-bolg-bottom-line"></div>
+
+           <div class="comments" id="comments">
+             <div id="disqus_thread">
+               <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+             </div>
+           </div>
+
+         
+      </div></article>
+
+    </div>
+
+
+    </div>
+  </div>
+
+
+  <div id="paginator">
+    
+  </div>
+
+
+
+  
+<footer class="footer footer-default">
+  <div class="container">
+    <div class="copyright">Copyright
+      &copy;
+      <script>
+        document.write(new Date().getFullYear())
+      </script>&nbsp;by Johnny Li. All rights reserved.
+
+    <p>Powered by HEXO | Based on <a href="https://demos.creative-tim.com/material-kit/"> Material Kit</a>
+    </p>
+    </div>
+  </div>
+
+</footer>
+
+  
+  
+    <script src="/js/core/jquery.min.js"></script>
+  
+    <script src="/js/core/popper.min.js"></script>
+  
+    <script src="/js/core/bootstrap-material-design.min.js"></script>
+  
+    <script src="/js/plugins/moment.min.js"></script>
+  
+    <script src="/js/plugins/bootstrap-datetimepicker.js"></script>
+  
+    <script src="/js/plugins/nouislider.min.js"></script>
+  
+    <script src="/js/material-kit.js"></script>
+  
+    <script src="/js/likely.js"></script>
+  
+    <script src="/js/af101.js"></script>
+  
+
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+
+
+  <script id="dsq-count-scr" src="https://j84lee-github-io.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://lijohnny.com/2019-05-04-Maching Learning and Price Strategy for Amazon Cloud Cam/";
+    this.page.identifier = "2019-05-04-Maching Learning and Price Strategy for Amazon Cloud Cam/";
+    this.page.title = 'Maching Learning and Price Strategy for Amazon Cloud Cam';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://j84lee-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+<script type="text/javascript">
+  $("#uxtab").on("click", function() {
+  $('#uxnav').addClass("active").parent("li").siblings().find("a").removeClass("active");
+  $("#ux").removeClass("fade").addClass("active").addClass("show");
+  $("#tabContent").removeClass("active").removeClass("show");
+  });
+  $("#datatab").on("click", function() {
+  $('#datanav').addClass("active").parent("li").siblings().find("a").removeClass("active");
+  $("#data").removeClass("fade").addClass("active").addClass("show");
+  $("#tabContent").removeClass("active").removeClass("show");
+  });
+  $("#blogtab").on("click", function() {
+  $('#blognav').addClass("active").parent("li").siblings().find("a").removeClass("active");
+  $("#blog").removeClass("fade").addClass("active").addClass("show");
+  $("#tabContent").removeClass("active").removeClass("show");
+  });
+
+
+
+  $('.post-content img')
+    .not(':hidden')
+    .each(function() {
+      var $image = $(this);
+      var imageTitle = $image.attr('title') || $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+
+      if ($imageWrapLink.length < 1) {
+        var imageLink = $image.attr('data-original') || $image.attr('src');
+        $imageWrapLink = $image.wrap('<a class="fancybox fancybox.image post-image-link" href="' + imageLink + '" itemscope itemtype="http://schema.org/ImageObject" itemprop="url"></a>').parent('a');
+        if ($image.is('.post-gallery img')) {
+          $imageWrapLink.addClass('post-gallery-img');
+          $imageWrapLink.attr('data-fancybox', 'gallery').attr('rel', 'gallery');
+        }
+        else if ($image.is('.group-picture img')) {
+          $imageWrapLink.attr('data-fancybox', 'group').attr('rel', 'group');
+        }
+        else {
+          $imageWrapLink.attr('data-fancybox', 'default').attr('rel', 'default');
+        }
+      }
+
+      if (imageTitle) {
+        $imageWrapLink.append('<p class="image-caption">' + imageTitle + '</p>');
+        // Make sure img title tag will show correctly in fancybox
+        $imageWrapLink.attr('title', imageTitle).attr('data-caption', imageTitle);
+      }
+    });
+
+  $('.fancybox').fancybox({
+    loop: true,
+    helpers: {
+      overlay: {
+        locked: false
+      }
+    }
+  });
+</script>
+
+<!--Baidu Analytics-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?8625975e55aff83f53b3e603ed269760";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

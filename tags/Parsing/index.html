@@ -1,0 +1,744 @@
+
+
+
+
+  
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136585559-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-136585559-1');
+</script>
+
+
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+<link rel="icon" type="image/png" href="../assets/img/favicon.png">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Johnny's - Tag: Parsing</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport">
+<!--     Fonts and icons     -->
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Pacifico" rel="stylesheet">
+
+
+  
+  
+    <link rel="stylesheet" href="/css/af101.css">
+  
+    <link rel="stylesheet" href="/css/material-kit.css">
+  
+    <link rel="stylesheet" href="/css/demo.css">
+  
+    <link rel="stylesheet" href="/css/addon.css">
+  
+    <link rel="stylesheet" href="/css/likely.css">
+  
+
+
+</head>
+<body class="profile-page sidebar-collapse">
+  <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+  <div class="container">
+    <div class="navbar-translate">
+      <a class="navbar-brand page-title" href="/">
+        Johnny's Blog </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a href="/" class="nav-link">
+            <i class="material-icons">home</i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="https://www.linkedin.com/in/johnny-li/" class="nav-link">
+            <i class="material-icons">account_box</i> About Me
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  <div class="page-header" data-parallax="true" style="background-image: url('../../img/bg2.png');"></div>
+   <div id="tag" class="main main-raised">
+    <div class="profile-content">
+      <div class="container">
+        
+        
+
+        
+          <div class="row">
+            <div class="col-md-6 ml-auto mr-auto" id="nav-row">
+              <div class="profile-tabs">
+                <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/" role="tab">
+                      <i class="material-icons">home</i>Home
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#tabContent" role="tab" data-toggle="tab">
+                      <i class="material-icons">dashboard</i>All
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#data" role="tab" data-toggle="tab" id="datanav">
+                      <i class="material-icons">assessment</i>Data
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#ux" role="tab" data-toggle="tab" id="uxnav">
+                      <i class="material-icons">palette</i>UX
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#blog" role="tab" data-toggle="tab" id="blognav">
+                      <i class="material-icons">favorite</i>Blog
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content tab-space">
+            <div class="tab-pane active" id="tabContent">
+              <div class="row tabContent justify-content-center">
+                <article class="col-md-10 mr-auto ml-auto">
+                
+                  <div class="card card-plain card-blog">
+  <h4 class="card-blog-title title col-md-10 col-lg-8 mr-auto ml-auto">
+    <a class="blog-item-title-link" href="/2019-05-09-Spam-Detection-and-Analysis-P2/" title="Spam Detection and Analysis (Part 2 - Analysis with R)">Spam Detection and Analysis (Part 2 - Analysis with R)
+    </a>
+  </h4>
+  <span class="card-bolg-title-date text-muted col-md-10 col-lg-8 mr-auto ml-auto">
+    <time datetime="2019-05-10T04:47:43.000Z">2019-05-09</time>&nbsp;&nbsp;
+    
+    <a href="#nav-row" title="View all posts in data" id="datatab">DATA
+    </a>
+    
+      
+    
+  </span>
+  <div class="card-image col-md-10  mr-auto ml-auto">
+    <a href="/2019-05-09-Spam-Detection-and-Analysis-P2/" title="Spam Detection and Analysis (Part 2 - Analysis with R)">
+      <img data-opt-src="https://i.loli.net/2019/05/10/5cd5051a0e1f9.png" src="https://i.loli.net/2019/05/10/5cd5051a0e1f9.png" class="img-fluid rounded img-raised" alt data-opt-loaded="true" data-opt-lazy-loaded="true">
+    </a>
+  </div>
+  <div class="content col-md-10 col-lg-8 mr-auto ml-auto">
+    <ul class="nav card-bolg-title-tags">
+      
+      <li class>
+        <a href="/tags/Python/" title="View all posts in Python">#Python
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Regression/" title="View all posts in Regression">#Regression
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Analysis/" title="View all posts in Analysis">#Analysis
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/R/" title="View all posts in R">#R
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Parsing/" title="View all posts in Parsing">#Parsing
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/BeautifulSoup/" title="View all posts in BeautifulSoup">#BeautifulSoup
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Spam/" title="View all posts in Spam">#Spam
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Email/" title="View all posts in Email">#Email
+        
+        
+        </a>
+      </li>
+      
+    </ul>
+      <div class="card-blog-title-excerpt">
+        <p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.<br>
+      </p></div>
+      <a class="moretag tabs" href="/2019-05-09-Spam-Detection-and-Analysis-P2/">
+        <p class="card-bolg-readmore">
+          Read more
+        </p>
+      </a>
+   </div>
+   <div class="card-bolg-bottom-line"></div>
+<div>
+
+                
+                  <div class="card card-plain card-blog">
+  <h4 class="card-blog-title title col-md-10 col-lg-8 mr-auto ml-auto">
+    <a class="blog-item-title-link" href="/2019-04-19-Spam-Detection-and-Analysis-P1/" title="Spam Detection and Analysis (Part 1 - Parsing)">Spam Detection and Analysis (Part 1 - Parsing)
+    </a>
+  </h4>
+  <span class="card-bolg-title-date text-muted col-md-10 col-lg-8 mr-auto ml-auto">
+    <time datetime="2019-04-19T08:24:59.000Z">2019-04-19</time>&nbsp;&nbsp;
+    
+    <a href="#nav-row" title="View all posts in data" id="datatab">DATA
+    </a>
+    
+      
+    
+  </span>
+  <div class="card-image col-md-10  mr-auto ml-auto">
+    <a href="/2019-04-19-Spam-Detection-and-Analysis-P1/" title="Spam Detection and Analysis (Part 1 - Parsing)">
+      <img data-opt-src="https://i.loli.net/2019/05/10/5cd50420b955f.png" src="https://i.loli.net/2019/05/10/5cd50420b955f.png" class="img-fluid rounded img-raised" alt data-opt-loaded="true" data-opt-lazy-loaded="true">
+    </a>
+  </div>
+  <div class="content col-md-10 col-lg-8 mr-auto ml-auto">
+    <ul class="nav card-bolg-title-tags">
+      
+      <li class>
+        <a href="/tags/Python/" title="View all posts in Python">#Python
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Regression/" title="View all posts in Regression">#Regression
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Analysis/" title="View all posts in Analysis">#Analysis
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/R/" title="View all posts in R">#R
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Parsing/" title="View all posts in Parsing">#Parsing
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/BeautifulSoup/" title="View all posts in BeautifulSoup">#BeautifulSoup
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Spam/" title="View all posts in Spam">#Spam
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Email/" title="View all posts in Email">#Email
+        
+        
+        </a>
+      </li>
+      
+    </ul>
+      <div class="card-blog-title-excerpt">
+        <p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.<br>
+      </p></div>
+      <a class="moretag tabs" href="/2019-04-19-Spam-Detection-and-Analysis-P1/">
+        <p class="card-bolg-readmore">
+          Read more
+        </p>
+      </a>
+   </div>
+   <div class="card-bolg-bottom-line"></div>
+<div>
+
+                
+                </div></div></div></div></article>
+              </div>
+            </div>
+            <div class="tab-pane" id="data">
+              <div class="row tabContent justify-content-center">
+                <article class="col-md-10 mr-auto ml-auto">
+                
+                  
+                    
+                  
+                  
+                    <div class="card card-plain card-blog">
+  <h4 class="card-blog-title title col-md-10 col-lg-8 mr-auto ml-auto">
+    <a class="blog-item-title-link" href="/2019-05-09-Spam-Detection-and-Analysis-P2/" title="Spam Detection and Analysis (Part 2 - Analysis with R)">Spam Detection and Analysis (Part 2 - Analysis with R)
+    </a>
+  </h4>
+  <span class="card-bolg-title-date text-muted col-md-10 col-lg-8 mr-auto ml-auto">
+    <time datetime="2019-05-10T04:47:43.000Z">2019-05-09</time>&nbsp;&nbsp;
+    
+    <a href="#nav-row" title="View all posts in data" id="datatab">DATA
+    </a>
+    
+      
+    
+  </span>
+  <div class="card-image col-md-10  mr-auto ml-auto">
+    <a href="/2019-05-09-Spam-Detection-and-Analysis-P2/" title="Spam Detection and Analysis (Part 2 - Analysis with R)">
+      <img data-opt-src="https://i.loli.net/2019/05/10/5cd5051a0e1f9.png" src="https://i.loli.net/2019/05/10/5cd5051a0e1f9.png" class="img-fluid rounded img-raised" alt data-opt-loaded="true" data-opt-lazy-loaded="true">
+    </a>
+  </div>
+  <div class="content col-md-10 col-lg-8 mr-auto ml-auto">
+    <ul class="nav card-bolg-title-tags">
+      
+      <li class>
+        <a href="/tags/Python/" title="View all posts in Python">#Python
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Regression/" title="View all posts in Regression">#Regression
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Analysis/" title="View all posts in Analysis">#Analysis
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/R/" title="View all posts in R">#R
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Parsing/" title="View all posts in Parsing">#Parsing
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/BeautifulSoup/" title="View all posts in BeautifulSoup">#BeautifulSoup
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Spam/" title="View all posts in Spam">#Spam
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Email/" title="View all posts in Email">#Email
+        
+        
+        </a>
+      </li>
+      
+    </ul>
+      <div class="card-blog-title-excerpt">
+        <p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.<br>
+      </p></div>
+      <a class="moretag tabs" href="/2019-05-09-Spam-Detection-and-Analysis-P2/">
+        <p class="card-bolg-readmore">
+          Read more
+        </p>
+      </a>
+   </div>
+   <div class="card-bolg-bottom-line"></div>
+<div>
+
+                  
+                
+                  
+                    
+                  
+                  
+                    <div class="card card-plain card-blog">
+  <h4 class="card-blog-title title col-md-10 col-lg-8 mr-auto ml-auto">
+    <a class="blog-item-title-link" href="/2019-04-19-Spam-Detection-and-Analysis-P1/" title="Spam Detection and Analysis (Part 1 - Parsing)">Spam Detection and Analysis (Part 1 - Parsing)
+    </a>
+  </h4>
+  <span class="card-bolg-title-date text-muted col-md-10 col-lg-8 mr-auto ml-auto">
+    <time datetime="2019-04-19T08:24:59.000Z">2019-04-19</time>&nbsp;&nbsp;
+    
+    <a href="#nav-row" title="View all posts in data" id="datatab">DATA
+    </a>
+    
+      
+    
+  </span>
+  <div class="card-image col-md-10  mr-auto ml-auto">
+    <a href="/2019-04-19-Spam-Detection-and-Analysis-P1/" title="Spam Detection and Analysis (Part 1 - Parsing)">
+      <img data-opt-src="https://i.loli.net/2019/05/10/5cd50420b955f.png" src="https://i.loli.net/2019/05/10/5cd50420b955f.png" class="img-fluid rounded img-raised" alt data-opt-loaded="true" data-opt-lazy-loaded="true">
+    </a>
+  </div>
+  <div class="content col-md-10 col-lg-8 mr-auto ml-auto">
+    <ul class="nav card-bolg-title-tags">
+      
+      <li class>
+        <a href="/tags/Python/" title="View all posts in Python">#Python
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Regression/" title="View all posts in Regression">#Regression
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Analysis/" title="View all posts in Analysis">#Analysis
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/R/" title="View all posts in R">#R
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Parsing/" title="View all posts in Parsing">#Parsing
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/BeautifulSoup/" title="View all posts in BeautifulSoup">#BeautifulSoup
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Spam/" title="View all posts in Spam">#Spam
+        
+        ,&nbsp;
+        
+        </a>
+      </li>
+      
+      <li class>
+        <a href="/tags/Email/" title="View all posts in Email">#Email
+        
+        
+        </a>
+      </li>
+      
+    </ul>
+      <div class="card-blog-title-excerpt">
+        <p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.<br>
+      </p></div>
+      <a class="moretag tabs" href="/2019-04-19-Spam-Detection-and-Analysis-P1/">
+        <p class="card-bolg-readmore">
+          Read more
+        </p>
+      </a>
+   </div>
+   <div class="card-bolg-bottom-line"></div>
+<div>
+
+                  
+                
+                </div></div></div></div></article>
+              </div>
+            </div>
+            <div class="tab-pane" id="ux">
+              <div class="row tabContent justify-content-center">
+                <article class="col-md-10 mr-auto ml-auto">
+                
+                  
+                    
+                  
+                  
+                
+                  
+                    
+                  
+                  
+                
+                </article>
+              </div>
+            </div>
+            <div class="tab-pane" id="blog">
+              <div class="row tabContent justify-content-center">
+                <article class="col-md-10 mr-auto ml-auto">
+                
+                  
+                    
+                  
+                  
+                
+                  
+                    
+                  
+                  
+                
+                </article>
+              </div>
+            </div>
+          </div>
+        
+
+
+
+
+      </div>
+    </div>
+  </div>
+  <div>
+
+  <div id="paginator">
+    
+  </div>
+
+  
+<footer class="footer footer-default">
+  <div class="container">
+    <div class="copyright">Copyright
+      &copy;
+      <script>
+        document.write(new Date().getFullYear())
+      </script>&nbsp;by Johnny Li. All rights reserved.
+
+    <p>Powered by HEXO | Based on <a href="https://demos.creative-tim.com/material-kit/"> Material Kit</a>
+    </p>
+    </div>
+  </div>
+
+</footer>
+
+  
+  
+    <script src="/js/core/jquery.min.js"></script>
+  
+    <script src="/js/core/popper.min.js"></script>
+  
+    <script src="/js/core/bootstrap-material-design.min.js"></script>
+  
+    <script src="/js/plugins/moment.min.js"></script>
+  
+    <script src="/js/plugins/bootstrap-datetimepicker.js"></script>
+  
+    <script src="/js/plugins/nouislider.min.js"></script>
+  
+    <script src="/js/material-kit.js"></script>
+  
+    <script src="/js/likely.js"></script>
+  
+    <script src="/js/af101.js"></script>
+  
+
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+
+
+  <script id="dsq-count-scr" src="https://j84lee-github-io.disqus.com/count.js" async></script>
+
+
+
+
+
+<script type="text/javascript">
+  $("#uxtab").on("click", function() {
+  $('#uxnav').addClass("active").parent("li").siblings().find("a").removeClass("active");
+  $("#ux").removeClass("fade").addClass("active").addClass("show");
+  $("#tabContent").removeClass("active").removeClass("show");
+  });
+  $("#datatab").on("click", function() {
+  $('#datanav').addClass("active").parent("li").siblings().find("a").removeClass("active");
+  $("#data").removeClass("fade").addClass("active").addClass("show");
+  $("#tabContent").removeClass("active").removeClass("show");
+  });
+  $("#blogtab").on("click", function() {
+  $('#blognav').addClass("active").parent("li").siblings().find("a").removeClass("active");
+  $("#blog").removeClass("fade").addClass("active").addClass("show");
+  $("#tabContent").removeClass("active").removeClass("show");
+  });
+
+
+
+  $('.post-content img')
+    .not(':hidden')
+    .each(function() {
+      var $image = $(this);
+      var imageTitle = $image.attr('title') || $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+
+      if ($imageWrapLink.length < 1) {
+        var imageLink = $image.attr('data-original') || $image.attr('src');
+        $imageWrapLink = $image.wrap('<a class="fancybox fancybox.image post-image-link" href="' + imageLink + '" itemscope itemtype="http://schema.org/ImageObject" itemprop="url"></a>').parent('a');
+        if ($image.is('.post-gallery img')) {
+          $imageWrapLink.addClass('post-gallery-img');
+          $imageWrapLink.attr('data-fancybox', 'gallery').attr('rel', 'gallery');
+        }
+        else if ($image.is('.group-picture img')) {
+          $imageWrapLink.attr('data-fancybox', 'group').attr('rel', 'group');
+        }
+        else {
+          $imageWrapLink.attr('data-fancybox', 'default').attr('rel', 'default');
+        }
+      }
+
+      if (imageTitle) {
+        $imageWrapLink.append('<p class="image-caption">' + imageTitle + '</p>');
+        // Make sure img title tag will show correctly in fancybox
+        $imageWrapLink.attr('title', imageTitle).attr('data-caption', imageTitle);
+      }
+    });
+
+  $('.fancybox').fancybox({
+    loop: true,
+    helpers: {
+      overlay: {
+        locked: false
+      }
+    }
+  });
+</script>
+
+<!--Baidu Analytics-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?8625975e55aff83f53b3e603ed269760";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</div></body>
+</html>

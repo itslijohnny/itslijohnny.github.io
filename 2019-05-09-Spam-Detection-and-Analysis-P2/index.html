@@ -1,0 +1,560 @@
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136585559-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-136585559-1');
+</script>
+
+
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+<link rel="icon" type="image/png" href="../assets/img/favicon.png">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Johnny's - Spam Detection and Analysis (Part 2 - Analysis with R)</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport">
+<!--     Fonts and icons     -->
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Pacifico" rel="stylesheet">
+
+
+  
+  
+    <link rel="stylesheet" href="/css/af101.css">
+  
+    <link rel="stylesheet" href="/css/material-kit.css">
+  
+    <link rel="stylesheet" href="/css/demo.css">
+  
+    <link rel="stylesheet" href="/css/addon.css">
+  
+    <link rel="stylesheet" href="/css/likely.css">
+  
+
+
+</head>
+<body class="profile-page sidebar-collapse">
+  <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+  <div class="container">
+    <div class="navbar-translate">
+      <a class="navbar-brand page-title" href="/">
+        Johnny's Blog </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a href="/" class="nav-link">
+            <i class="material-icons">home</i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="https://www.linkedin.com/in/johnny-li/" class="nav-link">
+            <i class="material-icons">account_box</i> About Me
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  <div class="page-header" data-parallax="true" style="background-image: url('/img/bg2.jpg');"></div>
+
+  <div class="main main-raised post-raised">
+    <div class="profile-content">
+      <div class="container">
+      <article class="col-md-8 mr-auto ml-auto">
+        <div class="card card-plain card-blog">
+          <h2 class="card-blog-title title post-title">
+          Spam Detection and Analysis (Part 2 - Analysis with R)
+          </h2>
+          <span class="card-bolg-title-date text-muted">
+            <time datetime="2019-05-10T04:47:43.000Z">2019-05-09</time>&nbsp;&nbsp;
+            
+            <a href="/#data" title="View all posts in data" id="datatab">DATA
+            </a>
+            
+              
+            
+          </span>
+          <div class="card-image  mr-auto ml-auto post-image">
+              <img data-opt-src="https://i.loli.net/2019/05/10/5cd5051a0e1f9.png" src="https://i.loli.net/2019/05/10/5cd5051a0e1f9.png" class="img-fluid img-raised rounded" alt data-opt-loaded="true" data-opt-lazy-loaded="true">
+          </div>
+          <div class="post-content">
+            <p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.<br><a id="more"></a></p>
+<blockquote>
+<p>This is the Part 2 of the series. For how to parsing email, please check <a href="https://lijohnny.com/2019-04-19-Spam-Detection-and-Analysis-P1/">Part 1</a></p>
+</blockquote>
+<h2 id="Data-Exploration"><a href="#Data-Exploration" class="headerlink" title="Data Exploration"></a>Data Exploration</h2><h3 id="Import-the-data-to-R"><a href="#Import-the-data-to-R" class="headerlink" title="Import the data to R"></a>Import the data to R</h3><p>For This part of the script, I used <strong>R language</strong>  to explore the data and the build model. Therefore We need to import CSV to R first.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">em &lt;- read.csv(<span class="string">"gamilspamedited.csv"</span>,stringsAsFactors = <span class="literal">F</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>&apos;data.frame&apos;:    272 obs. of  18 variables:
+ $ Subject            : chr  
+ $ Return.Path.Address: chr  
+ $ Date               : chr  
+ $ Reply.To.Address   : chr
+ $ Content.Type       : chr  
+ $ From.Address       : chr
+ $ IP                 : chr  
+ $ SPF                : chr  
+ $ DMARC              : chr  
+ $ DKIM               : chr
+ $ Country            : chr  
+ $ Regin              : chr  
+ $ City               : chr  
+ $ IPv6.Indicator     : int  
+ $ CAT                : chr  
+ $ Reputation         : chr  
+</code></pre><p>After cleaning the data, there are 272 entries and 18 columns left.</p>
+<h3 id="Preprocess-the-date"><a href="#Preprocess-the-date" class="headerlink" title="Preprocess the date"></a>Preprocess the date</h3><h4 id="Create-Variables"><a href="#Create-Variables" class="headerlink" title="Create Variables"></a>Create Variables</h4><p>Create <figure class="highlight plain"><figcaption><span>and ```hasattach``` columns to label if the email use html for main content and if the email has attachment.</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```R</span><br><span class="line">library(dplyr)</span><br><span class="line">hashtml.func &lt;- function(x,c1)&#123;</span><br><span class="line">    x &lt;- case_when(x[c1]==&quot;multipart/alternative&quot; ~ &quot;1&quot;,x[c1]==&quot;multipart/mixed&quot; ~ &quot;1&quot;,x[c1]==&quot;multipart/related&quot; ~ &quot;1&quot;,x[c1]==&quot;text/html&quot; ~ &quot;1&quot;,x[c1]==&quot;text/plain&quot; ~ &quot;0&quot;)</span><br><span class="line">&#125;</span><br><span class="line">em$hashtml &lt;- apply(em,1,hashtml.func,c1=&apos;Content.Type&apos;)</span><br><span class="line">hasattach.func &lt;- function(x,c1)&#123;</span><br><span class="line">    x &lt;- case_when(x[c1]==&quot;multipart/alternative&quot; ~ &quot;0&quot;,x[c1]==&quot;multipart/mixed&quot; ~ &quot;1&quot;,x[c1]==&quot;multipart/related&quot; ~ &quot;0&quot;,x[c1]==&quot;text/html&quot; ~ &quot;0&quot;,x[c1]==&quot;text/plain&quot; ~ &quot;0&quot;)</span><br><span class="line">&#125;</span><br><span class="line">em$hasattach &lt;- apply(em,1,hasattach.func,c1=&apos;Content.Type&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>Compare Email’s From address and reply address and label if they are different.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(stringr)</span><br><span class="line">rpavsfrom.func &lt;- <span class="keyword">function</span>(x)&#123;</span><br><span class="line">    fa&lt;-x[<span class="string">'From.Address'</span>]</span><br><span class="line">    fa&lt;-str_split(fa,<span class="string">'@'</span>)[[<span class="number">1</span>]][<span class="number">2</span>]</span><br><span class="line">    fasplit &lt;-str_split(fa,<span class="string">'[.]'</span>)[[<span class="number">1</span>]]</span><br><span class="line">    fareal &lt;- paste(str_split(fa,<span class="string">'[.]'</span>)[[<span class="number">1</span>]][(length(fasplit)-<span class="number">1</span>)],<span class="string">'.'</span>,str_split(fa,<span class="string">'[.]'</span>)[[<span class="number">1</span>]][(length(fasplit))],sep = <span class="string">""</span>)</span><br><span class="line">    rp&lt;-x[<span class="string">'Return.Path.Address'</span>]</span><br><span class="line">    rp&lt;-str_split(rp,<span class="string">'@'</span>)[[<span class="number">1</span>]][<span class="number">2</span>]</span><br><span class="line">    rpsplit &lt;-str_split(rp,<span class="string">'[.]'</span>)[[<span class="number">1</span>]]</span><br><span class="line">    rpreal &lt;- paste(str_split(rp,<span class="string">'[.]'</span>)[[<span class="number">1</span>]][(length(rpsplit)-<span class="number">1</span>)],<span class="string">'.'</span>,str_split(rp,<span class="string">'[.]'</span>)[[<span class="number">1</span>]][(length(rpsplit))],sep = <span class="string">""</span>)</span><br><span class="line">    <span class="keyword">if</span> (fareal == rpreal) &#123;</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        x = <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>(x)</span><br><span class="line">&#125;</span><br><span class="line">em$rpavsfrom&lt;-apply(em,<span class="number">1</span>,rpavsfrom.func)</span><br></pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(stringr)</span><br><span class="line">replyvsfrom.func &lt;- <span class="keyword">function</span>(x)&#123;</span><br><span class="line">    fa&lt;-x[<span class="string">'From.Address'</span>]</span><br><span class="line">    fa&lt;-str_split(fa,<span class="string">'@'</span>)[[<span class="number">1</span>]][<span class="number">2</span>]</span><br><span class="line">    fasplit &lt;-str_split(fa,<span class="string">'[.]'</span>)[[<span class="number">1</span>]]</span><br><span class="line">    fareal &lt;- paste(str_split(fa,<span class="string">'[.]'</span>)[[<span class="number">1</span>]][(length(fasplit)-<span class="number">1</span>)],<span class="string">'.'</span>,str_split(fa,<span class="string">'[.]'</span>)[[<span class="number">1</span>]][(length(fasplit))],sep = <span class="string">""</span>)</span><br><span class="line">    ra&lt;-x[<span class="string">'Reply.To.Address'</span>]</span><br><span class="line">    ra&lt;-str_split(ra,<span class="string">'@'</span>)[[<span class="number">1</span>]][<span class="number">2</span>]</span><br><span class="line">    rasplit &lt;-str_split(ra,<span class="string">'[.]'</span>)[[<span class="number">1</span>]]</span><br><span class="line">    rareal &lt;- paste(str_split(ra,<span class="string">'[.]'</span>)[[<span class="number">1</span>]][(length(rasplit)-<span class="number">1</span>)],<span class="string">'.'</span>,str_split(ra,<span class="string">'[.]'</span>)[[<span class="number">1</span>]][(length(rasplit))],sep = <span class="string">""</span>)</span><br><span class="line">    <span class="keyword">if</span> (fareal == rareal) &#123;</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        x = <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>(x)</span><br><span class="line">&#125;</span><br><span class="line">em$replyvsfrom&lt;-apply(em,<span class="number">1</span>,replyvsfrom.func)</span><br></pre></td></tr></table></figure>
+<p>Bin and Categorize the Time and the Day.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(lubridate)</span><br><span class="line">weekday.func &lt;- <span class="keyword">function</span>(x,c1)&#123;</span><br><span class="line">    weekday &lt;- wday(as.Date(str_split(x[c1],<span class="string">' '</span>)[[<span class="number">1</span>]][<span class="number">1</span>],format=<span class="string">'%m/%d/%Y'</span>))</span><br><span class="line">    <span class="keyword">return</span>(weekday)</span><br><span class="line">&#125;</span><br><span class="line">em$Weekday &lt;- apply(em,<span class="number">1</span>,weekday.func,c1=<span class="string">'Date'</span>)</span><br><span class="line">em$Weekday &lt;- factor(em$Weekday)</span><br><span class="line">levels(em$Weekday) &lt;- c(<span class="string">"Mon"</span>, <span class="string">"Tue"</span>, <span class="string">"Wed"</span>, <span class="string">"Thu"</span>, <span class="string">"Fri"</span>, <span class="string">"Sat"</span>, <span class="string">"Sun"</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">time.func &lt;- <span class="keyword">function</span>(x,c1)&#123;</span><br><span class="line">    time &lt;- gsub(<span class="string">":"</span>, <span class="string">""</span>, str_split(x[c1],<span class="string">' '</span>)[[<span class="number">1</span>]][<span class="number">2</span>])</span><br><span class="line">    <span class="keyword">return</span>(time)</span><br><span class="line">&#125;</span><br><span class="line">em$Time &lt;- apply(em,<span class="number">1</span>,time.func,c1=<span class="string">'Date'</span>)</span><br><span class="line">em$Time &lt;- factor(round(as.numeric(em$Time)/<span class="number">100</span>))</span><br></pre></td></tr></table></figure>
+<p>Convert the data to proper formats.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">em$SPF &lt;- factor(em$SPF,levels = c(<span class="string">"pass"</span>,<span class="string">"neutral"</span>,<span class="string">"fail"</span>,<span class="string">"temperror"</span>))</span><br><span class="line">em$DMARC &lt;- factor(em$DMARC,levels = c(<span class="string">"pass"</span>,<span class="string">"fail"</span>,<span class="string">"None"</span>))</span><br><span class="line">em$DKIM &lt;- factor(em$DKIM,levels = c(<span class="string">"pass"</span>,<span class="string">"None"</span>))</span><br><span class="line">em$Country &lt;- factor(em$Country)</span><br><span class="line">em$IPv6.Indicator&lt;-factor(em$IPv6.Indicator)</span><br><span class="line">em$CAT &lt;- factor(em$CAT)</span><br><span class="line">em$Reputation &lt;- factor(em$Reputation)</span><br><span class="line">em$hashtml &lt;- factor(em$hashtml)</span><br><span class="line">em$hasattach &lt;- factor(em$hasattach)</span><br><span class="line">em$rpavsfrom &lt;- factor(em$rpavsfrom)</span><br><span class="line">em$replyvsfrom &lt;- factor(em$replyvsfrom)</span><br></pre></td></tr></table></figure>
+<p>Set base level.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">em$Country &lt;- relevel(em$Country,ref = <span class="string">"US"</span>)</span><br><span class="line">em$Reputation &lt;- relevel(em$Reputation,ref = <span class="string">"Unsuspicious"</span>)</span><br></pre></td></tr></table></figure>
+<p>Re-code the target to numeric.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">em$CAT &lt;- as.numeric(em$CAT == <span class="string">"Spam"</span>)</span><br></pre></td></tr></table></figure>
+<p>Explore the Relationship.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set.seed(<span class="number">11</span>)</span><br><span class="line">selected.var &lt;- c(<span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">15</span>, <span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="number">22</span>,<span class="number">23</span>,<span class="number">24</span>)</span><br><span class="line">selected.df &lt;- em[, selected.var]</span><br></pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">emnum&lt;-selected.df</span><br><span class="line">levels(selected.df$SPF) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>, <span class="string">"4"</span>)</span><br><span class="line">emnum$SPF &lt;- as.numeric(selected.df$SPF)</span><br><span class="line">levels(selected.df$DMARC) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>)</span><br><span class="line">emnum$DMARC &lt;- as.numeric(selected.df$DMARC)</span><br><span class="line">levels(selected.df$DKIM) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>)</span><br><span class="line">emnum$DKIM &lt;- as.numeric(selected.df$DKIM)</span><br><span class="line">levels(selected.df$Country) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>)</span><br><span class="line">emnum$Country &lt;- as.numeric(selected.df$Country)</span><br><span class="line">levels(selected.df$IPv6.Indicator) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>)</span><br><span class="line">emnum$IPv6.Indicator &lt;- as.numeric(selected.df$IPv6.Indicator)</span><br><span class="line">levels(selected.df$Reputation) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>)</span><br><span class="line">emnum$Reputation &lt;- as.numeric(selected.df$Reputation)</span><br><span class="line">levels(selected.df$hashtml) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>)</span><br><span class="line">emnum$hashtml &lt;- as.numeric(selected.df$hashtml)</span><br><span class="line">levels(selected.df$hasattach) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>)</span><br><span class="line">emnum$hasattach &lt;- as.numeric(selected.df$hasattach)</span><br><span class="line">levels(selected.df$rpavsfrom) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>)</span><br><span class="line">emnum$rpavsfrom &lt;- as.numeric(selected.df$rpavsfrom)</span><br><span class="line">levels(selected.df$replyvsfrom) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>)</span><br><span class="line">emnum$replyvsfrom &lt;- as.numeric(selected.df$replyvsfrom)</span><br><span class="line">levels(selected.df$Weekday) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>, <span class="string">"4"</span>, <span class="string">"5"</span>, <span class="string">"6"</span>, <span class="string">"7"</span>)</span><br><span class="line">emnum$Weekday &lt;- as.numeric(selected.df$Weekday)</span><br><span class="line">levels(selected.df$Time) &lt;- c(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>, <span class="string">"4"</span>, <span class="string">"5"</span>, <span class="string">"6"</span>, <span class="string">"7"</span>, <span class="string">"8"</span>, <span class="string">"9"</span>, <span class="string">"10"</span>, <span class="string">"11"</span>, <span class="string">"12"</span>, <span class="string">"13"</span>, <span class="string">"14"</span>,<span class="string">"15"</span>, <span class="string">"16"</span>, <span class="string">"17"</span>, <span class="string">"18"</span>, <span class="string">"19"</span>, <span class="string">"20"</span>, <span class="string">"21"</span>, <span class="string">"22"</span>, <span class="string">"23"</span>, <span class="string">"24"</span>, <span class="string">"25"</span>)</span><br><span class="line">emnum$Time &lt;- as.numeric(selected.df$Time)</span><br></pre></td></tr></table></figure>
+<p>Create correlation matrix.<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(<span class="string">"PerformanceAnalytics"</span>)</span><br><span class="line">chart.Correlation(emnum, method=<span class="string">"spearman"</span>,histogram=<span class="literal">TRUE</span>,pch=<span class="string">"16"</span>)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g280ych5v7j30nc0nc3yv.jpg" alt="png"></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(corrr)</span><br><span class="line"></span><br><span class="line">emnum %&gt;% cor(method=<span class="string">"spearman"</span>) %&gt;% network_plot(min_cor=<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g280yddafpj30nc0ncwfs.jpg" alt="png"></p>
+<h2 id="Build-Model"><a href="#Build-Model" class="headerlink" title="Build Model"></a>Build Model</h2><h3 id="Partition-Data"><a href="#Partition-Data" class="headerlink" title="Partition Data"></a>Partition Data</h3><p>Create Training and Validation Sets</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># partition the data</span></span><br><span class="line">train.index &lt;- sample(<span class="number">1</span>:nrow(em), nrow(em)*<span class="number">0.6</span>)  </span><br><span class="line">train.df &lt;- selected.df[train.index, ]</span><br><span class="line">valid.df &lt;- selected.df[-train.index, ]</span><br></pre></td></tr></table></figure>
+<p>Fit a Logistic Regression Model</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">logit.reg &lt;- glm(CAT ~ Message+DMARC+Country+DKIM+Reputation+replyvsfrom+rpavsfrom+Weekday, data = train.df, family = <span class="string">"binomial"</span>)</span><br><span class="line">summary(logit.reg)</span><br></pre></td></tr></table></figure>
+<pre><code>Call:
+glm(formula = CAT ~ Message + DMARC + Country + DKIM + Reputation +
+    replyvsfrom + rpavsfrom + Weekday, family = &quot;binomial&quot;, data = train.df)
+
+Deviance Residuals:
+     Min        1Q    Median        3Q       Max  
+-3.09465  -0.18311  -0.04540  -0.00298   2.73259  
+
+Coefficients:
+               Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  -4.880e+00  1.891e+00  -2.581 0.009848 **
+Message      -2.864e-05  1.803e-05  -1.589 0.112145    
+DMARC2       -1.101e+01  2.400e+03  -0.005 0.996340    
+DMARC3        6.306e+00  1.445e+00   4.364 1.28e-05 ***
+Country2      4.332e+00  1.767e+00   2.451 0.014247 *  
+DKIM2        -3.987e+00  2.255e+00  -1.768 0.077077 .  
+Reputation2   9.137e+00  2.607e+00   3.505 0.000457 ***
+replyvsfrom2 -5.052e+00  1.214e+00  -4.162 3.16e-05 ***
+rpavsfrom2   -2.141e+00  1.044e+00  -2.052 0.040209 *  
+Weekday2      3.313e+00  1.764e+00   1.878 0.060359 .  
+Weekday3      3.392e+00  1.544e+00   2.197 0.028011 *  
+Weekday4      6.549e-01  1.684e+00   0.389 0.697268    
+Weekday5      5.326e+00  1.607e+00   3.315 0.000918 ***
+Weekday6      1.686e+00  1.216e+00   1.387 0.165409    
+Weekday7      2.898e+00  1.634e+00   1.773 0.076224 .  
+---
+Signif. codes:  0 &apos;***&apos; 0.001 &apos;**&apos; 0.01 &apos;*&apos; 0.05 &apos;.&apos; 0.1 &apos; &apos; 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 172.126  on 162  degrees of freedom
+Residual deviance:  56.569  on 148  degrees of freedom
+AIC: 86.569
+
+Number of Fisher Scoring iterations: 15
+</code></pre><p>Predict with validation dataset and find the best threshold.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">logit.reg.pred &lt;- predict(logit.reg, valid.df,  type = <span class="string">"response"</span>)</span><br><span class="line"><span class="keyword">library</span>(pROC)</span><br><span class="line">r &lt;- roc(valid.df$CAT, logit.reg.pred)</span><br><span class="line">plot.roc(r)</span><br><span class="line">pred &lt;- ifelse(logit.reg.pred &gt; coords(r, x = <span class="string">"best"</span>)[[<span class="number">1</span>]], <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">print(coords(r, x = <span class="string">"best"</span>))</span><br></pre></td></tr></table></figure>
+<pre><code>Type &apos;citation(&quot;pROC&quot;)&apos; for a citation.
+
+Attaching package: &apos;pROC&apos;
+
+The following objects are masked from &apos;package:stats&apos;:
+
+    cov, smooth, var
+
+
+
+  threshold specificity sensitivity
+  0.3222076   0.9625000   0.9655172
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g280ydomsdj30nc0nc3yf.jpg" alt></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(caret)</span><br><span class="line">confusionMatrix(factor(pred), factor(valid.df$CAT), positive = <span class="string">"1"</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>Loading required package: lattice
+Loading required package: ggplot2
+
+
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction  0  1
+         0 77  1
+         1  3 28
+
+               Accuracy : 0.9633          
+                 95% CI : (0.9087, 0.9899)
+    No Information Rate : 0.7339          
+    P-Value [Acc &gt; NIR] : 2.433e-10       
+
+                  Kappa : 0.9081          
+ Mcnemar&apos;s Test P-Value : 0.6171          
+
+            Sensitivity : 0.9655          
+            Specificity : 0.9625          
+         Pos Pred Value : 0.9032          
+         Neg Pred Value : 0.9872          
+             Prevalence : 0.2661          
+         Detection Rate : 0.2569          
+   Detection Prevalence : 0.2844          
+      Balanced Accuracy : 0.9640          
+
+       &apos;Positive&apos; Class : 1               
+</code></pre>
+          </div>
+          
+          <div class="row">
+              <ul class="nav card-bolg-title-tag post-title-tag mr-auto ml-auto ">
+                
+                <li class>
+                  <a href="/tags/Python/" title="View all posts in Python">#Python
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Regression/" title="View all posts in Regression">#Regression
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Analysis/" title="View all posts in Analysis">#Analysis
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/R/" title="View all posts in R">#R
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Parsing/" title="View all posts in Parsing">#Parsing
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/BeautifulSoup/" title="View all posts in BeautifulSoup">#BeautifulSoup
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Spam/" title="View all posts in Spam">#Spam
+                  
+                  ,&nbsp;
+                  
+                  </a>
+                </li>
+                
+                <li class>
+                  <a href="/tags/Email/" title="View all posts in Email">#Email
+                  
+                  
+                  </a>
+                </li>
+                
+              </ul>
+           </div>
+           <div class="card-bolg-bottom-line"></div>
+           <div class="row">
+             <div class="post-share mr-auto ml-auto">
+              <div class="likely likely-small">
+                <div class="twitter">Tweet</div>
+                <div class="facebook">Share</div>
+                <div class="linkedin">Link</div>
+                <div class="whatsapp">Send</div>
+              </div>
+            </div>
+           </div>
+           <div class="card-bolg-bottom-line"></div>
+           <div class="row post-prevnext">
+           
+             
+               <div class="post-prev post-prev-small  col-lg-6">
+                <a class="post-prev-arrow" href="/2019-05-11-scripts-automate-crop-compress-and-upload-image-for-my-blog/" title="Scripts that Automate Crop Compress and Upload Image for My Blog" rel="prev">
+                  <i class="fa fa-angle-double-left"></i>
+                </a>
+                <div class="post-prev-img">
+                  <a href="/2019-05-11-scripts-automate-crop-compress-and-upload-image-for-my-blog/" title="Scripts that Automate Crop Compress and Upload Image for My Blog" rel="prev">
+                    <img src="https://i.loli.net/2019/05/12/5cd7b069e734a.jpg" class="rounded" alt="Scripts that Automate Crop Compress and Upload Image for My Blog" srcset=" " data-src="https://i.loli.net/2019/05/12/5cd7b069e734a.jpg" data-sizes data-srcset=" " sizes>
+                  </a>
+                </div>
+                <div class="post-prev-wrapper">
+                  <a href="/2019-05-11-scripts-automate-crop-compress-and-upload-image-for-my-blog/" title="Scripts that Automate Crop Compress and Upload Image for My Blog" rel="prev">
+                    <span class="post_navigation_title title">Previous Post:</span>
+                  </a>
+                  <h4 class="title post-prevnext-title">
+                    <a href="/2019-05-11-scripts-automate-crop-compress-and-upload-image-for-my-blog/">
+                      Scripts that Automate Crop Compress and Upload Image for My Blog
+                    </a>
+                  </h4>
+                </div>
+               </div>
+             
+             
+               <div class="post-next col-lg-6">
+                <a class="post-next-arrow" href="/2019-05-04-Maching Learning and Price Strategy for Amazon Cloud Cam/" title="Maching Learning and Price Strategy for Amazon Cloud Cam" rel="next">
+                  <i class="fa fa-angle-double-right"></i>
+                </a>
+                <div class="post-next-img">
+                  <a href="/2019-05-04-Maching Learning and Price Strategy for Amazon Cloud Cam/" title="Maching Learning and Price Strategy for Amazon Cloud Cam" rel="next">
+                    <img src="https://i.loli.net/2019/05/10/5cd50a8799440.png" class="rounded" alt="Maching Learning and Price Strategy for Amazon Cloud Cam" srcset=" " data-src="https://i.loli.net/2019/05/10/5cd50a8799440.png" data-sizes data-srcset=" " sizes>
+                  </a>
+                </div>
+                <div class="post-next-wrapper">
+                  <a href="/2019-05-04-Maching Learning and Price Strategy for Amazon Cloud Cam/" title="Maching Learning and Price Strategy for Amazon Cloud Cam" rel="next">
+                    <span class="post_navigation_title title">Next Post:</span>
+                  </a>
+                  <h4 class="title post-prevnext-title">
+                    <a href="/2019-05-04-Maching Learning and Price Strategy for Amazon Cloud Cam/">Maching Learning and Price Strategy for Amazon Cloud Cam</a>
+                  </h4>
+                </div>
+              </div>
+            
+           
+           </div>
+           <div class="card-bolg-bottom-line"></div>
+
+
+          
+
+            
+
+          <div class="card-bolg-bottom-line"></div>
+
+           <div class="comments" id="comments">
+             <div id="disqus_thread">
+               <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+             </div>
+           </div>
+
+         
+      </div></article>
+
+    </div>
+
+
+    </div>
+  </div>
+
+
+  <div id="paginator">
+    
+  </div>
+
+
+
+  
+<footer class="footer footer-default">
+  <div class="container">
+    <div class="copyright">Copyright
+      &copy;
+      <script>
+        document.write(new Date().getFullYear())
+      </script>&nbsp;by Johnny Li. All rights reserved.
+
+    <p>Powered by HEXO | Based on <a href="https://demos.creative-tim.com/material-kit/"> Material Kit</a>
+    </p>
+    </div>
+  </div>
+
+</footer>
+
+  
+  
+    <script src="/js/core/jquery.min.js"></script>
+  
+    <script src="/js/core/popper.min.js"></script>
+  
+    <script src="/js/core/bootstrap-material-design.min.js"></script>
+  
+    <script src="/js/plugins/moment.min.js"></script>
+  
+    <script src="/js/plugins/bootstrap-datetimepicker.js"></script>
+  
+    <script src="/js/plugins/nouislider.min.js"></script>
+  
+    <script src="/js/material-kit.js"></script>
+  
+    <script src="/js/likely.js"></script>
+  
+    <script src="/js/af101.js"></script>
+  
+
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+
+
+  <script id="dsq-count-scr" src="https://j84lee-github-io.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://lijohnny.com/2019-05-09-Spam-Detection-and-Analysis-P2/";
+    this.page.identifier = "2019-05-09-Spam-Detection-and-Analysis-P2/";
+    this.page.title = 'Spam Detection and Analysis (Part 2 - Analysis with R)';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://j84lee-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+<script type="text/javascript">
+  $("#uxtab").on("click", function() {
+  $('#uxnav').addClass("active").parent("li").siblings().find("a").removeClass("active");
+  $("#ux").removeClass("fade").addClass("active").addClass("show");
+  $("#tabContent").removeClass("active").removeClass("show");
+  });
+  $("#datatab").on("click", function() {
+  $('#datanav').addClass("active").parent("li").siblings().find("a").removeClass("active");
+  $("#data").removeClass("fade").addClass("active").addClass("show");
+  $("#tabContent").removeClass("active").removeClass("show");
+  });
+  $("#blogtab").on("click", function() {
+  $('#blognav').addClass("active").parent("li").siblings().find("a").removeClass("active");
+  $("#blog").removeClass("fade").addClass("active").addClass("show");
+  $("#tabContent").removeClass("active").removeClass("show");
+  });
+
+
+
+  $('.post-content img')
+    .not(':hidden')
+    .each(function() {
+      var $image = $(this);
+      var imageTitle = $image.attr('title') || $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+
+      if ($imageWrapLink.length < 1) {
+        var imageLink = $image.attr('data-original') || $image.attr('src');
+        $imageWrapLink = $image.wrap('<a class="fancybox fancybox.image post-image-link" href="' + imageLink + '" itemscope itemtype="http://schema.org/ImageObject" itemprop="url"></a>').parent('a');
+        if ($image.is('.post-gallery img')) {
+          $imageWrapLink.addClass('post-gallery-img');
+          $imageWrapLink.attr('data-fancybox', 'gallery').attr('rel', 'gallery');
+        }
+        else if ($image.is('.group-picture img')) {
+          $imageWrapLink.attr('data-fancybox', 'group').attr('rel', 'group');
+        }
+        else {
+          $imageWrapLink.attr('data-fancybox', 'default').attr('rel', 'default');
+        }
+      }
+
+      if (imageTitle) {
+        $imageWrapLink.append('<p class="image-caption">' + imageTitle + '</p>');
+        // Make sure img title tag will show correctly in fancybox
+        $imageWrapLink.attr('title', imageTitle).attr('data-caption', imageTitle);
+      }
+    });
+
+  $('.fancybox').fancybox({
+    loop: true,
+    helpers: {
+      overlay: {
+        locked: false
+      }
+    }
+  });
+</script>
+
+<!--Baidu Analytics-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?8625975e55aff83f53b3e603ed269760";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>
