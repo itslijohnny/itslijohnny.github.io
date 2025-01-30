@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on Johnny's Blog</title><link>https://lijohnny.com/page/</link><description>Recent content in Pages on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Wed, 03 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://lijohnny.com/page/index.xml" rel="self" type="application/rss+xml"/><item><title>About</title><link>https://lijohnny.com/about/</link><pubDate>Wed, 03 Mar 2021 00:00:00 +0000</pubDate><guid>https://lijohnny.com/about/</guid><description>&lt;style>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on Johnny's Blog</title><link>https://johnnyli.cc/page/</link><description>Recent content in Pages on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Wed, 03 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://johnnyli.cc/page/index.xml" rel="self" type="application/rss+xml"/><item><title>About</title><link>https://johnnyli.cc/about/</link><pubDate>Wed, 03 Mar 2021 00:00:00 +0000</pubDate><guid>https://johnnyli.cc/about/</guid><description>&lt;style>
 .about-brief {
 margin: auto;
 max-width: 540px;
@@ -261,4 +261,4 @@ font-size: 14px;
 &lt;/div>
 &lt;/div>
 &lt;/div>
-&lt;/div></description></item><item><title>Archives</title><link>https://lijohnny.com/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://lijohnny.com/archives/</guid><description/></item><item><title>Search</title><link>https://lijohnny.com/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lijohnny.com/search/</guid><description/></item></channel></rss>
+&lt;/div></description></item><item><title>Archives</title><link>https://johnnyli.cc/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://johnnyli.cc/archives/</guid><description/></item><item><title>Search</title><link>https://johnnyli.cc/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://johnnyli.cc/search/</guid><description/></item></channel></rss>

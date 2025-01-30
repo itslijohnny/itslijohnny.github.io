@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hexo on Johnny's Blog</title><link>https://lijohnny.com/tags/hexo/</link><description>Recent content in Hexo on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Wed, 03 Mar 2021 20:03:50 +0000</lastBuildDate><atom:link href="https://lijohnny.com/tags/hexo/index.xml" rel="self" type="application/rss+xml"/><item><title>Switch from Hexo to Hugo</title><link>https://lijohnny.com/p/switch-from-hexo-to-hugo/</link><pubDate>Wed, 03 Mar 2021 20:03:50 +0000</pubDate><guid>https://lijohnny.com/p/switch-from-hexo-to-hugo/</guid><description>&lt;img src="https://lijohnny.com/p/switch-from-hexo-to-hugo/bg2.png" alt="Featured image of post Switch from Hexo to Hugo" />&lt;p>It&amp;rsquo;s been a year since last time I update my blog. Recently, I want to get back to writing blog again. However, I encounter some issues.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hexo on Johnny's Blog</title><link>https://johnnyli.cc/tags/hexo/</link><description>Recent content in Hexo on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Wed, 03 Mar 2021 20:03:50 +0000</lastBuildDate><atom:link href="https://johnnyli.cc/tags/hexo/index.xml" rel="self" type="application/rss+xml"/><item><title>Switch from Hexo to Hugo</title><link>https://johnnyli.cc/p/switch-from-hexo-to-hugo/</link><pubDate>Wed, 03 Mar 2021 20:03:50 +0000</pubDate><guid>https://johnnyli.cc/p/switch-from-hexo-to-hugo/</guid><description>&lt;img src="https://johnnyli.cc/p/switch-from-hexo-to-hugo/bg2.png" alt="Featured image of post Switch from Hexo to Hugo" />&lt;p>It&amp;rsquo;s been a year since last time I update my blog. Recently, I want to get back to writing blog again. However, I encounter some issues.&lt;/p>
 &lt;ol>
 &lt;li>
 &lt;p>&lt;a class="link" href="https://hexo.io/" target="_blank" rel="noopener"
@@ -14,10 +14,10 @@
 &lt;p>Therefore, I start looking for other solutions. After comparing and trying several static web generators. I picked Hugo. The reason is sample. Hugo is fast, and I find the theme I like.&lt;/p>
 &lt;p>Here is the screenshot for my perverse website. Hexo has tens of theme too. But I didn&amp;rsquo;t find one fit me needs. So, I created my own theme. The design is based on &lt;a class="link" href="https://demos.creative-tim.com/material-kit/" target="_blank" rel="noopener"
 >Material Kit&lt;/a>.&lt;/p>
-&lt;p>&lt;img src="https://lijohnny.com/p/switch-from-hexo-to-hugo/Screenshot.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/switch-from-hexo-to-hugo/Screenshot.png"
 width="1176"
 height="1211"
-srcset="https://lijohnny.com/p/switch-from-hexo-to-hugo/Screenshot_hu35e393f0d3b7c807b28ca9485ad3df19_786367_480x0_resize_box_3.png 480w, https://lijohnny.com/p/switch-from-hexo-to-hugo/Screenshot_hu35e393f0d3b7c807b28ca9485ad3df19_786367_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/switch-from-hexo-to-hugo/Screenshot_hu35e393f0d3b7c807b28ca9485ad3df19_786367_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/switch-from-hexo-to-hugo/Screenshot_hu35e393f0d3b7c807b28ca9485ad3df19_786367_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="97"

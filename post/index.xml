@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Johnny's Blog</title><link>https://lijohnny.com/post/</link><description>Recent content in Posts on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Sun, 02 May 2021 21:24:32 -0700</lastBuildDate><atom:link href="https://lijohnny.com/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Disaster Response Web App</title><link>https://lijohnny.com/p/disaster-response-web-app/</link><pubDate>Sun, 02 May 2021 21:24:32 -0700</pubDate><guid>https://lijohnny.com/p/disaster-response-web-app/</guid><description>&lt;img src="https://lijohnny.com/p/disaster-response-web-app/ArpiP6q2msCtGnU.jpg" alt="Featured image of post Disaster Response Web App" />&lt;p>&lt;em>Disaster Response Web Application&lt;/em> is a Web app that can help emergency organizations analyze incoming messages and classify the messages into specific categories (e.g. Water, Food, Hospitals, Aid-Related) during a disaster event. The app is based on Nature Language Processing and Random Forest Classifier ML model. The data was collected by Figure Eight and provided by Udacity.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Johnny's Blog</title><link>https://johnnyli.cc/post/</link><description>Recent content in Posts on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Sun, 02 May 2021 21:24:32 -0700</lastBuildDate><atom:link href="https://johnnyli.cc/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Disaster Response Web App</title><link>https://johnnyli.cc/p/disaster-response-web-app/</link><pubDate>Sun, 02 May 2021 21:24:32 -0700</pubDate><guid>https://johnnyli.cc/p/disaster-response-web-app/</guid><description>&lt;img src="https://johnnyli.cc/p/disaster-response-web-app/ArpiP6q2msCtGnU.jpg" alt="Featured image of post Disaster Response Web App" />&lt;p>&lt;em>Disaster Response Web Application&lt;/em> is a Web app that can help emergency organizations analyze incoming messages and classify the messages into specific categories (e.g. Water, Food, Hospitals, Aid-Related) during a disaster event. The app is based on Nature Language Processing and Random Forest Classifier ML model. The data was collected by Figure Eight and provided by Udacity.&lt;/p>
 &lt;p>The techniques I used in this project include:&lt;/p>
 &lt;ul>
 &lt;li>SQLite in Python&lt;/li>
@@ -123,20 +123,20 @@ Run &lt;code>pip install -r requirements.txt&lt;/code>&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="screen-shot">Screen Shot&lt;/h2>
-&lt;p>&lt;img src="https://lijohnny.com/p/disaster-response-web-app/newplot1.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/disaster-response-web-app/newplot1.png"
 width="1192"
 height="905"
-srcset="https://lijohnny.com/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_480x0_resize_box_3.png 480w, https://lijohnny.com/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="131"
 data-flex-basis="316px"
 >&lt;/p>
 &lt;!-- raw HTML omitted -->
-&lt;p>&lt;img src="https://lijohnny.com/p/disaster-response-web-app/newplot3.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/disaster-response-web-app/newplot3.png"
 width="1211"
 height="777"
-srcset="https://lijohnny.com/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_480x0_resize_box_3.png 480w, https://lijohnny.com/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="155"
@@ -343,7 +343,7 @@ margin:0 auto;
 &lt;/div>
 &lt;img src="https://camo.githubusercontent.com/c3f856bacd5b09669157ed4774f80fb9d8622dd45ce8fdf2990d3552db99bd27/68747470733a2f2f7777772e6275796d6561636f666665652e636f6d2f6173736574732f696d672f637573746f6d5f696d616765732f6f72616e67655f696d672e706e67"
 loading="lazy"
->&lt;/h2></description></item><item><title>Pyforest - Automate Package Import Process for Your Data Science Project</title><link>https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/</link><pubDate>Fri, 19 Mar 2021 19:56:44 -0700</pubDate><guid>https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/</guid><description>&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/j4dzCfs1YINnUeP.jpg" alt="Featured image of post Pyforest - Automate Package Import Process for Your Data Science Project" />&lt;p>Usually, the first step we all do for any Python project is importing required packages. So, the beginning of the file usually looks like this:&lt;/p>
+>&lt;/h2></description></item><item><title>Pyforest - Automate Package Import Process for Your Data Science Project</title><link>https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/</link><pubDate>Fri, 19 Mar 2021 19:56:44 -0700</pubDate><guid>https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/</guid><description>&lt;img src="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/j4dzCfs1YINnUeP.jpg" alt="Featured image of post Pyforest - Automate Package Import Process for Your Data Science Project" />&lt;p>Usually, the first step we all do for any Python project is importing required packages. So, the beginning of the file usually looks like this:&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -390,10 +390,10 @@ python -m pyforest install_extensions
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>The installation will add pyforest_autoimport.py to your Jupyter and IPython default startup settings. Therefore, you can start coding in Jupyter or Ipython and don&amp;rsquo;t need to import pyforest.&lt;/p>
-&lt;p>&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo.png"
 width="606"
 height="166"
-srcset="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_480x0_resize_box_3.png 480w, https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="I didn&amp;rsquo;t add the statement for import pandas as pd."
 class="gallery-image"
@@ -401,10 +401,10 @@ data-flex-grow="365"
 data-flex-basis="876px"
 >&lt;/p>
 &lt;p>Also, you can notice that I didn&amp;rsquo;t type the full name of pandas library. Pyforest has already included all the common abbreviations.
-&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode.png"
+&lt;img src="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode.png"
 width="491"
 height="392"
-srcset="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_480x0_resize_box_3.png 480w, https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="Pyforest includes many import statements."
 class="gallery-image"
@@ -412,10 +412,10 @@ data-flex-grow="125"
 data-flex-basis="300px"
 >&lt;/p>
 &lt;p>You can also edit ~/.pyforest/user_imports.py to add your customized import statements.&lt;/p>
-&lt;p>&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports.png"
 width="623"
 height="394"
-srcset="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_480x0_resize_box_3.png 480w, https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="158"
@@ -634,7 +634,7 @@ margin:0 auto;
 &lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">&lt;path d="M.707 8.475C.275 8.64 0 9.508 0 9.508s.284.867.718 1.03l5.09 1.897 1.986 6.38a1.102 1.102 0 0 0 1.75.527l2.96-2.41a.405.405 0 0 1 .494-.013l5.34 3.87a1.1 1.1 0 0 0 1.046.135 1.1 1.1 0 0 0 .682-.803l3.91-18.795A1.102 1.102 0 0 0 22.5.075L.706 8.475z"/>&lt;/svg>&lt;/div>Telegram&lt;/div>
 &lt;/a>
 &lt;/div>
-&lt;hr></description></item><item><title>Price Strategy Based on Features Reputation</title><link>https://lijohnny.com/p/price-strategy-based-on-features-reputation/</link><pubDate>Sun, 14 Mar 2021 22:18:37 -0700</pubDate><guid>https://lijohnny.com/p/price-strategy-based-on-features-reputation/</guid><description>&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y.jpg" alt="Featured image of post Price Strategy Based on Features Reputation" />&lt;p>&lt;a class="link" href="https://github.com/itslijohnny/ama" target="_blank" rel="noopener"
+&lt;hr></description></item><item><title>Price Strategy Based on Features Reputation</title><link>https://johnnyli.cc/p/price-strategy-based-on-features-reputation/</link><pubDate>Sun, 14 Mar 2021 22:18:37 -0700</pubDate><guid>https://johnnyli.cc/p/price-strategy-based-on-features-reputation/</guid><description>&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y.jpg" alt="Featured image of post Price Strategy Based on Features Reputation" />&lt;p>&lt;a class="link" href="https://github.com/itslijohnny/ama" target="_blank" rel="noopener"
 >&lt;img src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg"
 loading="lazy"
 alt="Ask Me Anything !"
@@ -704,29 +704,29 @@ My goal is to extract features from reviews, identify each feature&amp;rsquo;s o
 &lt;/tbody>
 &lt;/table>
 &lt;p>The average length of reviews of the product is around 200 words, and most of the product has 2000 reviews.
-&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/bptextlenall.png"
+&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/bptextlenall.png"
 width="398"
 height="378"
-srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="105"
 data-flex-basis="252px"
 >
-&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewcount.png"
+&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewcount.png"
 width="398"
 height="378"
-srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="105"
 data-flex-basis="252px"
 >&lt;/p>
 &lt;p>Most of reviews are in the range of 4 years.
-&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewdate.png"
+&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewdate.png"
 width="1173"
 height="375"
-srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="312"
@@ -750,16 +750,16 @@ G --> H( Sentiment Quantifying )
 H --> I( Price Premiums Prediction )
 &lt;/div>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
-&lt;p>&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30.png"
 width="636"
 height="487"
-srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="130"
 data-flex-basis="313px"
 >&lt;/p>
-&lt;p>To Be Continued.&lt;/p></description></item><item><title>Identify Customer Segments</title><link>https://lijohnny.com/p/identify-customer-segments/</link><pubDate>Fri, 12 Mar 2021 21:42:22 -0800</pubDate><guid>https://lijohnny.com/p/identify-customer-segments/</guid><description>&lt;img src="https://lijohnny.com/p/identify-customer-segments/7dfc3OoaYZAnejX.jpg" alt="Featured image of post Identify Customer Segments" />&lt;p>This is one of the Udacity Data Scientist Nanodegree Project. This project aims to use unsupervised learning techniques to identify segments of the population from the core customer base for a mail-order sales company in Germany. Therefore, these segments can then be used to direct marketing campaigns towards audiences with the highest expected rate of returns.&lt;/p>
+&lt;p>To Be Continued.&lt;/p></description></item><item><title>Identify Customer Segments</title><link>https://johnnyli.cc/p/identify-customer-segments/</link><pubDate>Fri, 12 Mar 2021 21:42:22 -0800</pubDate><guid>https://johnnyli.cc/p/identify-customer-segments/</guid><description>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/7dfc3OoaYZAnejX.jpg" alt="Featured image of post Identify Customer Segments" />&lt;p>This is one of the Udacity Data Scientist Nanodegree Project. This project aims to use unsupervised learning techniques to identify segments of the population from the core customer base for a mail-order sales company in Germany. Therefore, these segments can then be used to direct marketing campaigns towards audiences with the highest expected rate of returns.&lt;/p>
 &lt;p>The techniques I used in this project include:&lt;/p>
 &lt;ol>
 &lt;li>Data cleaning&lt;/li>
@@ -787,10 +787,10 @@ data-flex-basis="313px"
 &lt;li>Clustering with k-means&lt;/li>
 &lt;/ol>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
-&lt;p>&lt;img src="https://lijohnny.com/p/identify-customer-segments/Figure1.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/Figure1.png"
 width="615"
 height="278"
-srcset="https://lijohnny.com/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_480x0_resize_box_3.png 480w, https://lijohnny.com/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="Figure 1. Proportions per cluster for general vs customer."
 class="gallery-image"
@@ -798,10 +798,10 @@ data-flex-grow="221"
 data-flex-basis="530px"
 >&lt;/p>
 &lt;p>I use the elbow method to find that 6 is the optimal number for clustering, which means the model segments customers and the general population into 6&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> groups. We can find the proportion of customers in cluster 2 is higher than the general population, which suggests people in cluster 2 are the target audience. We also find that, in cluster 3, the customer is underrepresented, which means people in that group are outside of the target demographics.&lt;/p>
-&lt;p>&lt;img src="https://lijohnny.com/p/identify-customer-segments/Figure2.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/Figure2.png"
 width="2299"
 height="589"
-srcset="https://lijohnny.com/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_480x0_resize_box_3.png 480w, https://lijohnny.com/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="Figure 2. Major differences between Cluster 2 and Cluster 3"
 class="gallery-image"
@@ -834,7 +834,7 @@ Udacity partners at Bertelsmann Arvato Analytics provided the data.&lt;/p>
 &lt;p>Cluster -1 is the group I added for checking the proportion of data that miss more than 30% information.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>Switch from Hexo to Hugo</title><link>https://lijohnny.com/p/switch-from-hexo-to-hugo/</link><pubDate>Wed, 03 Mar 2021 20:03:50 +0000</pubDate><guid>https://lijohnny.com/p/switch-from-hexo-to-hugo/</guid><description>&lt;img src="https://lijohnny.com/p/switch-from-hexo-to-hugo/bg2.png" alt="Featured image of post Switch from Hexo to Hugo" />&lt;p>It&amp;rsquo;s been a year since last time I update my blog. Recently, I want to get back to writing blog again. However, I encounter some issues.&lt;/p>
+&lt;/section></description></item><item><title>Switch from Hexo to Hugo</title><link>https://johnnyli.cc/p/switch-from-hexo-to-hugo/</link><pubDate>Wed, 03 Mar 2021 20:03:50 +0000</pubDate><guid>https://johnnyli.cc/p/switch-from-hexo-to-hugo/</guid><description>&lt;img src="https://johnnyli.cc/p/switch-from-hexo-to-hugo/bg2.png" alt="Featured image of post Switch from Hexo to Hugo" />&lt;p>It&amp;rsquo;s been a year since last time I update my blog. Recently, I want to get back to writing blog again. However, I encounter some issues.&lt;/p>
 &lt;ol>
 &lt;li>
 &lt;p>&lt;a class="link" href="https://hexo.io/" target="_blank" rel="noopener"
@@ -850,15 +850,15 @@ Udacity partners at Bertelsmann Arvato Analytics provided the data.&lt;/p>
 &lt;p>Therefore, I start looking for other solutions. After comparing and trying several static web generators. I picked Hugo. The reason is sample. Hugo is fast, and I find the theme I like.&lt;/p>
 &lt;p>Here is the screenshot for my perverse website. Hexo has tens of theme too. But I didn&amp;rsquo;t find one fit me needs. So, I created my own theme. The design is based on &lt;a class="link" href="https://demos.creative-tim.com/material-kit/" target="_blank" rel="noopener"
 >Material Kit&lt;/a>.&lt;/p>
-&lt;p>&lt;img src="https://lijohnny.com/p/switch-from-hexo-to-hugo/Screenshot.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/switch-from-hexo-to-hugo/Screenshot.png"
 width="1176"
 height="1211"
-srcset="https://lijohnny.com/p/switch-from-hexo-to-hugo/Screenshot_hu35e393f0d3b7c807b28ca9485ad3df19_786367_480x0_resize_box_3.png 480w, https://lijohnny.com/p/switch-from-hexo-to-hugo/Screenshot_hu35e393f0d3b7c807b28ca9485ad3df19_786367_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/switch-from-hexo-to-hugo/Screenshot_hu35e393f0d3b7c807b28ca9485ad3df19_786367_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/switch-from-hexo-to-hugo/Screenshot_hu35e393f0d3b7c807b28ca9485ad3df19_786367_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="97"
 data-flex-basis="233px"
->&lt;/p></description></item><item><title>Donors Identification for CharityML</title><link>https://lijohnny.com/p/donors-identification-for-charityml/</link><pubDate>Thu, 30 May 2019 01:03:50 +0000</pubDate><guid>https://lijohnny.com/p/donors-identification-for-charityml/</guid><description>&lt;img src="https://lijohnny.com/p/donors-identification-for-charityml/5cef9192b167778174.jpg" alt="Featured image of post Donors Identification for CharityML" />&lt;p>&lt;a class="link" href="https://lijohnny.com" target="_blank" rel="noopener"
+>&lt;/p></description></item><item><title>Donors Identification for CharityML</title><link>https://johnnyli.cc/p/donors-identification-for-charityml/</link><pubDate>Thu, 30 May 2019 01:03:50 +0000</pubDate><guid>https://johnnyli.cc/p/donors-identification-for-charityml/</guid><description>&lt;img src="https://johnnyli.cc/p/donors-identification-for-charityml/5cef9192b167778174.jpg" alt="Featured image of post Donors Identification for CharityML" />&lt;p>&lt;a class="link" href="https://lijohnny.com" target="_blank" rel="noopener"
 >&lt;img src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg"
 loading="lazy"
 >&lt;/a> &lt;a class="link" href="https://www.python.org/" target="_blank" rel="noopener"
@@ -878,7 +878,7 @@ loading="lazy"
 &lt;li>Logistic Regression&lt;/li>
 &lt;/ul>
 &lt;p>You can see the code(iPython notebook) &lt;a class="link" href="https://github.com/itslijohnny/udacity-data-scientist-nanodegree/blob/master/Supervised/Project-CharityML/finding_donors_done.ipynb" target="_blank" rel="noopener"
->here&lt;/a>.&lt;/p></description></item><item><title>Automate Image Processing for My Blog</title><link>https://lijohnny.com/p/automate-image-processing-for-my-blog/</link><pubDate>Sat, 11 May 2019 22:28:30 +0000</pubDate><guid>https://lijohnny.com/p/automate-image-processing-for-my-blog/</guid><description>&lt;img src="https://lijohnny.com/p/automate-image-processing-for-my-blog/5cd7b069e734a.jpg" alt="Featured image of post Automate Image Processing for My Blog" />&lt;blockquote>
+>here&lt;/a>.&lt;/p></description></item><item><title>Automate Image Processing for My Blog</title><link>https://johnnyli.cc/p/automate-image-processing-for-my-blog/</link><pubDate>Sat, 11 May 2019 22:28:30 +0000</pubDate><guid>https://johnnyli.cc/p/automate-image-processing-for-my-blog/</guid><description>&lt;img src="https://johnnyli.cc/p/automate-image-processing-for-my-blog/5cd7b069e734a.jpg" alt="Featured image of post Automate Image Processing for My Blog" />&lt;blockquote>
 &lt;p>:warning:The old cript is &lt;code>DEPRECATED&lt;/code>. I switch to FastAPI, and updated the code &lt;a class="link" href="https://github.com/itslijohnny/blog-image-processing-automation" target="_blank" rel="noopener"
 >here&lt;/a>. The old code is now in &lt;a class="link" href="https://github.com/itslijohnny/blog-image-processing-automation/tree/V1.0" target="_blank" rel="noopener"
 >v1.0 Branch&lt;/a>.&lt;/p>
@@ -911,10 +911,10 @@ loading="lazy"
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>Once it launched, you can drag and drop any image on it.&lt;/p>
-&lt;p>&lt;code>automator.py&lt;/code> can be used in Mac&amp;rsquo;s Automator. By building a server with Automator, I can right click on any image and run the script, or use a shortcut to run the script.&lt;/p></description></item><item><title>Spam Detection and Analysis (Part 2 - Analysis with R)</title><link>https://lijohnny.com/p/spam-detection-and-analysis-part-2-analysis-with-r/</link><pubDate>Thu, 09 May 2019 21:47:43 +0000</pubDate><guid>https://lijohnny.com/p/spam-detection-and-analysis-part-2-analysis-with-r/</guid><description>&lt;img src="https://lijohnny.com/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png" alt="Featured image of post Spam Detection and Analysis (Part 2 - Analysis with R)" />&lt;p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p>
+&lt;p>&lt;code>automator.py&lt;/code> can be used in Mac&amp;rsquo;s Automator. By building a server with Automator, I can right click on any image and run the script, or use a shortcut to run the script.&lt;/p></description></item><item><title>Spam Detection and Analysis (Part 2 - Analysis with R)</title><link>https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/</link><pubDate>Thu, 09 May 2019 21:47:43 +0000</pubDate><guid>https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/</guid><description>&lt;img src="https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png" alt="Featured image of post Spam Detection and Analysis (Part 2 - Analysis with R)" />&lt;p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p>
 &lt;!-- raw HTML omitted -->
 &lt;blockquote>
-&lt;p>This is the Part 2 of the series. For how to parsing email, please check &lt;a class="link" href="https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/" >Part 1&lt;/a>&lt;/p>
+&lt;p>This is the Part 2 of the series. For how to parsing email, please check &lt;a class="link" href="https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/" >Part 1&lt;/a>&lt;/p>
 &lt;/blockquote>
 &lt;h2 id="data-exploration">Data Exploration&lt;/h2>
 &lt;h3 id="import-the-data-to-r">Import the data to R&lt;/h3>
@@ -1368,7 +1368,7 @@ Detection Rate : 0.2569
 Detection Prevalence : 0.2844
 Balanced Accuracy : 0.9640
 'Positive' Class : 1
-&lt;/code>&lt;/pre></description></item><item><title>Spam Detection and Analysis (Part 1 - Parsing)</title><link>https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/</link><pubDate>Fri, 19 Apr 2019 01:24:59 +0000</pubDate><guid>https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/</guid><description>&lt;img src="https://lijohnny.com/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f.png" alt="Featured image of post Spam Detection and Analysis (Part 1 - Parsing)" />&lt;p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p>
+&lt;/code>&lt;/pre></description></item><item><title>Spam Detection and Analysis (Part 1 - Parsing)</title><link>https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/</link><pubDate>Fri, 19 Apr 2019 01:24:59 +0000</pubDate><guid>https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/</guid><description>&lt;img src="https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f.png" alt="Featured image of post Spam Detection and Analysis (Part 1 - Parsing)" />&lt;p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p>
 &lt;!-- raw HTML omitted -->
 &lt;h2 id="get-email-header-information">Get Email Header information&lt;/h2>
 &lt;p>First thing we need to do is the get the data. Email Header contents a lots of information that usually a email client do not show that to the users. However, most of those informations reveal more information about the sender. Therefore, we need to get Email Headers and parsing them for analysis.
@@ -1704,8 +1704,8 @@ What we want are:&lt;/p>
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;blockquote>
-&lt;p>This is the Part 1 of the series. For how to user R analysis the email, please check &lt;a class="link" href="https://lijohnny.com/p/spam-detection-and-analysis-part-2-analysis-with-r/" >Part 2&lt;/a>&lt;/p>
-&lt;/blockquote></description></item><item><title>Solve the Problem in a April Fool's Joke</title><link>https://lijohnny.com/p/solve-the-problem-in-a-april-fools-joke/</link><pubDate>Sat, 06 Apr 2019 14:35:05 +0000</pubDate><guid>https://lijohnny.com/p/solve-the-problem-in-a-april-fools-joke/</guid><description>&lt;img src="https://lijohnny.com/p/solve-the-problem-in-a-april-fools-joke/5cc38cc539c01.jpg" alt="Featured image of post Solve the Problem in a April Fool's Joke" />&lt;p>On April 1st, one of the post on &lt;a class="link" href="https://www.v2ex.com/t/550870" target="_blank" rel="noopener"
+&lt;p>This is the Part 1 of the series. For how to user R analysis the email, please check &lt;a class="link" href="https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/" >Part 2&lt;/a>&lt;/p>
+&lt;/blockquote></description></item><item><title>Solve the Problem in a April Fool's Joke</title><link>https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/</link><pubDate>Sat, 06 Apr 2019 14:35:05 +0000</pubDate><guid>https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/</guid><description>&lt;img src="https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/5cc38cc539c01.jpg" alt="Featured image of post Solve the Problem in a April Fool's Joke" />&lt;p>On April 1st, one of the post on &lt;a class="link" href="https://www.v2ex.com/t/550870" target="_blank" rel="noopener"
 >v2ex&lt;/a> (An online community of developers and designers in China&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>) become viral. The &lt;a class="link" href="https://www.v2ex.com/t/550870" target="_blank" rel="noopener"
 >post&lt;/a> title is &amp;ldquo;Seeking Dates&amp;rdquo; and it is posted on April 1st, so most reactions of this post are pointing out that this is the &amp;ldquo;new trap&amp;rdquo; of the recruiters.&lt;/p>
 &lt;!-- raw HTML omitted -->
@@ -1771,7 +1771,7 @@ Here is my solution.&lt;/p>
 >https://zh.wikipedia.org/wiki/V2EX&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>Data Analysis with Docker</title><link>https://lijohnny.com/p/data-analysis-with-docker/</link><pubDate>Wed, 20 Mar 2019 02:02:28 +0000</pubDate><guid>https://lijohnny.com/p/data-analysis-with-docker/</guid><description>&lt;img src="https://lijohnny.com/p/data-analysis-with-docker/5cc38cc0066e1.jpg" alt="Featured image of post Data Analysis with Docker" />&lt;p>Data Analysis is not all about reports or visualization. The correctness and reproducibility are also important for scientific research. A consistent environment is critical for reproducibility. There are several ways to achieve that. However, I find out using &lt;a class="link" href="%28https://www.docker.com/why-docker%29" >Docker&lt;/a> at any time can repeat the experiment in the same environment. It is easy to scale up and scale horizontally.&lt;/p>
+&lt;/section></description></item><item><title>Data Analysis with Docker</title><link>https://johnnyli.cc/p/data-analysis-with-docker/</link><pubDate>Wed, 20 Mar 2019 02:02:28 +0000</pubDate><guid>https://johnnyli.cc/p/data-analysis-with-docker/</guid><description>&lt;img src="https://johnnyli.cc/p/data-analysis-with-docker/5cc38cc0066e1.jpg" alt="Featured image of post Data Analysis with Docker" />&lt;p>Data Analysis is not all about reports or visualization. The correctness and reproducibility are also important for scientific research. A consistent environment is critical for reproducibility. There are several ways to achieve that. However, I find out using &lt;a class="link" href="%28https://www.docker.com/why-docker%29" >Docker&lt;/a> at any time can repeat the experiment in the same environment. It is easy to scale up and scale horizontally.&lt;/p>
 &lt;!-- raw HTML omitted -->
 &lt;p>My docker image is based on Ubuntu. It includes common Data Science tools such as Jupyter Notebook wiht Python 3 and R kernel. With the help of R Magic, I can run both Python and R in the same .ipynb file. To learn more about R Magic, you can click &lt;a class="link" href="https://www.datacamp.com/community/blog/jupyter-notebook-r?utm_source=adwords_ppc&amp;amp;utm_campaignid=1565261270&amp;amp;utm_adgroupid=67750485268&amp;amp;utm_device=c&amp;amp;utm_keyword=&amp;amp;utm_matchtype=b&amp;amp;utm_network=g&amp;amp;utm_adpostion=1t1&amp;amp;utm_creative=295208661496&amp;amp;utm_targetid=dsa-473406574235&amp;amp;utm_loc_interest_ms=&amp;amp;utm_loc_physical_ms=9033309&amp;amp;gclid=EAIaIQobChMIt5Xy39jq4AIVbiCtBh3FdQ4IEAAYASAAEgLEZ_D_BwE" target="_blank" rel="noopener"
 >here&lt;/a>.
@@ -1817,7 +1817,7 @@ I also installed Nbextensions for Jupyter Notebook. For more information, you ca
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">dslab&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;docker run -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v ~/:/home/jovyan/work data-analyst-notebook&amp;#39;&lt;/span>
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>Now you can use &lt;code>dslab&lt;/code> in the terminal as a replacement for typing the long command.&lt;/p></description></item><item><title>Craigslist Vacation House Data Crawling</title><link>https://lijohnny.com/p/craigslist-vacation-house-data-crawling/</link><pubDate>Tue, 12 Feb 2019 01:13:34 -0800</pubDate><guid>https://lijohnny.com/p/craigslist-vacation-house-data-crawling/</guid><description>&lt;img src="https://lijohnny.com/p/craigslist-vacation-house-data-crawling/5cd7d789264a1.jpg" alt="Featured image of post Craigslist Vacation House Data Crawling" />&lt;p>In this &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist" target="_blank" rel="noopener"
+&lt;/div>&lt;p>Now you can use &lt;code>dslab&lt;/code> in the terminal as a replacement for typing the long command.&lt;/p></description></item><item><title>Craigslist Vacation House Data Crawling</title><link>https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/</link><pubDate>Tue, 12 Feb 2019 01:13:34 -0800</pubDate><guid>https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/</guid><description>&lt;img src="https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/5cd7d789264a1.jpg" alt="Featured image of post Craigslist Vacation House Data Crawling" />&lt;p>In this &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist" target="_blank" rel="noopener"
 >tutorial&lt;/a> I use &lt;a class="link" href="https://scrapy.org/" target="_blank" rel="noopener"
 >Scrapy&lt;/a> to collect data from Craigslist.com. Specifically, the data under craigslist.org/Seattle/housing/vacation rentals. You can find the page under the link: &lt;a class="link" href="https://seattle.craigslist.org/d/vacation%e2%80%90rentals/search/vac" target="_blank" rel="noopener"
 >https://seattle.craigslist.org/d/vacation‐rentals/search/vac&lt;/a>&lt;/p>

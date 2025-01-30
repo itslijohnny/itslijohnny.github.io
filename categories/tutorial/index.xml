@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tutorial on Johnny's Blog</title><link>https://lijohnny.com/categories/tutorial/</link><description>Recent content in Tutorial on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Fri, 19 Mar 2021 19:56:44 -0700</lastBuildDate><atom:link href="https://lijohnny.com/categories/tutorial/index.xml" rel="self" type="application/rss+xml"/><item><title>Pyforest - Automate Package Import Process for Your Data Science Project</title><link>https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/</link><pubDate>Fri, 19 Mar 2021 19:56:44 -0700</pubDate><guid>https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/</guid><description>&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/j4dzCfs1YINnUeP.jpg" alt="Featured image of post Pyforest - Automate Package Import Process for Your Data Science Project" />&lt;p>Usually, the first step we all do for any Python project is importing required packages. So, the beginning of the file usually looks like this:&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tutorial on Johnny's Blog</title><link>https://johnnyli.cc/categories/tutorial/</link><description>Recent content in Tutorial on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Fri, 19 Mar 2021 19:56:44 -0700</lastBuildDate><atom:link href="https://johnnyli.cc/categories/tutorial/index.xml" rel="self" type="application/rss+xml"/><item><title>Pyforest - Automate Package Import Process for Your Data Science Project</title><link>https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/</link><pubDate>Fri, 19 Mar 2021 19:56:44 -0700</pubDate><guid>https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/</guid><description>&lt;img src="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/j4dzCfs1YINnUeP.jpg" alt="Featured image of post Pyforest - Automate Package Import Process for Your Data Science Project" />&lt;p>Usually, the first step we all do for any Python project is importing required packages. So, the beginning of the file usually looks like this:&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -45,10 +45,10 @@ python -m pyforest install_extensions
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>The installation will add pyforest_autoimport.py to your Jupyter and IPython default startup settings. Therefore, you can start coding in Jupyter or Ipython and don&amp;rsquo;t need to import pyforest.&lt;/p>
-&lt;p>&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo.png"
 width="606"
 height="166"
-srcset="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_480x0_resize_box_3.png 480w, https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/pyforestdemo_hu8584359d6e9be33951add4cb35ae0fa4_9830_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="I didn&amp;rsquo;t add the statement for import pandas as pd."
 class="gallery-image"
@@ -56,10 +56,10 @@ data-flex-grow="365"
 data-flex-basis="876px"
 >&lt;/p>
 &lt;p>Also, you can notice that I didn&amp;rsquo;t type the full name of pandas library. Pyforest has already included all the common abbreviations.
-&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode.png"
+&lt;img src="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode.png"
 width="491"
 height="392"
-srcset="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_480x0_resize_box_3.png 480w, https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/sourcecode_hudfe07432bc95aaaf3409e0bad5f8f1fc_25646_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="Pyforest includes many import statements."
 class="gallery-image"
@@ -67,10 +67,10 @@ data-flex-grow="125"
 data-flex-basis="300px"
 >&lt;/p>
 &lt;p>You can also edit ~/.pyforest/user_imports.py to add your customized import statements.&lt;/p>
-&lt;p>&lt;img src="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports.png"
 width="623"
 height="394"
-srcset="https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_480x0_resize_box_3.png 480w, https://lijohnny.com/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/pyforest-automate-package-import-process-for-your-data-science-project/user_imports_hucf6f272c83a09cb13413cf5e43137c2f_32185_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="158"
@@ -289,7 +289,7 @@ margin:0 auto;
 &lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">&lt;path d="M.707 8.475C.275 8.64 0 9.508 0 9.508s.284.867.718 1.03l5.09 1.897 1.986 6.38a1.102 1.102 0 0 0 1.75.527l2.96-2.41a.405.405 0 0 1 .494-.013l5.34 3.87a1.1 1.1 0 0 0 1.046.135 1.1 1.1 0 0 0 .682-.803l3.91-18.795A1.102 1.102 0 0 0 22.5.075L.706 8.475z"/>&lt;/svg>&lt;/div>Telegram&lt;/div>
 &lt;/a>
 &lt;/div>
-&lt;hr></description></item><item><title>Craigslist Vacation House Data Crawling</title><link>https://lijohnny.com/p/craigslist-vacation-house-data-crawling/</link><pubDate>Tue, 12 Feb 2019 01:13:34 -0800</pubDate><guid>https://lijohnny.com/p/craigslist-vacation-house-data-crawling/</guid><description>&lt;img src="https://lijohnny.com/p/craigslist-vacation-house-data-crawling/5cd7d789264a1.jpg" alt="Featured image of post Craigslist Vacation House Data Crawling" />&lt;p>In this &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist" target="_blank" rel="noopener"
+&lt;hr></description></item><item><title>Craigslist Vacation House Data Crawling</title><link>https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/</link><pubDate>Tue, 12 Feb 2019 01:13:34 -0800</pubDate><guid>https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/</guid><description>&lt;img src="https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/5cd7d789264a1.jpg" alt="Featured image of post Craigslist Vacation House Data Crawling" />&lt;p>In this &lt;a class="link" href="https://github.com/itslijohnny/web-crawler-tutorial/tree/master/scrapy_craigslist" target="_blank" rel="noopener"
 >tutorial&lt;/a> I use &lt;a class="link" href="https://scrapy.org/" target="_blank" rel="noopener"
 >Scrapy&lt;/a> to collect data from Craigslist.com. Specifically, the data under craigslist.org/Seattle/housing/vacation rentals. You can find the page under the link: &lt;a class="link" href="https://seattle.craigslist.org/d/vacation%e2%80%90rentals/search/vac" target="_blank" rel="noopener"
 >https://seattle.craigslist.org/d/vacation‐rentals/search/vac&lt;/a>&lt;/p>

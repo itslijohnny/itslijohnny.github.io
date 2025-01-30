@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Web App on Johnny's Blog</title><link>https://lijohnny.com/tags/web-app/</link><description>Recent content in Web App on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Sun, 02 May 2021 21:24:32 -0700</lastBuildDate><atom:link href="https://lijohnny.com/tags/web-app/index.xml" rel="self" type="application/rss+xml"/><item><title>Disaster Response Web App</title><link>https://lijohnny.com/p/disaster-response-web-app/</link><pubDate>Sun, 02 May 2021 21:24:32 -0700</pubDate><guid>https://lijohnny.com/p/disaster-response-web-app/</guid><description>&lt;img src="https://lijohnny.com/p/disaster-response-web-app/ArpiP6q2msCtGnU.jpg" alt="Featured image of post Disaster Response Web App" />&lt;p>&lt;em>Disaster Response Web Application&lt;/em> is a Web app that can help emergency organizations analyze incoming messages and classify the messages into specific categories (e.g. Water, Food, Hospitals, Aid-Related) during a disaster event. The app is based on Nature Language Processing and Random Forest Classifier ML model. The data was collected by Figure Eight and provided by Udacity.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Web App on Johnny's Blog</title><link>https://johnnyli.cc/tags/web-app/</link><description>Recent content in Web App on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Sun, 02 May 2021 21:24:32 -0700</lastBuildDate><atom:link href="https://johnnyli.cc/tags/web-app/index.xml" rel="self" type="application/rss+xml"/><item><title>Disaster Response Web App</title><link>https://johnnyli.cc/p/disaster-response-web-app/</link><pubDate>Sun, 02 May 2021 21:24:32 -0700</pubDate><guid>https://johnnyli.cc/p/disaster-response-web-app/</guid><description>&lt;img src="https://johnnyli.cc/p/disaster-response-web-app/ArpiP6q2msCtGnU.jpg" alt="Featured image of post Disaster Response Web App" />&lt;p>&lt;em>Disaster Response Web Application&lt;/em> is a Web app that can help emergency organizations analyze incoming messages and classify the messages into specific categories (e.g. Water, Food, Hospitals, Aid-Related) during a disaster event. The app is based on Nature Language Processing and Random Forest Classifier ML model. The data was collected by Figure Eight and provided by Udacity.&lt;/p>
 &lt;p>The techniques I used in this project include:&lt;/p>
 &lt;ul>
 &lt;li>SQLite in Python&lt;/li>
@@ -123,20 +123,20 @@ Run &lt;code>pip install -r requirements.txt&lt;/code>&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="screen-shot">Screen Shot&lt;/h2>
-&lt;p>&lt;img src="https://lijohnny.com/p/disaster-response-web-app/newplot1.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/disaster-response-web-app/newplot1.png"
 width="1192"
 height="905"
-srcset="https://lijohnny.com/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_480x0_resize_box_3.png 480w, https://lijohnny.com/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="131"
 data-flex-basis="316px"
 >&lt;/p>
 &lt;!-- raw HTML omitted -->
-&lt;p>&lt;img src="https://lijohnny.com/p/disaster-response-web-app/newplot3.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/disaster-response-web-app/newplot3.png"
 width="1211"
 height="777"
-srcset="https://lijohnny.com/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_480x0_resize_box_3.png 480w, https://lijohnny.com/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="155"

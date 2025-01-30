@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Machine Learning on Johnny's Blog</title><link>https://lijohnny.com/categories/machine-learning/</link><description>Recent content in Machine Learning on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Sun, 02 May 2021 21:24:32 -0700</lastBuildDate><atom:link href="https://lijohnny.com/categories/machine-learning/index.xml" rel="self" type="application/rss+xml"/><item><title>Disaster Response Web App</title><link>https://lijohnny.com/p/disaster-response-web-app/</link><pubDate>Sun, 02 May 2021 21:24:32 -0700</pubDate><guid>https://lijohnny.com/p/disaster-response-web-app/</guid><description>&lt;img src="https://lijohnny.com/p/disaster-response-web-app/ArpiP6q2msCtGnU.jpg" alt="Featured image of post Disaster Response Web App" />&lt;p>&lt;em>Disaster Response Web Application&lt;/em> is a Web app that can help emergency organizations analyze incoming messages and classify the messages into specific categories (e.g. Water, Food, Hospitals, Aid-Related) during a disaster event. The app is based on Nature Language Processing and Random Forest Classifier ML model. The data was collected by Figure Eight and provided by Udacity.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Machine Learning on Johnny's Blog</title><link>https://johnnyli.cc/categories/machine-learning/</link><description>Recent content in Machine Learning on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Sun, 02 May 2021 21:24:32 -0700</lastBuildDate><atom:link href="https://johnnyli.cc/categories/machine-learning/index.xml" rel="self" type="application/rss+xml"/><item><title>Disaster Response Web App</title><link>https://johnnyli.cc/p/disaster-response-web-app/</link><pubDate>Sun, 02 May 2021 21:24:32 -0700</pubDate><guid>https://johnnyli.cc/p/disaster-response-web-app/</guid><description>&lt;img src="https://johnnyli.cc/p/disaster-response-web-app/ArpiP6q2msCtGnU.jpg" alt="Featured image of post Disaster Response Web App" />&lt;p>&lt;em>Disaster Response Web Application&lt;/em> is a Web app that can help emergency organizations analyze incoming messages and classify the messages into specific categories (e.g. Water, Food, Hospitals, Aid-Related) during a disaster event. The app is based on Nature Language Processing and Random Forest Classifier ML model. The data was collected by Figure Eight and provided by Udacity.&lt;/p>
 &lt;p>The techniques I used in this project include:&lt;/p>
 &lt;ul>
 &lt;li>SQLite in Python&lt;/li>
@@ -123,20 +123,20 @@ Run &lt;code>pip install -r requirements.txt&lt;/code>&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="screen-shot">Screen Shot&lt;/h2>
-&lt;p>&lt;img src="https://lijohnny.com/p/disaster-response-web-app/newplot1.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/disaster-response-web-app/newplot1.png"
 width="1192"
 height="905"
-srcset="https://lijohnny.com/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_480x0_resize_box_3.png 480w, https://lijohnny.com/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/disaster-response-web-app/newplot1_hubb7702a0e4ae3d6e3163467d2e36804b_45843_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="131"
 data-flex-basis="316px"
 >&lt;/p>
 &lt;!-- raw HTML omitted -->
-&lt;p>&lt;img src="https://lijohnny.com/p/disaster-response-web-app/newplot3.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/disaster-response-web-app/newplot3.png"
 width="1211"
 height="777"
-srcset="https://lijohnny.com/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_480x0_resize_box_3.png 480w, https://lijohnny.com/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/disaster-response-web-app/newplot3_hu954293fc3ee571183bb0a41828b357ef_41146_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="155"
@@ -343,7 +343,7 @@ margin:0 auto;
 &lt;/div>
 &lt;img src="https://camo.githubusercontent.com/c3f856bacd5b09669157ed4774f80fb9d8622dd45ce8fdf2990d3552db99bd27/68747470733a2f2f7777772e6275796d6561636f666665652e636f6d2f6173736574732f696d672f637573746f6d5f696d616765732f6f72616e67655f696d672e706e67"
 loading="lazy"
->&lt;/h2></description></item><item><title>Price Strategy Based on Features Reputation</title><link>https://lijohnny.com/p/price-strategy-based-on-features-reputation/</link><pubDate>Sun, 14 Mar 2021 22:18:37 -0700</pubDate><guid>https://lijohnny.com/p/price-strategy-based-on-features-reputation/</guid><description>&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y.jpg" alt="Featured image of post Price Strategy Based on Features Reputation" />&lt;p>&lt;a class="link" href="https://github.com/itslijohnny/ama" target="_blank" rel="noopener"
+>&lt;/h2></description></item><item><title>Price Strategy Based on Features Reputation</title><link>https://johnnyli.cc/p/price-strategy-based-on-features-reputation/</link><pubDate>Sun, 14 Mar 2021 22:18:37 -0700</pubDate><guid>https://johnnyli.cc/p/price-strategy-based-on-features-reputation/</guid><description>&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/4BxDCOzgPulU89Y.jpg" alt="Featured image of post Price Strategy Based on Features Reputation" />&lt;p>&lt;a class="link" href="https://github.com/itslijohnny/ama" target="_blank" rel="noopener"
 >&lt;img src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg"
 loading="lazy"
 alt="Ask Me Anything !"
@@ -413,29 +413,29 @@ My goal is to extract features from reviews, identify each feature&amp;rsquo;s o
 &lt;/tbody>
 &lt;/table>
 &lt;p>The average length of reviews of the product is around 200 words, and most of the product has 2000 reviews.
-&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/bptextlenall.png"
+&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/bptextlenall.png"
 width="398"
 height="378"
-srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/price-strategy-based-on-features-reputation/bptextlenall_hu2229a34b09e72ff045b11d917ee12791_21161_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="105"
 data-flex-basis="252px"
 >
-&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewcount.png"
+&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewcount.png"
 width="398"
 height="378"
-srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewcount_hu42a7441e2aeb265b38b30e1c8e11cef4_16874_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="105"
 data-flex-basis="252px"
 >&lt;/p>
 &lt;p>Most of reviews are in the range of 4 years.
-&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewdate.png"
+&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewdate.png"
 width="1173"
 height="375"
-srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewdate_hu9a39bf0df7bdae27ff97468837a614af_55329_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="312"
@@ -459,16 +459,16 @@ G --> H( Sentiment Quantifying )
 H --> I( Price Premiums Prediction )
 &lt;/div>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
-&lt;p>&lt;img src="https://lijohnny.com/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30.png"
 width="636"
 height="487"
-srcset="https://lijohnny.com/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_480x0_resize_box_3.png 480w, https://lijohnny.com/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30_hu561893eae45e95a4eb608be77a543eb5_27147_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="130"
 data-flex-basis="313px"
 >&lt;/p>
-&lt;p>To Be Continued.&lt;/p></description></item><item><title>Identify Customer Segments</title><link>https://lijohnny.com/p/identify-customer-segments/</link><pubDate>Fri, 12 Mar 2021 21:42:22 -0800</pubDate><guid>https://lijohnny.com/p/identify-customer-segments/</guid><description>&lt;img src="https://lijohnny.com/p/identify-customer-segments/7dfc3OoaYZAnejX.jpg" alt="Featured image of post Identify Customer Segments" />&lt;p>This is one of the Udacity Data Scientist Nanodegree Project. This project aims to use unsupervised learning techniques to identify segments of the population from the core customer base for a mail-order sales company in Germany. Therefore, these segments can then be used to direct marketing campaigns towards audiences with the highest expected rate of returns.&lt;/p>
+&lt;p>To Be Continued.&lt;/p></description></item><item><title>Identify Customer Segments</title><link>https://johnnyli.cc/p/identify-customer-segments/</link><pubDate>Fri, 12 Mar 2021 21:42:22 -0800</pubDate><guid>https://johnnyli.cc/p/identify-customer-segments/</guid><description>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/7dfc3OoaYZAnejX.jpg" alt="Featured image of post Identify Customer Segments" />&lt;p>This is one of the Udacity Data Scientist Nanodegree Project. This project aims to use unsupervised learning techniques to identify segments of the population from the core customer base for a mail-order sales company in Germany. Therefore, these segments can then be used to direct marketing campaigns towards audiences with the highest expected rate of returns.&lt;/p>
 &lt;p>The techniques I used in this project include:&lt;/p>
 &lt;ol>
 &lt;li>Data cleaning&lt;/li>
@@ -496,10 +496,10 @@ data-flex-basis="313px"
 &lt;li>Clustering with k-means&lt;/li>
 &lt;/ol>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
-&lt;p>&lt;img src="https://lijohnny.com/p/identify-customer-segments/Figure1.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/Figure1.png"
 width="615"
 height="278"
-srcset="https://lijohnny.com/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_480x0_resize_box_3.png 480w, https://lijohnny.com/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="Figure 1. Proportions per cluster for general vs customer."
 class="gallery-image"
@@ -507,10 +507,10 @@ data-flex-grow="221"
 data-flex-basis="530px"
 >&lt;/p>
 &lt;p>I use the elbow method to find that 6 is the optimal number for clustering, which means the model segments customers and the general population into 6&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> groups. We can find the proportion of customers in cluster 2 is higher than the general population, which suggests people in cluster 2 are the target audience. We also find that, in cluster 3, the customer is underrepresented, which means people in that group are outside of the target demographics.&lt;/p>
-&lt;p>&lt;img src="https://lijohnny.com/p/identify-customer-segments/Figure2.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/Figure2.png"
 width="2299"
 height="589"
-srcset="https://lijohnny.com/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_480x0_resize_box_3.png 480w, https://lijohnny.com/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="Figure 2. Major differences between Cluster 2 and Cluster 3"
 class="gallery-image"

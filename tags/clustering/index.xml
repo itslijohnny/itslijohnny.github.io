@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Clustering on Johnny's Blog</title><link>https://lijohnny.com/tags/clustering/</link><description>Recent content in Clustering on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Fri, 12 Mar 2021 21:42:22 -0800</lastBuildDate><atom:link href="https://lijohnny.com/tags/clustering/index.xml" rel="self" type="application/rss+xml"/><item><title>Identify Customer Segments</title><link>https://lijohnny.com/p/identify-customer-segments/</link><pubDate>Fri, 12 Mar 2021 21:42:22 -0800</pubDate><guid>https://lijohnny.com/p/identify-customer-segments/</guid><description>&lt;img src="https://lijohnny.com/p/identify-customer-segments/7dfc3OoaYZAnejX.jpg" alt="Featured image of post Identify Customer Segments" />&lt;p>This is one of the Udacity Data Scientist Nanodegree Project. This project aims to use unsupervised learning techniques to identify segments of the population from the core customer base for a mail-order sales company in Germany. Therefore, these segments can then be used to direct marketing campaigns towards audiences with the highest expected rate of returns.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Clustering on Johnny's Blog</title><link>https://johnnyli.cc/tags/clustering/</link><description>Recent content in Clustering on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Fri, 12 Mar 2021 21:42:22 -0800</lastBuildDate><atom:link href="https://johnnyli.cc/tags/clustering/index.xml" rel="self" type="application/rss+xml"/><item><title>Identify Customer Segments</title><link>https://johnnyli.cc/p/identify-customer-segments/</link><pubDate>Fri, 12 Mar 2021 21:42:22 -0800</pubDate><guid>https://johnnyli.cc/p/identify-customer-segments/</guid><description>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/7dfc3OoaYZAnejX.jpg" alt="Featured image of post Identify Customer Segments" />&lt;p>This is one of the Udacity Data Scientist Nanodegree Project. This project aims to use unsupervised learning techniques to identify segments of the population from the core customer base for a mail-order sales company in Germany. Therefore, these segments can then be used to direct marketing campaigns towards audiences with the highest expected rate of returns.&lt;/p>
 &lt;p>The techniques I used in this project include:&lt;/p>
 &lt;ol>
 &lt;li>Data cleaning&lt;/li>
@@ -26,10 +26,10 @@
 &lt;li>Clustering with k-means&lt;/li>
 &lt;/ol>
 &lt;h2 id="conclusion">Conclusion&lt;/h2>
-&lt;p>&lt;img src="https://lijohnny.com/p/identify-customer-segments/Figure1.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/Figure1.png"
 width="615"
 height="278"
-srcset="https://lijohnny.com/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_480x0_resize_box_3.png 480w, https://lijohnny.com/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/identify-customer-segments/Figure1_hudb085fa3cbbe78a5c1f4dd5854a76d63_10999_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="Figure 1. Proportions per cluster for general vs customer."
 class="gallery-image"
@@ -37,10 +37,10 @@ data-flex-grow="221"
 data-flex-basis="530px"
 >&lt;/p>
 &lt;p>I use the elbow method to find that 6 is the optimal number for clustering, which means the model segments customers and the general population into 6&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> groups. We can find the proportion of customers in cluster 2 is higher than the general population, which suggests people in cluster 2 are the target audience. We also find that, in cluster 3, the customer is underrepresented, which means people in that group are outside of the target demographics.&lt;/p>
-&lt;p>&lt;img src="https://lijohnny.com/p/identify-customer-segments/Figure2.png"
+&lt;p>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/Figure2.png"
 width="2299"
 height="589"
-srcset="https://lijohnny.com/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_480x0_resize_box_3.png 480w, https://lijohnny.com/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_1024x0_resize_box_3.png 1024w"
+srcset="https://johnnyli.cc/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_480x0_resize_box_3.png 480w, https://johnnyli.cc/p/identify-customer-segments/Figure2_hue29e5bf3277d24f23bccf99a1420d40f_76006_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="Figure 2. Major differences between Cluster 2 and Cluster 3"
 class="gallery-image"
