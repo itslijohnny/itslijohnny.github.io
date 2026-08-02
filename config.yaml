@@ -21,7 +21,6 @@ params:
         name: Johnny Li
     mainSections:
         - post
-    featuredImageField: image
     rssFullContent: true
     favicon:
 
@@ -36,10 +35,7 @@ params:
     sidebar:
         emoji: 🖖
         subtitle: Data Scientist | ML Engineer
-        avatar:
-            enabled: true
-            local: true
-            src: img/avatar.jpg
+        avatar: img/avatar.jpg
 
     article:
         math: false
