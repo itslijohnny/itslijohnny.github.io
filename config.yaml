@@ -1,19 +1,11 @@
-baseurl: https://johnnyli.cc
-languageCode: en-us
-theme: 
+baseurl: https://johnny.cc/
+locale: en-us
+theme:
     - hugo-theme-stack
-    - hugo-cite
-paginate: 10
+pagination:
+    pagerSize: 10
 title: Johnny's Blog
 copyright: Johnny Li
-author:
-    display_name: Johnny Li
-
-# Change it to your Disqus shortname before using
-disqusShortname: lijohnny
-
-# GA Tracking ID
-googleAnalytics: UA-136585559-1
 
 # Theme i18n support
 # Available values: en, fr, id, ja, ko, pt-br, zh-cn
@@ -25,6 +17,8 @@ permalinks:
     page: /:slug/
 
 params:
+    author:
+        name: Johnny Li
     mainSections:
         - post
     featuredImageField: image
@@ -57,8 +51,8 @@ params:
 
 
     comments:
-        enabled: true
-        provider: disqus
+        enabled: false
+        provider:
 
         utterances:
             repo: itslijohnny/itslijohnny.github.io
