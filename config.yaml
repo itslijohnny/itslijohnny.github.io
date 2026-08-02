@@ -1,4 +1,4 @@
-baseurl: https://johnnyhli.cc/
+baseurl: https://johnnyli.cc/
 locale: en-us
 theme:
     - hugo-theme-stack
@@ -131,7 +131,7 @@ menu:
 
         - identifier: til
           name: Today I Learned
-          url: https://johnny.cc/Today-I-Learned/
+          url: https://johnnyli.cc/Today-I-Learned/
           weight: -65
           params:
             icon: notes

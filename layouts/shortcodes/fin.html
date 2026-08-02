@@ -216,7 +216,7 @@ background-color: #FF6600
 </style>
 
 
-{{ $shareURL := printf "%sp/%s" .Site.BaseURL (.Get 0) }}
+{{ $shareURL := printf "p/%s" (.Get 0) | absURL }}
 <div class="share">
 <p>If you think your friends/network would find this useful, please share it with them – I’d really appreciate it.</p>
 <!-- Sharingbutton Facebook -->
