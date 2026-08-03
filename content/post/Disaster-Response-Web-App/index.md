@@ -125,5 +125,5 @@ The data files associated with this project are from [Figure Eight](https://www.
 
 ------------------------
 {{<fin "disaster-response-web-app"  "Disaster Response Web App">}}
-![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)
+![Buy me a coffee](orange_img.png)
 ------------------------

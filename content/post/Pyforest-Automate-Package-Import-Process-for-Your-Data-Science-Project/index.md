@@ -39,7 +39,7 @@ from xxxx import xxxx
 Importing packages is one of my least favorite parts when I'm working on a Data Scientist project. Packages like *pandas*, *numpy*, *lighteda*,  *matplotlib.pyplot*, and *seaborn* are commonly used for my projects. I need to repeat this step in every single Jupyter Notebook. Moreover, when the analysis/research dives deeper, and I need to import new packages in the middle, I have to go back to the beginning and import new packages (If you are using Jupyter Notebook, don't forget to press `Ctrl` + `Enter`).
 
 
-![Import in the middle. ](https://i.loli.net/2021/03/20/mle46dnAb8zsr1K.gif)
+![Import in the middle. ](mle46dnAb8zsr1K.gif)
 {{<cap 
 "Going back and forth to import packages is frustrating."
 >}}
@@ -51,7 +51,7 @@ I can reduce some repetitive works by using template tools like cookiecutter.
 
 
 But, is there a way to automatically import related packages and add import statements for me, like this?
-![](https://github.com/8080labs/pyforest/raw/master/examples/assets/pyforest_demo_in_jupyter_notebook.gif)
+![](pyforest_demo_in_jupyter_notebook.gif)
 {{<cap 
 "The packages are automatically imported in the first cell."
 >}}

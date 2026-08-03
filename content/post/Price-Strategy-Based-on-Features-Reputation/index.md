@@ -18,7 +18,7 @@ hidden: false
 mermaid: true
 ---
 
-[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://github.com/itslijohnny/ama)     [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![made-with-mathjax](https://img.shields.io/badge/Made%20with-MathJax-1f425f.svg)](https://www.mathjax.org/)
+[![Ask Me Anything !](Ask-me-anything-1abc9c.svg)](https://github.com/itslijohnny/ama)     [![made-with-python](Made-with-Python-1f425f.svg)](https://www.python.org/) [![made-with-mathjax](Made-with-MathJax-1f425f.svg)](https://www.mathjax.org/)
 
 Customer reviews contain a large amount of information. One of the recurring subjects of NLP is to understand customer opinion through statement analysis of customer reviews. However, Basic Sentimental Classification can only tell customers' overall impression about the product. It can't tell customers' opinions of specific features of the product. But, if we dive deeper into the customer reviews, we can get more information.
 My goal is to extract features from reviews, identify each feature's opinion, quantify the sentiment using econometrics, and then generate a price strategy based on it.
