@@ -115,11 +115,13 @@ def process(markdown_path, dry_run):
         except (urllib.error.URLError, urllib.error.HTTPError, OSError) as error:
             failures.append((markdown_path, url, str(error)))
             print(f"    FAILED  {url}\n            {error}")
+            rewrites[url] = None  # counted as attempted; None means "leave the link alone"
             continue
 
         if not data:
             failures.append((markdown_path, url, "empty response"))
             print(f"    FAILED  {url}\n            empty response")
+            rewrites[url] = None
             continue
 
         name = filename_for(origin, content_type, taken)
@@ -170,7 +172,20 @@ def main():
         print(f"\n{len(all_failures)} failed and were left as remote links:")
         for path, url, error in all_failures:
             print(f"  {os.path.relpath(path, os.path.dirname(args.content_dir))}\n    {url}\n    {error}")
-        print("\nThese hosts are likely dead. Replace or remove those images by hand.")
+        if any("Tunnel connection failed" in error or "ProxyError" in error for _, _, error in all_failures):
+            print(
+                "\nSome failures are proxy tunnel errors, which mean an egress policy\n"
+                "blocked the request rather than the host being unreachable. Re-run\n"
+                "from a network that allows these hosts before concluding anything\n"
+                "about them."
+            )
+        else:
+            print(
+                "\nEach of these was reachable as a request but did not return an image.\n"
+                "Check them in a browser: a host that blocks hotlinking may still serve\n"
+                "the image to you directly, in which case save it into the post folder\n"
+                "by hand. Otherwise replace or remove the image."
+            )
         return 1
     return 0
 
