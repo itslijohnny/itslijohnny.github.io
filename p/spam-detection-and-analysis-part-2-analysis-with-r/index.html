@@ -1,133 +1,19 @@
-<!doctype html><html lang=en-us dir=ltr>
-<head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.">
-<meta name=keywords content="Python,R,Regression,detection,analysis,,parsing,,BeautifulSoup,,spam,,email"><title>Spam Detection and Analysis (Part 2 - Analysis with R)</title>
-<link rel=canonical href=https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/>
-<link rel=stylesheet href=https://johnnyli.cc/scss/style.min.abbd69b2908fdfcd5179898beaafd374514a86538d81639ddd2c58c06ae54e40.css><meta property="og:title" content="Spam Detection and Analysis (Part 2 - Analysis with R)">
-<meta property="og:description" content="Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.">
-<meta property="og:url" content="https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/">
-<meta property="og:site_name" content="Johnny's Blog">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="Python"><meta property="article:tag" content="R"><meta property="article:tag" content="Regression"><meta property="article:tag" content="Analysis"><meta property="article:tag" content="Parsing"><meta property="article:tag" content="BeautifulSoup,"><meta property="article:tag" content="Spam"><meta property="article:tag" content="Email"><meta property="article:tag" content="HTML"><meta property="article:published_time" content="2019-05-09T21:47:43+00:00"><meta property="article:modified_time" content="2019-05-09T21:47:43+00:00"><meta property="og:image" content="https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png">
-<meta name=twitter:site content="@lijohnnyds">
-<meta name=twitter:creator content="@lijohnnyds"><meta name=twitter:title content="Spam Detection and Analysis (Part 2 - Analysis with R)">
-<meta name=twitter:description content="Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious."><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png">
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-136585559-1','auto'),ga('send','pageview'))</script><meta name=keywords content="Python,R,Regression,detection,analysis, parsing, BeautifulSoup, spam, email">
-<meta name=tags content="Python, R, Regression, Analysis, Parsing, BeautifulSoup,, Spam, Email, HTML">
-<script type=application/ld+json>{"@context":"http://lijohnny.com","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/johnnyli.cc"},"articleSection":"post","name":"Spam Detection and Analysis (Part 2 - Analysis with R)","headline":"Spam Detection and Analysis (Part 2 - Analysis with R)","description":"Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.","inLanguage":"en-US","author":"Johnny Li","creator":"Johnny Li","publisher":"Johnny Li","accountablePerson":"Johnny Li","copyrightHolder":"Johnny Li","copyrightYear":"2019","datePublished":"2019-05-09 21:47:43 \u002b0000 UTC","dateModified":"2019-05-09 21:47:43 \u002b0000 UTC","url":"https:\/\/johnnyli.cc\/p\/spam-detection-and-analysis-part-2-analysis-with-r\/","wordCount":"1104","keywords":["Python","R","Regression","Analysis","Parsing","BeautifulSoup,","Spam","Email","HTML","Blog"]}</script>
-<link href=https://johnnyli.cc/scss/all.min.css rel=stylesheet>
-<link rel=stylesheet type=text/css href=https://johnnyli.cc/hugo-cite.css>
-<link href=https://johnnyli.cc/scss/animate.css rel=stylesheet>
-<link rel=stylesheet href=https://johnnyli.cc/dist/morphext.css>
-<script src=//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js></script>
-<script src=https://johnnyli.cc/dist/morphext.min.js></script>
-</head>
-<body class=article-page>
-<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky">
-<button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
-<span class=hamburger-box>
-<span class=hamburger-inner></span>
-</span>
-</button>
-<header>
-<figure class=site-avatar>
-<a href=https://johnnyli.cc/>
-<img src=https://johnnyli.cc/img/avatar_hua0986efb83853d2923c77d3b90f65b4d_41306_300x0_resize_q75_box.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
-</a>
-<span class=emoji>🖖</span>
-</figure>
-<div class=site-meta>
-<h1 class=site-name><a href=https://johnnyli.cc/>Johnny's Blog</a></h1>
-<h2 class=site-description>Data Scientist | ML Engineer</h2>
-</div>
-</header><ol class=menu id=main-menu>
-<li>
-<a href=https://johnnyli.cc/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
-<span>Home</span>
-</a>
-</li>
-<li>
-<a href=https://johnnyli.cc/about><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
-<span>About</span>
-</a>
-</li>
-<li>
-<a href=https://johnnyli.cc/archives><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-<span>Categories</span>
-</a>
-</li>
-<li>
-<a href=https://johnny.cc/Today-I-Learned/ target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notes" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2z"/><path d="M9 7h6"/><path d="M9 11h6"/><path d="M9 15h4"/></svg>
-<span>Today I Learned</span>
-</a>
-</li>
-<li>
-<a href=https://johnnyli.cc/search><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
-<span>Search</span>
-</a>
-</li>
-<div class=menu-bottom-section>
-<li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
-<span>Dark Mode</span>
-</li>
-</div>
-</ol>
-</aside>
-<main class="main full-width">
-<article class="has-image main-article">
-<header class=article-header>
-<div class=article-image>
-<a href=https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/>
-<img src=https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9_hu17c392432df8ca411e01c9374606a277_619113_800x0_resize_box_3.png srcset="https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9_hu17c392432df8ca411e01c9374606a277_619113_800x0_resize_box_3.png 800w, https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9_hu17c392432df8ca411e01c9374606a277_619113_1600x0_resize_box_3.png 1600w" width=800 height=363 loading=lazy alt="Featured image of post Spam Detection and Analysis (Part 2 - Analysis with R)">
-</a>
-</div>
-<div class=article-details>
-<header class=article-category>
-<a href=https://johnnyli.cc/categories/data/ style=background-color:#2a9d8f;color:#fff>
-Data
-</a>
-<a href=https://johnnyli.cc/categories/r/>
-R
-</a>
-</header>
-<div class=article-title-wrapper>
-<h2 class=article-title>
-<a href=https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/>Spam Detection and Analysis (Part 2 - Analysis with R)</a>
-</h2>
-<h3 class=article-subtitle>
-Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.
-</h3>
-</div>
-<footer class=article-time>
-<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>May 09, 2019</time>
-</div>
-<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>
-6 minute read
-</time>
-</div>
-</footer>
-</div>
-</header>
-<section class=article-content>
-<p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.</p>
-<blockquote>
-<p>This is the Part 2 of the series. For how to parsing email, please check <a class=link href=https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/>Part 1</a></p>
-</blockquote>
-<h2 id=data-exploration>Data Exploration</h2>
-<h3 id=import-the-data-to-r>Import the data to R</h3>
-<p>For This part of the script, I used <strong>R language</strong> to explore the data and the build model. Therefore We need to import CSV to R first.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=n>em</span> <span class=o>&lt;-</span> <span class=nf>read.csv</span><span class=p>(</span><span class=s>&#34;gamilspamedited.csv&#34;</span><span class=p>,</span><span class=n>stringsAsFactors</span> <span class=o>=</span> <span class=bp>F</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><pre><code>'data.frame':	272 obs. of  18 variables:
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious."><meta name=keywords content="Python,R,Regression,detection,analysis,,parsing,,BeautifulSoup,,spam,,email"><title>Spam Detection and Analysis (Part 2 - Analysis with R)</title><link rel=canonical href=https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=preload as=style href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap"><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap"><link rel=stylesheet href=https://johnnyli.cc/scss/style.min.e62e09c60ba428a627e03568fa3df938f6a8224f815b5846f00816c17d4a0be4.css><meta property='og:title' content="Spam Detection and Analysis (Part 2 - Analysis with R)"><meta property='og:description' content="Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious."><meta property='og:url' content='https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/'><meta property='og:site_name' content="Johnny's Blog"><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='Python'><meta property='article:tag' content='R'><meta property='article:tag' content='Regression'><meta property='article:tag' content='Analysis'><meta property='article:tag' content='Parsing'><meta property='article:tag' content='BeautifulSoup,'><meta property='article:tag' content='Spam'><meta property='article:tag' content='Email'><meta property='article:tag' content='HTML'><meta property='article:published_time' content='2019-05-09T21:47:43+00:00'><meta property='article:modified_time' content='2019-05-09T21:47:43+00:00'><meta property='og:image' content='https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png'><meta name=twitter:site content="@lijohnnyds"><meta name=twitter:creator content="@lijohnnyds"><meta name=twitter:title content="Spam Detection and Analysis (Part 2 - Analysis with R)"><meta name=twitter:description content="Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png'><meta name=keywords content="Python,R,Regression,detection,analysis,parsing,BeautifulSoup,spam,email"><meta name=tags content="Python, R, Regression, Analysis, Parsing, BeautifulSoup,, Spam, Email, HTML"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/johnnyli.cc\/"},"articleSection":"post","name":"Spam Detection and Analysis (Part 2 - Analysis with R)","headline":"Spam Detection and Analysis (Part 2 - Analysis with R)","description":"Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.","inLanguage":"en-US","author":"Johnny Li","creator":"Johnny Li","publisher":"Johnny Li","accountablePerson":"Johnny Li","copyrightHolder":"Johnny Li","copyrightYear":"2019","datePublished":"2019-05-09 21:47:43 \u002b0000 UTC","dateModified":"2019-05-09 21:47:43 \u002b0000 UTC","url":"https:\/\/johnnyli.cc\/p\/spam-detection-and-analysis-part-2-analysis-with-r\/","wordCount":"1103","keywords":["Python","R","Regression","Analysis","Parsing","BeautifulSoup,","Spam","Email","HTML","Blog"]}</script><link href=https://johnnyli.cc/scss/all.min.css rel=stylesheet><link href=https://johnnyli.cc/scss/animate.css rel=stylesheet><link rel=stylesheet href=https://johnnyli.cc/dist/morphext.css><script src=//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js></script><script src=https://johnnyli.cc/dist/morphext.min.js></script></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=https://johnnyli.cc/><img src=https://johnnyli.cc/img/avatar.jpg width=400 height=400 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🖖</span></figure><div class=site-meta><h1 class=site-name><a href=https://johnnyli.cc/>Johnny's Blog</a></h1><h2 class=site-description>Data Scientist | ML Engineer</h2></div></header><ol class=menu id=main-menu><li><a href=https://johnnyli.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=https://johnnyli.cc/about><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=https://johnnyli.cc/archives><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Categories</span></a></li><li><a href=https://johnnyli.cc/Today-I-Learned/ target=_blank><svg class="icon icon-tabler icon-tabler-notes" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2z"/><path d="M9 7h6"/><path d="M9 11h6"/><path d="M9 15h4"/></svg>
+<span>Today I Learned</span></a></li><li><a href=https://johnnyli.cc/search><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/><img alt="Featured image of post Spam Detection and Analysis (Part 2 - Analysis with R)" height=736 loading=lazy sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src=https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png srcset="https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9_hu_a21fd7eca6addb5.png 800w, https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9_hu_8d7377ec51a2d240.png 1600w, https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png 1620w" width=1620></a></div><div class=article-details><header class=article-category><a href=https://johnnyli.cc/categories/data/ style=background-color:#2a9d8f;color:#fff>Data
+</a><a href=https://johnnyli.cc/categories/r/ style=background-color:#beefe9;color:#0f3d38>R</a></header><div class=article-title-wrapper><h2 class=article-title><a href=https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/>Spam Detection and Analysis (Part 2 - Analysis with R)</a></h2><h3 class=article-subtitle>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.</h3></div><footer class=article-meta><div class=inline-meta><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2019-05-09T21:47:43Z>May 09, 2019</time>
+<svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>6 minutes read</time></div></footer></div></header><section class=article-content><p>Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.</p><blockquote><p>This is the Part 2 of the series. For how to parsing email, please check <a class=link href=https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/>Part 1</a></p></blockquote><h2 id=data-exploration>Data Exploration</h2><h3 id=import-the-data-to-r>Import the data to R</h3><p>For This part of the script, I used <strong>R language</strong> to explore the data and the build model. Therefore We need to import CSV to R first.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=n>em</span> <span class=o>&lt;-</span> <span class=nf>read.csv</span><span class=p>(</span><span class=s>&#34;gamilspamedited.csv&#34;</span><span class=p>,</span><span class=n>stringsAsFactors</span> <span class=o>=</span> <span class=bp>F</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>'data.frame':	272 obs. of  18 variables:
  $ Subject            : chr  
  $ Return.Path.Address: chr  
  $ Date               : chr  
@@ -144,14 +30,7 @@ Spam is still a common attack method. Most of the email services have spam filte
  $ IPv6.Indicator     : int  
  $ CAT                : chr  
  $ Reputation         : chr  
-</code></pre>
-<p>After cleaning the data, there are 272 entries and 18 columns left.</p>
-<h3 id=preprocess-the-date>Preprocess the date</h3>
-<h4 id=create-variables>Create Variables</h4>
-<p>Create <code>hashtml</code> and <code>hasattach</code> columns to label if the email use html for main content and if the email has attachment.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</code></pre><p>After cleaning the data, there are 272 entries and 18 columns left.</p><h3 id=preprocess-the-date>Preprocess the date</h3><h4 id=create-variables>Create Variables</h4><p>Create <code>hashtml</code> and <code>hasattach</code> columns to label if the email use html for main content and if the email has attachment.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -160,23 +39,16 @@ Spam is still a common attack method. Most of the email services have spam filte
 </span><span class=lnt>7
 </span><span class=lnt>8
 </span><span class=lnt>9
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=nf>library</span><span class=p>(</span><span class=n>dplyr</span><span class=p>)</span>
-<span class=n>hashtml.func</span> <span class=o>&lt;-</span> <span class=nf>function</span><span class=p>(</span><span class=n>x</span><span class=p>,</span><span class=n>c1</span><span class=p>){</span>
-    <span class=n>x</span> <span class=o>&lt;-</span> <span class=nf>case_when</span><span class=p>(</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/alternative&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/mixed&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/related&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;text/html&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;text/plain&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=n>em</span><span class=o>$</span><span class=n>hashtml</span> <span class=o>&lt;-</span> <span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>hashtml.func</span><span class=p>,</span><span class=n>c1</span><span class=o>=</span><span class=s>&#39;Content.Type&#39;</span><span class=p>)</span>
-<span class=n>hasattach.func</span> <span class=o>&lt;-</span> <span class=nf>function</span><span class=p>(</span><span class=n>x</span><span class=p>,</span><span class=n>c1</span><span class=p>){</span>
-    <span class=n>x</span> <span class=o>&lt;-</span> <span class=nf>case_when</span><span class=p>(</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/alternative&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/mixed&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/related&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;text/html&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;text/plain&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=n>em</span><span class=o>$</span><span class=n>hasattach</span> <span class=o>&lt;-</span> <span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>hasattach.func</span><span class=p>,</span><span class=n>c1</span><span class=o>=</span><span class=s>&#39;Content.Type&#39;</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Compare Email&rsquo;s From address and reply address and label if they are different.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=nf>library</span><span class=p>(</span><span class=n>dplyr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>hashtml.func</span> <span class=o>&lt;-</span> <span class=kr>function</span><span class=p>(</span><span class=n>x</span><span class=p>,</span><span class=n>c1</span><span class=p>){</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>&lt;-</span> <span class=nf>case_when</span><span class=p>(</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/alternative&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/mixed&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/related&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;text/html&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;text/plain&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>hashtml</span> <span class=o>&lt;-</span> <span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>hashtml.func</span><span class=p>,</span><span class=n>c1</span><span class=o>=</span><span class=s>&#39;Content.Type&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>hasattach.func</span> <span class=o>&lt;-</span> <span class=kr>function</span><span class=p>(</span><span class=n>x</span><span class=p>,</span><span class=n>c1</span><span class=p>){</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>&lt;-</span> <span class=nf>case_when</span><span class=p>(</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/alternative&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/mixed&#34;</span> <span class=o>~</span> <span class=s>&#34;1&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;multipart/related&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;text/html&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>,</span><span class=n>x[c1]</span><span class=o>==</span><span class=s>&#34;text/plain&#34;</span> <span class=o>~</span> <span class=s>&#34;0&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>hasattach</span> <span class=o>&lt;-</span> <span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>hasattach.func</span><span class=p>,</span><span class=n>c1</span><span class=o>=</span><span class=s>&#39;Content.Type&#39;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Compare Email&rsquo;s From address and reply address and label if they are different.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -194,31 +66,25 @@ Spam is still a common attack method. Most of the email services have spam filte
 </span><span class=lnt>16
 </span><span class=lnt>17
 </span><span class=lnt>18
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=nf>library</span><span class=p>(</span><span class=n>stringr</span><span class=p>)</span>
-<span class=n>rpavsfrom.func</span> <span class=o>&lt;-</span> <span class=nf>function</span><span class=p>(</span><span class=n>x</span><span class=p>){</span>
-    <span class=n>fa</span><span class=o>&lt;-</span><span class=n>x[</span><span class=s>&#39;From.Address&#39;</span><span class=n>]</span>
-    <span class=n>fa</span><span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;@&#39;</span><span class=p>)</span><span class=n>[[1]][2]</span>
-    <span class=n>fasplit</span> <span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span>
-    <span class=n>fareal</span> <span class=o>&lt;-</span> <span class=nf>paste</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>fasplit</span><span class=p>)</span><span class=m>-1</span><span class=p>)</span><span class=n>]</span><span class=p>,</span><span class=s>&#39;.&#39;</span><span class=p>,</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>fasplit</span><span class=p>))</span><span class=n>]</span><span class=p>,</span><span class=n>sep</span> <span class=o>=</span> <span class=s>&#34;&#34;</span><span class=p>)</span>
-    <span class=n>rp</span><span class=o>&lt;-</span><span class=n>x[</span><span class=s>&#39;Return.Path.Address&#39;</span><span class=n>]</span>
-    <span class=n>rp</span><span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>rp</span><span class=p>,</span><span class=s>&#39;@&#39;</span><span class=p>)</span><span class=n>[[1]][2]</span>
-    <span class=n>rpsplit</span> <span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>rp</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span>
-    <span class=n>rpreal</span> <span class=o>&lt;-</span> <span class=nf>paste</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>rp</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>rpsplit</span><span class=p>)</span><span class=m>-1</span><span class=p>)</span><span class=n>]</span><span class=p>,</span><span class=s>&#39;.&#39;</span><span class=p>,</span><span class=nf>str_split</span><span class=p>(</span><span class=n>rp</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>rpsplit</span><span class=p>))</span><span class=n>]</span><span class=p>,</span><span class=n>sep</span> <span class=o>=</span> <span class=s>&#34;&#34;</span><span class=p>)</span>
-    <span class=nf>if </span><span class=p>(</span><span class=n>fareal</span> <span class=o>==</span> <span class=n>rpreal</span><span class=p>)</span> <span class=p>{</span>
-        <span class=n>x</span> <span class=o>=</span> <span class=m>1</span>
-    <span class=p>}</span><span class=n>else</span><span class=p>{</span>
-        <span class=n>x</span> <span class=o>=</span> <span class=m>0</span>
-    <span class=p>}</span>
-    <span class=nf>return</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=n>em</span><span class=o>$</span><span class=n>rpavsfrom</span><span class=o>&lt;-</span><span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>rpavsfrom.func</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=nf>library</span><span class=p>(</span><span class=n>stringr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>rpavsfrom.func</span> <span class=o>&lt;-</span> <span class=kr>function</span><span class=p>(</span><span class=n>x</span><span class=p>){</span>
+</span></span><span class=line><span class=cl>    <span class=n>fa</span><span class=o>&lt;-</span><span class=n>x[</span><span class=s>&#39;From.Address&#39;</span><span class=n>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>fa</span><span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;@&#39;</span><span class=p>)</span><span class=n>[[1]][2]</span>
+</span></span><span class=line><span class=cl>    <span class=n>fasplit</span> <span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span>
+</span></span><span class=line><span class=cl>    <span class=n>fareal</span> <span class=o>&lt;-</span> <span class=nf>paste</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>fasplit</span><span class=p>)</span><span class=m>-1</span><span class=p>)</span><span class=n>]</span><span class=p>,</span><span class=s>&#39;.&#39;</span><span class=p>,</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>fasplit</span><span class=p>))</span><span class=n>]</span><span class=p>,</span><span class=n>sep</span> <span class=o>=</span> <span class=s>&#34;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>rp</span><span class=o>&lt;-</span><span class=n>x[</span><span class=s>&#39;Return.Path.Address&#39;</span><span class=n>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>rp</span><span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>rp</span><span class=p>,</span><span class=s>&#39;@&#39;</span><span class=p>)</span><span class=n>[[1]][2]</span>
+</span></span><span class=line><span class=cl>    <span class=n>rpsplit</span> <span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>rp</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span>
+</span></span><span class=line><span class=cl>    <span class=n>rpreal</span> <span class=o>&lt;-</span> <span class=nf>paste</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>rp</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>rpsplit</span><span class=p>)</span><span class=m>-1</span><span class=p>)</span><span class=n>]</span><span class=p>,</span><span class=s>&#39;.&#39;</span><span class=p>,</span><span class=nf>str_split</span><span class=p>(</span><span class=n>rp</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>rpsplit</span><span class=p>))</span><span class=n>]</span><span class=p>,</span><span class=n>sep</span> <span class=o>=</span> <span class=s>&#34;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=kr>if</span> <span class=p>(</span><span class=n>fareal</span> <span class=o>==</span> <span class=n>rpreal</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span><span class=kr>else</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=kr>return</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>rpavsfrom</span><span class=o>&lt;-</span><span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>rpavsfrom.func</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -236,32 +102,25 @@ Spam is still a common attack method. Most of the email services have spam filte
 </span><span class=lnt>16
 </span><span class=lnt>17
 </span><span class=lnt>18
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=nf>library</span><span class=p>(</span><span class=n>stringr</span><span class=p>)</span>
-<span class=n>replyvsfrom.func</span> <span class=o>&lt;-</span> <span class=nf>function</span><span class=p>(</span><span class=n>x</span><span class=p>){</span>
-    <span class=n>fa</span><span class=o>&lt;-</span><span class=n>x[</span><span class=s>&#39;From.Address&#39;</span><span class=n>]</span>
-    <span class=n>fa</span><span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;@&#39;</span><span class=p>)</span><span class=n>[[1]][2]</span>
-    <span class=n>fasplit</span> <span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span>
-    <span class=n>fareal</span> <span class=o>&lt;-</span> <span class=nf>paste</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>fasplit</span><span class=p>)</span><span class=m>-1</span><span class=p>)</span><span class=n>]</span><span class=p>,</span><span class=s>&#39;.&#39;</span><span class=p>,</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>fasplit</span><span class=p>))</span><span class=n>]</span><span class=p>,</span><span class=n>sep</span> <span class=o>=</span> <span class=s>&#34;&#34;</span><span class=p>)</span>
-    <span class=n>ra</span><span class=o>&lt;-</span><span class=n>x[</span><span class=s>&#39;Reply.To.Address&#39;</span><span class=n>]</span>
-    <span class=n>ra</span><span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>ra</span><span class=p>,</span><span class=s>&#39;@&#39;</span><span class=p>)</span><span class=n>[[1]][2]</span>
-    <span class=n>rasplit</span> <span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>ra</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span>
-    <span class=n>rareal</span> <span class=o>&lt;-</span> <span class=nf>paste</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>ra</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>rasplit</span><span class=p>)</span><span class=m>-1</span><span class=p>)</span><span class=n>]</span><span class=p>,</span><span class=s>&#39;.&#39;</span><span class=p>,</span><span class=nf>str_split</span><span class=p>(</span><span class=n>ra</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>rasplit</span><span class=p>))</span><span class=n>]</span><span class=p>,</span><span class=n>sep</span> <span class=o>=</span> <span class=s>&#34;&#34;</span><span class=p>)</span>
-    <span class=nf>if </span><span class=p>(</span><span class=n>fareal</span> <span class=o>==</span> <span class=n>rareal</span><span class=p>)</span> <span class=p>{</span>
-        <span class=n>x</span> <span class=o>=</span> <span class=m>1</span>
-    <span class=p>}</span><span class=n>else</span><span class=p>{</span>
-        <span class=n>x</span> <span class=o>=</span> <span class=m>0</span>
-    <span class=p>}</span>
-    <span class=nf>return</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=n>em</span><span class=o>$</span><span class=n>replyvsfrom</span><span class=o>&lt;-</span><span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>replyvsfrom.func</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Bin and Categorize the Time and the Day.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=nf>library</span><span class=p>(</span><span class=n>stringr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>replyvsfrom.func</span> <span class=o>&lt;-</span> <span class=kr>function</span><span class=p>(</span><span class=n>x</span><span class=p>){</span>
+</span></span><span class=line><span class=cl>    <span class=n>fa</span><span class=o>&lt;-</span><span class=n>x[</span><span class=s>&#39;From.Address&#39;</span><span class=n>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>fa</span><span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;@&#39;</span><span class=p>)</span><span class=n>[[1]][2]</span>
+</span></span><span class=line><span class=cl>    <span class=n>fasplit</span> <span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span>
+</span></span><span class=line><span class=cl>    <span class=n>fareal</span> <span class=o>&lt;-</span> <span class=nf>paste</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>fasplit</span><span class=p>)</span><span class=m>-1</span><span class=p>)</span><span class=n>]</span><span class=p>,</span><span class=s>&#39;.&#39;</span><span class=p>,</span><span class=nf>str_split</span><span class=p>(</span><span class=n>fa</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>fasplit</span><span class=p>))</span><span class=n>]</span><span class=p>,</span><span class=n>sep</span> <span class=o>=</span> <span class=s>&#34;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>ra</span><span class=o>&lt;-</span><span class=n>x[</span><span class=s>&#39;Reply.To.Address&#39;</span><span class=n>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>ra</span><span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>ra</span><span class=p>,</span><span class=s>&#39;@&#39;</span><span class=p>)</span><span class=n>[[1]][2]</span>
+</span></span><span class=line><span class=cl>    <span class=n>rasplit</span> <span class=o>&lt;-</span><span class=nf>str_split</span><span class=p>(</span><span class=n>ra</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span>
+</span></span><span class=line><span class=cl>    <span class=n>rareal</span> <span class=o>&lt;-</span> <span class=nf>paste</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>ra</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>rasplit</span><span class=p>)</span><span class=m>-1</span><span class=p>)</span><span class=n>]</span><span class=p>,</span><span class=s>&#39;.&#39;</span><span class=p>,</span><span class=nf>str_split</span><span class=p>(</span><span class=n>ra</span><span class=p>,</span><span class=s>&#39;[.]&#39;</span><span class=p>)</span><span class=n>[[1]]</span><span class=nf>[</span><span class=p>(</span><span class=nf>length</span><span class=p>(</span><span class=n>rasplit</span><span class=p>))</span><span class=n>]</span><span class=p>,</span><span class=n>sep</span> <span class=o>=</span> <span class=s>&#34;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=kr>if</span> <span class=p>(</span><span class=n>fareal</span> <span class=o>==</span> <span class=n>rareal</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span><span class=kr>else</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=kr>return</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>replyvsfrom</span><span class=o>&lt;-</span><span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>replyvsfrom.func</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Bin and Categorize the Time and the Day.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -269,40 +128,27 @@ Spam is still a common attack method. Most of the email services have spam filte
 </span><span class=lnt>6
 </span><span class=lnt>7
 </span><span class=lnt>8
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=nf>library</span><span class=p>(</span><span class=n>lubridate</span><span class=p>)</span>
-<span class=n>weekday.func</span> <span class=o>&lt;-</span> <span class=nf>function</span><span class=p>(</span><span class=n>x</span><span class=p>,</span><span class=n>c1</span><span class=p>){</span>
-    <span class=n>weekday</span> <span class=o>&lt;-</span> <span class=nf>wday</span><span class=p>(</span><span class=nf>as.Date</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>x[c1]</span><span class=p>,</span><span class=s>&#39; &#39;</span><span class=p>)</span><span class=n>[[1]][1]</span><span class=p>,</span><span class=n>format</span><span class=o>=</span><span class=s>&#39;%m/%d/%Y&#39;</span><span class=p>))</span>
-    <span class=nf>return</span><span class=p>(</span><span class=n>weekday</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=n>em</span><span class=o>$</span><span class=n>Weekday</span> <span class=o>&lt;-</span> <span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>weekday.func</span><span class=p>,</span><span class=n>c1</span><span class=o>=</span><span class=s>&#39;Date&#39;</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>Weekday</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Weekday</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Weekday</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;Mon&#34;</span><span class=p>,</span> <span class=s>&#34;Tue&#34;</span><span class=p>,</span> <span class=s>&#34;Wed&#34;</span><span class=p>,</span> <span class=s>&#34;Thu&#34;</span><span class=p>,</span> <span class=s>&#34;Fri&#34;</span><span class=p>,</span> <span class=s>&#34;Sat&#34;</span><span class=p>,</span> <span class=s>&#34;Sun&#34;</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=nf>library</span><span class=p>(</span><span class=n>lubridate</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>weekday.func</span> <span class=o>&lt;-</span> <span class=kr>function</span><span class=p>(</span><span class=n>x</span><span class=p>,</span><span class=n>c1</span><span class=p>){</span>
+</span></span><span class=line><span class=cl>    <span class=n>weekday</span> <span class=o>&lt;-</span> <span class=nf>wday</span><span class=p>(</span><span class=nf>as.Date</span><span class=p>(</span><span class=nf>str_split</span><span class=p>(</span><span class=n>x[c1]</span><span class=p>,</span><span class=s>&#39; &#39;</span><span class=p>)</span><span class=n>[[1]][1]</span><span class=p>,</span><span class=n>format</span><span class=o>=</span><span class=s>&#39;%m/%d/%Y&#39;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=kr>return</span><span class=p>(</span><span class=n>weekday</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>Weekday</span> <span class=o>&lt;-</span> <span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>weekday.func</span><span class=p>,</span><span class=n>c1</span><span class=o>=</span><span class=s>&#39;Date&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>Weekday</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Weekday</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Weekday</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;Mon&#34;</span><span class=p>,</span> <span class=s>&#34;Tue&#34;</span><span class=p>,</span> <span class=s>&#34;Wed&#34;</span><span class=p>,</span> <span class=s>&#34;Thu&#34;</span><span class=p>,</span> <span class=s>&#34;Fri&#34;</span><span class=p>,</span> <span class=s>&#34;Sat&#34;</span><span class=p>,</span> <span class=s>&#34;Sun&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
 </span><span class=lnt>6
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=n>time.func</span> <span class=o>&lt;-</span> <span class=nf>function</span><span class=p>(</span><span class=n>x</span><span class=p>,</span><span class=n>c1</span><span class=p>){</span>
-    <span class=n>time</span> <span class=o>&lt;-</span> <span class=nf>gsub</span><span class=p>(</span><span class=s>&#34;:&#34;</span><span class=p>,</span> <span class=s>&#34;&#34;</span><span class=p>,</span> <span class=nf>str_split</span><span class=p>(</span><span class=n>x[c1]</span><span class=p>,</span><span class=s>&#39; &#39;</span><span class=p>)</span><span class=n>[[1]][2]</span><span class=p>)</span>
-    <span class=nf>return</span><span class=p>(</span><span class=n>time</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=n>em</span><span class=o>$</span><span class=n>Time</span> <span class=o>&lt;-</span> <span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>time.func</span><span class=p>,</span><span class=n>c1</span><span class=o>=</span><span class=s>&#39;Date&#39;</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>Time</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=nf>round</span><span class=p>(</span><span class=nf>as.numeric</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Time</span><span class=p>)</span><span class=o>/</span><span class=m>100</span><span class=p>))</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Convert the data to proper formats.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=n>time.func</span> <span class=o>&lt;-</span> <span class=kr>function</span><span class=p>(</span><span class=n>x</span><span class=p>,</span><span class=n>c1</span><span class=p>){</span>
+</span></span><span class=line><span class=cl>    <span class=n>time</span> <span class=o>&lt;-</span> <span class=nf>gsub</span><span class=p>(</span><span class=s>&#34;:&#34;</span><span class=p>,</span> <span class=s>&#34;&#34;</span><span class=p>,</span> <span class=nf>str_split</span><span class=p>(</span><span class=n>x[c1]</span><span class=p>,</span><span class=s>&#39; &#39;</span><span class=p>)</span><span class=n>[[1]][2]</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=kr>return</span><span class=p>(</span><span class=n>time</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>Time</span> <span class=o>&lt;-</span> <span class=nf>apply</span><span class=p>(</span><span class=n>em</span><span class=p>,</span><span class=m>1</span><span class=p>,</span><span class=n>time.func</span><span class=p>,</span><span class=n>c1</span><span class=o>=</span><span class=s>&#39;Date&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>Time</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=nf>round</span><span class=p>(</span><span class=nf>as.numeric</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Time</span><span class=p>)</span><span class=o>/</span><span class=m>100</span><span class=p>))</span>
+</span></span></code></pre></td></tr></table></div></div><p>Convert the data to proper formats.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -313,57 +159,30 @@ Spam is still a common attack method. Most of the email services have spam filte
 </span><span class=lnt> 9
 </span><span class=lnt>10
 </span><span class=lnt>11
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=n>em</span><span class=o>$</span><span class=n>SPF</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>SPF</span><span class=p>,</span><span class=n>levels</span> <span class=o>=</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;pass&#34;</span><span class=p>,</span><span class=s>&#34;neutral&#34;</span><span class=p>,</span><span class=s>&#34;fail&#34;</span><span class=p>,</span><span class=s>&#34;temperror&#34;</span><span class=p>))</span>
-<span class=n>em</span><span class=o>$</span><span class=n>DMARC</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>DMARC</span><span class=p>,</span><span class=n>levels</span> <span class=o>=</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;pass&#34;</span><span class=p>,</span><span class=s>&#34;fail&#34;</span><span class=p>,</span><span class=s>&#34;None&#34;</span><span class=p>))</span>
-<span class=n>em</span><span class=o>$</span><span class=n>DKIM</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>DKIM</span><span class=p>,</span><span class=n>levels</span> <span class=o>=</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;pass&#34;</span><span class=p>,</span><span class=s>&#34;None&#34;</span><span class=p>))</span>
-<span class=n>em</span><span class=o>$</span><span class=n>Country</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Country</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>IPv6.Indicator</span><span class=o>&lt;-</span><span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>IPv6.Indicator</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>CAT</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>CAT</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>Reputation</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Reputation</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>hashtml</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>hashtml</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>hasattach</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>hasattach</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>rpavsfrom</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>rpavsfrom</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>replyvsfrom</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>replyvsfrom</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Set base level.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>SPF</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>SPF</span><span class=p>,</span><span class=n>levels</span> <span class=o>=</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;pass&#34;</span><span class=p>,</span><span class=s>&#34;neutral&#34;</span><span class=p>,</span><span class=s>&#34;fail&#34;</span><span class=p>,</span><span class=s>&#34;temperror&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>DMARC</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>DMARC</span><span class=p>,</span><span class=n>levels</span> <span class=o>=</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;pass&#34;</span><span class=p>,</span><span class=s>&#34;fail&#34;</span><span class=p>,</span><span class=s>&#34;None&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>DKIM</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>DKIM</span><span class=p>,</span><span class=n>levels</span> <span class=o>=</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;pass&#34;</span><span class=p>,</span><span class=s>&#34;None&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>Country</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Country</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>IPv6.Indicator</span><span class=o>&lt;-</span><span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>IPv6.Indicator</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>CAT</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>CAT</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>Reputation</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Reputation</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>hashtml</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>hashtml</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>hasattach</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>hasattach</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>rpavsfrom</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>rpavsfrom</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>replyvsfrom</span> <span class=o>&lt;-</span> <span class=nf>factor</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>replyvsfrom</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Set base level.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=n>em</span><span class=o>$</span><span class=n>Country</span> <span class=o>&lt;-</span> <span class=nf>relevel</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Country</span><span class=p>,</span><span class=n>ref</span> <span class=o>=</span> <span class=s>&#34;US&#34;</span><span class=p>)</span>
-<span class=n>em</span><span class=o>$</span><span class=n>Reputation</span> <span class=o>&lt;-</span> <span class=nf>relevel</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Reputation</span><span class=p>,</span><span class=n>ref</span> <span class=o>=</span> <span class=s>&#34;Unsuspicious&#34;</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Re-code the target to numeric.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=n>em</span><span class=o>$</span><span class=n>CAT</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>CAT</span> <span class=o>==</span> <span class=s>&#34;Spam&#34;</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Explore the Relationship.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>Country</span> <span class=o>&lt;-</span> <span class=nf>relevel</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Country</span><span class=p>,</span><span class=n>ref</span> <span class=o>=</span> <span class=s>&#34;US&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>Reputation</span> <span class=o>&lt;-</span> <span class=nf>relevel</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>Reputation</span><span class=p>,</span><span class=n>ref</span> <span class=o>=</span> <span class=s>&#34;Unsuspicious&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Re-code the target to numeric.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=n>em</span><span class=o>$</span><span class=n>CAT</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>em</span><span class=o>$</span><span class=n>CAT</span> <span class=o>==</span> <span class=s>&#34;Spam&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Explore the Relationship.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=nf>set.seed</span><span class=p>(</span><span class=m>11</span><span class=p>)</span>
-<span class=n>selected.var</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=m>7</span><span class=p>,</span> <span class=m>9</span><span class=p>,</span> <span class=m>10</span><span class=p>,</span> <span class=m>11</span><span class=p>,</span> <span class=m>12</span><span class=p>,</span> <span class=m>15</span><span class=p>,</span> <span class=m>16</span><span class=p>,</span><span class=m>17</span><span class=p>,</span><span class=m>18</span><span class=p>,</span><span class=m>19</span><span class=p>,</span><span class=m>20</span><span class=p>,</span><span class=m>21</span><span class=p>,</span><span class=m>22</span><span class=p>,</span><span class=m>23</span><span class=p>,</span><span class=m>24</span><span class=p>)</span>
-<span class=n>selected.df</span> <span class=o>&lt;-</span> <span class=n>em[</span><span class=p>,</span> <span class=n>selected.var]</span>
-</code></pre></td></tr></table>
-</div>
-</div><div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=nf>set.seed</span><span class=p>(</span><span class=m>11</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>selected.var</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=m>7</span><span class=p>,</span> <span class=m>9</span><span class=p>,</span> <span class=m>10</span><span class=p>,</span> <span class=m>11</span><span class=p>,</span> <span class=m>12</span><span class=p>,</span> <span class=m>15</span><span class=p>,</span> <span class=m>16</span><span class=p>,</span><span class=m>17</span><span class=p>,</span><span class=m>18</span><span class=p>,</span><span class=m>19</span><span class=p>,</span><span class=m>20</span><span class=p>,</span><span class=m>21</span><span class=p>,</span><span class=m>22</span><span class=p>,</span><span class=m>23</span><span class=p>,</span><span class=m>24</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>selected.df</span> <span class=o>&lt;-</span> <span class=n>em[</span><span class=p>,</span> <span class=n>selected.var]</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -388,91 +207,54 @@ Spam is still a common attack method. Most of the email services have spam filte
 </span><span class=lnt>23
 </span><span class=lnt>24
 </span><span class=lnt>25
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=n>emnum</span><span class=o>&lt;-</span><span class=n>selected.df</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>SPF</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>,</span> <span class=s>&#34;3&#34;</span><span class=p>,</span> <span class=s>&#34;4&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>SPF</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>SPF</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>DMARC</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>,</span> <span class=s>&#34;3&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>DMARC</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>DMARC</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>DKIM</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>DKIM</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>DKIM</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Country</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>Country</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Country</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>IPv6.Indicator</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>IPv6.Indicator</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>IPv6.Indicator</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Reputation</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>Reputation</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Reputation</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>hashtml</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>hashtml</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>hashtml</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>hasattach</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>hasattach</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>hasattach</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>rpavsfrom</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>rpavsfrom</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>rpavsfrom</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>replyvsfrom</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>replyvsfrom</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>replyvsfrom</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Weekday</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>,</span> <span class=s>&#34;3&#34;</span><span class=p>,</span> <span class=s>&#34;4&#34;</span><span class=p>,</span> <span class=s>&#34;5&#34;</span><span class=p>,</span> <span class=s>&#34;6&#34;</span><span class=p>,</span> <span class=s>&#34;7&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>Weekday</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Weekday</span><span class=p>)</span>
-<span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Time</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>,</span> <span class=s>&#34;3&#34;</span><span class=p>,</span> <span class=s>&#34;4&#34;</span><span class=p>,</span> <span class=s>&#34;5&#34;</span><span class=p>,</span> <span class=s>&#34;6&#34;</span><span class=p>,</span> <span class=s>&#34;7&#34;</span><span class=p>,</span> <span class=s>&#34;8&#34;</span><span class=p>,</span> <span class=s>&#34;9&#34;</span><span class=p>,</span> <span class=s>&#34;10&#34;</span><span class=p>,</span> <span class=s>&#34;11&#34;</span><span class=p>,</span> <span class=s>&#34;12&#34;</span><span class=p>,</span> <span class=s>&#34;13&#34;</span><span class=p>,</span> <span class=s>&#34;14&#34;</span><span class=p>,</span><span class=s>&#34;15&#34;</span><span class=p>,</span> <span class=s>&#34;16&#34;</span><span class=p>,</span> <span class=s>&#34;17&#34;</span><span class=p>,</span> <span class=s>&#34;18&#34;</span><span class=p>,</span> <span class=s>&#34;19&#34;</span><span class=p>,</span> <span class=s>&#34;20&#34;</span><span class=p>,</span> <span class=s>&#34;21&#34;</span><span class=p>,</span> <span class=s>&#34;22&#34;</span><span class=p>,</span> <span class=s>&#34;23&#34;</span><span class=p>,</span> <span class=s>&#34;24&#34;</span><span class=p>,</span> <span class=s>&#34;25&#34;</span><span class=p>)</span>
-<span class=n>emnum</span><span class=o>$</span><span class=n>Time</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Time</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Create correlation matrix.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=n>emnum</span><span class=o>&lt;-</span><span class=n>selected.df</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>SPF</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>,</span> <span class=s>&#34;3&#34;</span><span class=p>,</span> <span class=s>&#34;4&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>SPF</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>SPF</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>DMARC</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>,</span> <span class=s>&#34;3&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>DMARC</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>DMARC</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>DKIM</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>DKIM</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>DKIM</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Country</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>Country</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Country</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>IPv6.Indicator</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>IPv6.Indicator</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>IPv6.Indicator</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Reputation</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>Reputation</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Reputation</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>hashtml</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>hashtml</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>hashtml</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>hasattach</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>hasattach</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>hasattach</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>rpavsfrom</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>rpavsfrom</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>rpavsfrom</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>replyvsfrom</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>replyvsfrom</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>replyvsfrom</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Weekday</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>,</span> <span class=s>&#34;3&#34;</span><span class=p>,</span> <span class=s>&#34;4&#34;</span><span class=p>,</span> <span class=s>&#34;5&#34;</span><span class=p>,</span> <span class=s>&#34;6&#34;</span><span class=p>,</span> <span class=s>&#34;7&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>Weekday</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Weekday</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>levels</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Time</span><span class=p>)</span> <span class=o>&lt;-</span> <span class=nf>c</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>,</span> <span class=s>&#34;2&#34;</span><span class=p>,</span> <span class=s>&#34;3&#34;</span><span class=p>,</span> <span class=s>&#34;4&#34;</span><span class=p>,</span> <span class=s>&#34;5&#34;</span><span class=p>,</span> <span class=s>&#34;6&#34;</span><span class=p>,</span> <span class=s>&#34;7&#34;</span><span class=p>,</span> <span class=s>&#34;8&#34;</span><span class=p>,</span> <span class=s>&#34;9&#34;</span><span class=p>,</span> <span class=s>&#34;10&#34;</span><span class=p>,</span> <span class=s>&#34;11&#34;</span><span class=p>,</span> <span class=s>&#34;12&#34;</span><span class=p>,</span> <span class=s>&#34;13&#34;</span><span class=p>,</span> <span class=s>&#34;14&#34;</span><span class=p>,</span><span class=s>&#34;15&#34;</span><span class=p>,</span> <span class=s>&#34;16&#34;</span><span class=p>,</span> <span class=s>&#34;17&#34;</span><span class=p>,</span> <span class=s>&#34;18&#34;</span><span class=p>,</span> <span class=s>&#34;19&#34;</span><span class=p>,</span> <span class=s>&#34;20&#34;</span><span class=p>,</span> <span class=s>&#34;21&#34;</span><span class=p>,</span> <span class=s>&#34;22&#34;</span><span class=p>,</span> <span class=s>&#34;23&#34;</span><span class=p>,</span> <span class=s>&#34;24&#34;</span><span class=p>,</span> <span class=s>&#34;25&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>emnum</span><span class=o>$</span><span class=n>Time</span> <span class=o>&lt;-</span> <span class=nf>as.numeric</span><span class=p>(</span><span class=n>selected.df</span><span class=o>$</span><span class=n>Time</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Create correlation matrix.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=nf>library</span><span class=p>(</span><span class=s>&#34;PerformanceAnalytics&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>chart.Correlation</span><span class=p>(</span><span class=n>emnum</span><span class=p>,</span> <span class=n>method</span><span class=o>=</span><span class=s>&#34;spearman&#34;</span><span class=p>,</span><span class=n>histogram</span><span class=o>=</span><span class=kc>TRUE</span><span class=p>,</span><span class=n>pch</span><span class=o>=</span><span class=s>&#34;16&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img alt=png loading=lazy sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src=https://ws1.sinaimg.cn/large/006tNc79ly1g280ych5v7j30nc0nc3yv.jpg></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=nf>library</span><span class=p>(</span><span class=s>&#34;PerformanceAnalytics&#34;</span><span class=p>)</span>
-<span class=nf>chart.Correlation</span><span class=p>(</span><span class=n>emnum</span><span class=p>,</span> <span class=n>method</span><span class=o>=</span><span class=s>&#34;spearman&#34;</span><span class=p>,</span><span class=n>histogram</span><span class=o>=</span><span class=kc>TRUE</span><span class=p>,</span><span class=n>pch</span><span class=o>=</span><span class=s>&#34;16&#34;</span><span class=p>)</span>
-
-</code></pre></td></tr></table>
-</div>
-</div><p><img src=https://ws1.sinaimg.cn/large/006tNc79ly1g280ych5v7j30nc0nc3yv.jpg loading=lazy alt=png></p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=nf>library</span><span class=p>(</span><span class=n>corrr</span><span class=p>)</span>
-
-<span class=n>emnum</span> <span class=o>%&gt;%</span> <span class=nf>cor</span><span class=p>(</span><span class=n>method</span><span class=o>=</span><span class=s>&#34;spearman&#34;</span><span class=p>)</span> <span class=o>%&gt;%</span> <span class=nf>network_plot</span><span class=p>(</span><span class=n>min_cor</span><span class=o>=</span><span class=m>0.1</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p><img src=https://ws4.sinaimg.cn/large/006tNc79ly1g280yddafpj30nc0ncwfs.jpg loading=lazy alt=png></p>
-<h2 id=build-model>Build Model</h2>
-<h3 id=partition-data>Partition Data</h3>
-<p>Create Training and Validation Sets</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=nf>library</span><span class=p>(</span><span class=n>corrr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>emnum</span> <span class=o>%&gt;%</span> <span class=nf>cor</span><span class=p>(</span><span class=n>method</span><span class=o>=</span><span class=s>&#34;spearman&#34;</span><span class=p>)</span> <span class=o>%&gt;%</span> <span class=nf>network_plot</span><span class=p>(</span><span class=n>min_cor</span><span class=o>=</span><span class=m>0.1</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img alt=png loading=lazy sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src=https://ws4.sinaimg.cn/large/006tNc79ly1g280yddafpj30nc0ncwfs.jpg></p><h2 id=build-model>Build Model</h2><h3 id=partition-data>Partition Data</h3><p>Create Training and Validation Sets</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=c1># partition the data</span>
-<span class=n>train.index</span> <span class=o>&lt;-</span> <span class=nf>sample</span><span class=p>(</span><span class=m>1</span><span class=o>:</span><span class=nf>nrow</span><span class=p>(</span><span class=n>em</span><span class=p>),</span> <span class=nf>nrow</span><span class=p>(</span><span class=n>em</span><span class=p>)</span><span class=o>*</span><span class=m>0.6</span><span class=p>)</span>  
-<span class=n>train.df</span> <span class=o>&lt;-</span> <span class=n>selected.df[train.index</span><span class=p>,</span> <span class=n>]</span>
-<span class=n>valid.df</span> <span class=o>&lt;-</span> <span class=n>selected.df[</span><span class=o>-</span><span class=n>train.index</span><span class=p>,</span> <span class=n>]</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Fit a Logistic Regression Model</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=c1># partition the data</span>
+</span></span><span class=line><span class=cl><span class=n>train.index</span> <span class=o>&lt;-</span> <span class=nf>sample</span><span class=p>(</span><span class=m>1</span><span class=o>:</span><span class=nf>nrow</span><span class=p>(</span><span class=n>em</span><span class=p>),</span> <span class=nf>nrow</span><span class=p>(</span><span class=n>em</span><span class=p>)</span><span class=o>*</span><span class=m>0.6</span><span class=p>)</span>  
+</span></span><span class=line><span class=cl><span class=n>train.df</span> <span class=o>&lt;-</span> <span class=n>selected.df[train.index</span><span class=p>,</span> <span class=n>]</span>
+</span></span><span class=line><span class=cl><span class=n>valid.df</span> <span class=o>&lt;-</span> <span class=n>selected.df[</span><span class=o>-</span><span class=n>train.index</span><span class=p>,</span> <span class=n>]</span>
+</span></span></code></pre></td></tr></table></div></div><p>Fit a Logistic Regression Model</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=n>logit.reg</span> <span class=o>&lt;-</span> <span class=nf>glm</span><span class=p>(</span><span class=n>CAT</span> <span class=o>~</span> <span class=n>Message</span><span class=o>+</span><span class=n>DMARC</span><span class=o>+</span><span class=n>Country</span><span class=o>+</span><span class=n>DKIM</span><span class=o>+</span><span class=n>Reputation</span><span class=o>+</span><span class=n>replyvsfrom</span><span class=o>+</span><span class=n>rpavsfrom</span><span class=o>+</span><span class=n>Weekday</span><span class=p>,</span> <span class=n>data</span> <span class=o>=</span> <span class=n>train.df</span><span class=p>,</span> <span class=n>family</span> <span class=o>=</span> <span class=s>&#34;binomial&#34;</span><span class=p>)</span>
-<span class=nf>summary</span><span class=p>(</span><span class=n>logit.reg</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><pre><code>Call:
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=n>logit.reg</span> <span class=o>&lt;-</span> <span class=nf>glm</span><span class=p>(</span><span class=n>CAT</span> <span class=o>~</span> <span class=n>Message</span><span class=o>+</span><span class=n>DMARC</span><span class=o>+</span><span class=n>Country</span><span class=o>+</span><span class=n>DKIM</span><span class=o>+</span><span class=n>Reputation</span><span class=o>+</span><span class=n>replyvsfrom</span><span class=o>+</span><span class=n>rpavsfrom</span><span class=o>+</span><span class=n>Weekday</span><span class=p>,</span> <span class=n>data</span> <span class=o>=</span> <span class=n>train.df</span><span class=p>,</span> <span class=n>family</span> <span class=o>=</span> <span class=s>&#34;binomial&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>summary</span><span class=p>(</span><span class=n>logit.reg</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>Call:
 glm(formula = CAT ~ Message + DMARC + Country + DKIM + Reputation +
     replyvsfrom + rpavsfrom + Weekday, family = &quot;binomial&quot;, data = train.df)
 
@@ -507,27 +289,19 @@ Residual deviance:  56.569  on 148  degrees of freedom
 AIC: 86.569
 
 Number of Fisher Scoring iterations: 15
-</code></pre>
-<p>Predict with validation dataset and find the best threshold.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</code></pre><p>Predict with validation dataset and find the best threshold.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
 </span><span class=lnt>6
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=n>logit.reg.pred</span> <span class=o>&lt;-</span> <span class=nf>predict</span><span class=p>(</span><span class=n>logit.reg</span><span class=p>,</span> <span class=n>valid.df</span><span class=p>,</span>  <span class=n>type</span> <span class=o>=</span> <span class=s>&#34;response&#34;</span><span class=p>)</span>
-<span class=nf>library</span><span class=p>(</span><span class=n>pROC</span><span class=p>)</span>
-<span class=n>r</span> <span class=o>&lt;-</span> <span class=nf>roc</span><span class=p>(</span><span class=n>valid.df</span><span class=o>$</span><span class=n>CAT</span><span class=p>,</span> <span class=n>logit.reg.pred</span><span class=p>)</span>
-<span class=nf>plot.roc</span><span class=p>(</span><span class=n>r</span><span class=p>)</span>
-<span class=n>pred</span> <span class=o>&lt;-</span> <span class=nf>ifelse</span><span class=p>(</span><span class=n>logit.reg.pred</span> <span class=o>&gt;</span> <span class=nf>coords</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>x</span> <span class=o>=</span> <span class=s>&#34;best&#34;</span><span class=p>)</span><span class=n>[[1]]</span><span class=p>,</span> <span class=m>1</span><span class=p>,</span> <span class=m>0</span><span class=p>)</span>
-<span class=nf>print</span><span class=p>(</span><span class=nf>coords</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>x</span> <span class=o>=</span> <span class=s>&#34;best&#34;</span><span class=p>))</span>
-</code></pre></td></tr></table>
-</div>
-</div><pre><code>Type 'citation(&quot;pROC&quot;)' for a citation.
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=n>logit.reg.pred</span> <span class=o>&lt;-</span> <span class=nf>predict</span><span class=p>(</span><span class=n>logit.reg</span><span class=p>,</span> <span class=n>valid.df</span><span class=p>,</span>  <span class=n>type</span> <span class=o>=</span> <span class=s>&#34;response&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>library</span><span class=p>(</span><span class=n>pROC</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>r</span> <span class=o>&lt;-</span> <span class=nf>roc</span><span class=p>(</span><span class=n>valid.df</span><span class=o>$</span><span class=n>CAT</span><span class=p>,</span> <span class=n>logit.reg.pred</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>plot.roc</span><span class=p>(</span><span class=n>r</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>pred</span> <span class=o>&lt;-</span> <span class=nf>ifelse</span><span class=p>(</span><span class=n>logit.reg.pred</span> <span class=o>&gt;</span> <span class=nf>coords</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>x</span> <span class=o>=</span> <span class=s>&#34;best&#34;</span><span class=p>)</span><span class=n>[[1]]</span><span class=p>,</span> <span class=m>1</span><span class=p>,</span> <span class=m>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>print</span><span class=p>(</span><span class=nf>coords</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>x</span> <span class=o>=</span> <span class=s>&#34;best&#34;</span><span class=p>))</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>Type 'citation(&quot;pROC&quot;)' for a citation.
 
 Attaching package: 'pROC'
 
@@ -539,19 +313,11 @@ The following objects are masked from 'package:stats':
 
   threshold specificity sensitivity
   0.3222076   0.9625000   0.9655172
-</code></pre>
-<p><img src=https://ws1.sinaimg.cn/large/006tNc79ly1g280ydomsdj30nc0nc3yf.jpg loading=lazy></p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</code></pre><p><img loading=lazy sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src=https://ws1.sinaimg.cn/large/006tNc79ly1g280ydomsdj30nc0nc3yf.jpg></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=nf>library</span><span class=p>(</span><span class=n>caret</span><span class=p>)</span>
-<span class=nf>confusionMatrix</span><span class=p>(</span><span class=nf>factor</span><span class=p>(</span><span class=n>pred</span><span class=p>),</span> <span class=nf>factor</span><span class=p>(</span><span class=n>valid.df</span><span class=o>$</span><span class=n>CAT</span><span class=p>),</span> <span class=n>positive</span> <span class=o>=</span> <span class=s>&#34;1&#34;</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><pre><code>Loading required package: lattice
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=nf>library</span><span class=p>(</span><span class=n>caret</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nf>confusionMatrix</span><span class=p>(</span><span class=nf>factor</span><span class=p>(</span><span class=n>pred</span><span class=p>),</span> <span class=nf>factor</span><span class=p>(</span><span class=n>valid.df</span><span class=o>$</span><span class=n>CAT</span><span class=p>),</span> <span class=n>positive</span> <span class=o>=</span> <span class=s>&#34;1&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>Loading required package: lattice
 Loading required package: ggplot2
 
 
@@ -581,11 +347,7 @@ Prediction  0  1
       Balanced Accuracy : 0.9640          
 
        'Positive' Class : 1               
-</code></pre>
-</section>
-<footer class=article-footer>
-<section class=article-tags>
-<a href=https://johnnyli.cc/tags/python/>Python</a>
+</code></pre></section><footer class="article-meta article-footer"><section class=article-tags><a href=https://johnnyli.cc/tags/python/>Python</a>
 <a href=https://johnnyli.cc/tags/r/>R</a>
 <a href=https://johnnyli.cc/tags/regression/>Regression</a>
 <a href=https://johnnyli.cc/tags/analysis/>Analysis</a>
@@ -593,109 +355,31 @@ Prediction  0  1
 <a href=https://johnnyli.cc/tags/beautifulsoup/>BeautifulSoup,</a>
 <a href=https://johnnyli.cc/tags/spam/>Spam</a>
 <a href=https://johnnyli.cc/tags/email/>Email</a>
-<a href=https://johnnyli.cc/tags/html/>HTML</a>
-</section>
-<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
-<span>Licensed under CC BY-NC-SA 4.0 本文内容基于CC BY-NC-SA 4.0协议发布，转载需要署名。</span>
-</section>
-</footer>
-</article>
-<aside class=related-content--wrapper>
-<h2 class=section-title>Related content</h2>
-<div class=related-content>
-<div class="flex article-list--tile">
-<article class=has-image>
-<a href=https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/>
-<div class=article-image>
-<img src=https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f.3cb4b6dc5eaebc135292d09cb8266e67_hu9b8175d3ba48e13699867e4777819883_306711_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Spam Detection and Analysis (Part 1 - Parsing)" data-hash="md5-PLS23F6uvBNSktCcuCZuZw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Spam Detection and Analysis (Part 1 - Parsing)</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=https://johnnyli.cc/p/data-analysis-with-docker/>
-<div class=article-image>
-<img src=https://johnnyli.cc/p/data-analysis-with-docker/5cc38cc0066e1.739a97e385eedd9fd7730c50568ac6db_hu70d1880b8c0962ac8fd85c3141778403_516435_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Data Analysis with Docker" data-hash="md5-c5qX44Xu3Z/XcwxQVorG2w==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Data Analysis with Docker</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/>
-<div class=article-image>
-<img src=https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/5cd7d789264a1.08fe6bac8dd676c72ac36400d7f1eb69_huc7cb634be90cb868cb769f9003ac1e34_106268_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Craigslist Vacation House Data Crawling" data-hash="md5-CP5rrI3Wdscqw2QA1/HraQ==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Craigslist Vacation House Data Crawling</h2>
-</div>
-</a>
-</article>
-</div>
-</div>
-</aside>
-<div class=disqus-container>
-<div id=disqus_thread></div>
-<script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var b=document,a=b.createElement('script');a.async=!0,a.src='//lijohnny.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a)})()</script>
-<noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript>
-<a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a>
-</div>
-<style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style>
-<script>window.addEventListener('onColorSchemeChange',a=>{typeof DISQUS=='object'&&DISQUS.reset({reload:!0})})</script>
-<footer class=site-footer>
-<section class=copyright>
-&copy;
+<a href=https://johnnyli.cc/tags/html/>HTML</a></section><section class="article-copyright inline-meta"><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0 本文内容基于CC BY-NC-SA 4.0协议发布，转载需要署名。</span></section></footer></article><aside><h2 class=section-title>Related content</h2><div class=subsection-list><div class=article-list--tile><article class=has-image><a href=https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/><div class=article-image><img alt="Featured image of post Spam Detection and Analysis (Part 1 - Parsing)" height=150 loading=lazy src=https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f_hu_264eaed7721697bb.png srcset="https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f_hu_264eaed7721697bb.png 1x, https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f_hu_82360fa21fe34b9f.png 2x" width=250></div><div class=article-details style="background:linear-gradient(0deg,#a8653b80 0%,#e8dccfC0 100%)"><h2 class=article-title>Spam Detection and Analysis (Part 1 - Parsing)</h2></div></a></article><article class=has-image><a href=https://johnnyli.cc/p/data-analysis-with-docker/><div class=article-image><img alt="Featured image of post Data Analysis with Docker" height=150 loading=lazy src=https://johnnyli.cc/p/data-analysis-with-docker/5cc38cc0066e1_hu_b45197ad485bcb1e.jpg srcset="https://johnnyli.cc/p/data-analysis-with-docker/5cc38cc0066e1_hu_b45197ad485bcb1e.jpg 1x, https://johnnyli.cc/p/data-analysis-with-docker/5cc38cc0066e1_hu_a2de1d072e4bc919.jpg 2x" width=250></div><div class=article-details style="background:linear-gradient(0deg,#afc3d380 0%,#39312eC0 100%)"><h2 class=article-title>Data Analysis with Docker</h2></div></a></article><article class=has-image><a href=https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/><div class=article-image><img alt="Featured image of post Craigslist Vacation House Data Crawling" height=150 loading=lazy src=https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/5cd7d789264a1_hu_8129bc116f6f75ee.jpg srcset="https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/5cd7d789264a1_hu_8129bc116f6f75ee.jpg 1x, https://johnnyli.cc/p/craigslist-vacation-house-data-crawling/5cd7d789264a1_hu_57a8660a63ba53d9.jpg 2x" width=250></div><div class=article-details style="background:linear-gradient(0deg,#c6beba80 0%,#352d29C0 100%)"><h2 class=article-title>Craigslist Vacation House Data Crawling</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
 2019 -
-2025 Johnny Li
-</section>
-<section class=powerby>
-All contents licensed under CC BY-NC-SA 4.0 本站所有内容基于CC BY-NC-SA 4.0协议发布，转载需要署名 <br>
-Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
-Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.22.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
-</section>
-</footer>
-<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
-<div class=pswp__bg></div>
-<div class=pswp__scroll-wrap>
-<div class=pswp__container>
-<div class=pswp__item></div>
-<div class=pswp__item></div>
-<div class=pswp__item></div>
-</div>
-<div class="pswp__ui pswp__ui--hidden">
-<div class=pswp__top-bar>
-<div class=pswp__counter></div>
-<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-<div class=pswp__preloader>
-<div class=pswp__preloader__icn>
-<div class=pswp__preloader__cut>
-<div class=pswp__preloader__donut></div>
-</div>
-</div>
-</div>
-</div>
-<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-<div class=pswp__share-tooltip></div>
-</div>
-<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-</button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-</button>
-<div class=pswp__caption>
-<div class=pswp__caption__center></div>
-</div>
-</div>
-</div>
-</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous>
-</main>
-</div>
-<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=https://johnnyli.cc/ts/main.js defer></script>
-<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
-</body>
-</html>
+2026 Johnny Li</section><section class=powerby>All contents licensed under CC BY-NC-SA 4.0 本站所有内容基于CC BY-NC-SA 4.0协议发布，转载需要署名<br>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=4.0.3>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><script type=module>
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script></main></div><script type=text/javascript src=https://johnnyli.cc/ts/main.786c94191ed904e0fbc51592ba77840d4e449fa80aeb59a126eab489a07758d7.js defer></script></body></html>

@@ -1,67 +1,72 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Coding Challenge on Johnny's Blog</title><link>https://johnnyli.cc/categories/coding-challenge/</link><description>Recent content in Coding Challenge on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Sat, 06 Apr 2019 14:35:05 +0000</lastBuildDate><atom:link href="https://johnnyli.cc/categories/coding-challenge/index.xml" rel="self" type="application/rss+xml"/><item><title>Solve the Problem in a April Fool's Joke</title><link>https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/</link><pubDate>Sat, 06 Apr 2019 14:35:05 +0000</pubDate><guid>https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/</guid><description>&lt;img src="https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/5cc38cc539c01.jpg" alt="Featured image of post Solve the Problem in a April Fool's Joke" />&lt;p>On April 1st, one of the post on &lt;a class="link" href="https://www.v2ex.com/t/550870" target="_blank" rel="noopener"
->v2ex&lt;/a> (An online community of developers and designers in China&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>) become viral. The &lt;a class="link" href="https://www.v2ex.com/t/550870" target="_blank" rel="noopener"
->post&lt;/a> title is &amp;ldquo;Seeking Dates&amp;rdquo; and it is posted on April 1st, so most reactions of this post are pointing out that this is the &amp;ldquo;new trap&amp;rdquo; of the recruiters.&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>Here is the translation:&lt;/p>
-&lt;blockquote>
-&lt;p>I am born and raised in Hangzhou. I am a science student at Zhejiang University &amp;hellip; I hope to find a man can pass the following test. &lt;strong>My Wechat ID is my Family name Lin followed with two prime number. The smaller prime number is in the front. The product of these two prime numbers 7140229933.&lt;/strong> If you can find my Wechat ID, I will sincerely date you. Bula bula bula &amp;hellip;&lt;/p>
-&lt;/blockquote>
-&lt;p>Disregard if it is a joke, I think the question is interesting. So let&amp;rsquo;s solve it.&lt;/p>
-&lt;p>The idea is using Exhaustive Method (Brute Force Method) to find two prime factors. However, 7,140,229,933 is a relatively large number. To find all prime number could take a long time. Since 7,140,229,933 is the product of two prime, one of the numbers must smaller than the &lt;strong>Square Root&lt;/strong> of it. Therefore the order of magnitude of range could reduce from $10^9$ to $10^4$.
-Here is my solution.&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="kn">import&lt;/span> &lt;span class="nn">time&lt;/span>
-&lt;span class="n">start&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">time&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">time&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;span class="c1"># The input number&lt;/span>
-&lt;span class="nb">input&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">7140229933&lt;/span>
-&lt;span class="k">for&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">input&lt;/span>&lt;span class="o">**&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">0.5&lt;/span>&lt;span class="p">))):&lt;/span>
-&lt;span class="k">if&lt;/span> &lt;span class="nb">input&lt;/span>&lt;span class="o">%&lt;/span>&lt;span class="n">x&lt;/span> &lt;span class="o">==&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="k">break&lt;/span>
-&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">input&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="mi">83777&lt;/span>&lt;span class="p">))&lt;/span>
-&lt;span class="n">end&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">time&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">time&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Total Time: &lt;/span>&lt;span class="si">{}&lt;/span>&lt;span class="s1">s.&amp;#39;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">end&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">))&lt;/span>
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>Output:&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="mi">83777&lt;/span>
-&lt;span class="mi">85229&lt;/span>
-&lt;span class="n">Total&lt;/span> &lt;span class="n">Time&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mf">0.01737499237060547&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="o">.&lt;/span>
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>So the two prime number are 83777 and 85229.&lt;/p>
-&lt;section class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
-&lt;p>&lt;a class="link" href="https://zh.wikipedia.org/wiki/V2EX" target="_blank" rel="noopener"
->https://zh.wikipedia.org/wiki/V2EX&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/section></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Coding Challenge on Johnny's Blog</title><link>https://johnnyli.cc/categories/coding-challenge/</link><description>Recent content in Coding Challenge on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Sat, 06 Apr 2019 14:35:05 +0000</lastBuildDate><atom:link href="https://johnnyli.cc/categories/coding-challenge/index.xml" rel="self" type="application/rss+xml"/><item><title>Solve the Problem in a April Fool's Joke</title><link>https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/</link><pubDate>Sat, 06 Apr 2019 14:35:05 +0000</pubDate><guid>https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/</guid><description>&lt;img src="https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/5cc38cc539c01.jpg" alt="Featured image of post Solve the Problem in a April Fool's Joke" /&gt;&lt;p&gt;On April 1st, one of the post on &lt;a class="link" href="https://www.v2ex.com/t/550870" target="_blank" rel="noopener"
+ &gt;v2ex&lt;/a&gt; (An online community of developers and designers in China&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;) become viral. The &lt;a class="link" href="https://www.v2ex.com/t/550870" target="_blank" rel="noopener"
+ &gt;post&lt;/a&gt; title is &amp;ldquo;Seeking Dates&amp;rdquo; and it is posted on April 1st, so most reactions of this post are pointing out that this is the &amp;ldquo;new trap&amp;rdquo; of the recruiters.&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;Here is the translation:&lt;/p&gt;
+
+ &lt;blockquote&gt;
+ &lt;p&gt;I am born and raised in Hangzhou. I am a science student at Zhejiang University &amp;hellip; I hope to find a man can pass the following test. &lt;strong&gt;My Wechat ID is my Family name Lin followed with two prime number. The smaller prime number is in the front. The product of these two prime numbers 7140229933.&lt;/strong&gt; If you can find my Wechat ID, I will sincerely date you. Bula bula bula &amp;hellip;&lt;/p&gt;
+
+ &lt;/blockquote&gt;
+&lt;p&gt;Disregard if it is a joke, I think the question is interesting. So let&amp;rsquo;s solve it.&lt;/p&gt;
+&lt;p&gt;The idea is using Exhaustive Method (Brute Force Method) to find two prime factors. However, 7,140,229,933 is a relatively large number. To find all prime number could take a long time. Since 7,140,229,933 is the product of two prime, one of the numbers must smaller than the &lt;strong&gt;Square Root&lt;/strong&gt; of it. Therefore the order of magnitude of range could reduce from $10^9$ to $10^4$.
+Here is my solution.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;time&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;start&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# The input number&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;input&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;7140229933&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;input&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;))):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nb"&gt;input&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;break&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;input&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;83777&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Total Time: &lt;/span&gt;&lt;span class="si"&gt;{}&lt;/span&gt;&lt;span class="s1"&gt;s.&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Output:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="mi"&gt;83777&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="mi"&gt;85229&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;Total&lt;/span&gt; &lt;span class="n"&gt;Time&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.01737499237060547&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;So the two prime number are 83777 and 85229.&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a class="link" href="https://zh.wikipedia.org/wiki/V2EX" target="_blank" rel="noopener"
+ &gt;https://zh.wikipedia.org/wiki/V2EX&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item></channel></rss>
