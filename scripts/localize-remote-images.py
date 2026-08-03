@@ -82,6 +82,49 @@ def filename_for(url, content_type, taken):
     return candidate
 
 
+DIAGNOSIS = {
+    "dns": (
+        "dns: the hostname does not resolve, so nothing was ever contacted. The\n"
+        "  subdomain is usually retired rather than the image being gone. Sina's\n"
+        "  ws1-ws4.sinaimg.cn are retired in favour of wx1-wx4 and tva/tvax, for\n"
+        "  example, and the rest of the URL still works. Try swapping the\n"
+        "  subdomain and re-running before giving up on the image."
+    ),
+    "blocked": (
+        "blocked: a proxy or egress policy refused the request. This says nothing\n"
+        "  about the host. Re-run from a network that allows it."
+    ),
+    "http": (
+        "http: the host answered but refused or lost the image. A 403 is usually\n"
+        "  hotlink protection, which often still serves the file to a browser, so\n"
+        "  open the URL and save it into the post folder by hand. A 404 means it\n"
+        "  is gone; replace or remove the image."
+    ),
+    "other": (
+        "other: the request failed for some other reason. Check the message above;\n"
+        "  a timeout is worth simply retrying."
+    ),
+}
+
+
+def classify(error):
+    """Bucket a download failure so the summary describes what actually happened."""
+    text = error.lower()
+    if "tunnel connection failed" in text or "proxyerror" in text:
+        return "blocked"
+    if (
+        "nodename nor servname" in text
+        or "name or service not known" in text
+        or "temporary failure in name resolution" in text
+        or "getaddrinfo" in text
+        or "no address associated" in text
+    ):
+        return "dns"
+    if "http error" in text:
+        return "http"
+    return "other"
+
+
 def download(url):
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
@@ -170,22 +213,16 @@ def main():
 
     if all_failures:
         print(f"\n{len(all_failures)} failed and were left as remote links:")
+        kinds = set()
         for path, url, error in all_failures:
-            print(f"  {os.path.relpath(path, os.path.dirname(args.content_dir))}\n    {url}\n    {error}")
-        if any("Tunnel connection failed" in error or "ProxyError" in error for _, _, error in all_failures):
-            print(
-                "\nSome failures are proxy tunnel errors, which mean an egress policy\n"
-                "blocked the request rather than the host being unreachable. Re-run\n"
-                "from a network that allows these hosts before concluding anything\n"
-                "about them."
-            )
-        else:
-            print(
-                "\nEach of these was reachable as a request but did not return an image.\n"
-                "Check them in a browser: a host that blocks hotlinking may still serve\n"
-                "the image to you directly, in which case save it into the post folder\n"
-                "by hand. Otherwise replace or remove the image."
-            )
+            kind = classify(error)
+            kinds.add(kind)
+            rel = os.path.relpath(path, os.path.dirname(args.content_dir))
+            print(f"  {rel}\n    {url}\n    [{kind}] {error}")
+
+        print()
+        for kind in sorted(kinds):
+            print(DIAGNOSIS[kind])
         return 1
     return 0
 

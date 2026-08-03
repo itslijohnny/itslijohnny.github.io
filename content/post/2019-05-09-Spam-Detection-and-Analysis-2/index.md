@@ -225,7 +225,7 @@ chart.Correlation(emnum, method="spearman",histogram=TRUE,pch="16")
 
 
 
-![png](https://ws1.sinaimg.cn/large/006tNc79ly1g280ych5v7j30nc0nc3yv.jpg)
+![png](https://wx1.sinaimg.cn/large/006tNc79ly1g280ych5v7j30nc0nc3yv.jpg)
 
 
 
@@ -238,7 +238,7 @@ emnum %>% cor(method="spearman") %>% network_plot(min_cor=0.1)
 
 
 
-![png](https://ws4.sinaimg.cn/large/006tNc79ly1g280yddafpj30nc0ncwfs.jpg)
+![png](https://wx4.sinaimg.cn/large/006tNc79ly1g280yddafpj30nc0ncwfs.jpg)
 
 
 
@@ -331,7 +331,7 @@ print(coords(r, x = "best"))
 
 
 
-![](https://ws1.sinaimg.cn/large/006tNc79ly1g280ydomsdj30nc0nc3yf.jpg)
+![](https://wx1.sinaimg.cn/large/006tNc79ly1g280ydomsdj30nc0nc3yf.jpg)
 
 
 
