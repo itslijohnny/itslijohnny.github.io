@@ -95,10 +95,10 @@ DIAGNOSIS = {
         "  about the host. Re-run from a network that allows it."
     ),
     "http": (
-        "http: the host answered but refused or lost the image. A 403 is usually\n"
-        "  hotlink protection, which often still serves the file to a browser, so\n"
-        "  open the URL and save it into the post folder by hand. A 404 means it\n"
-        "  is gone; replace or remove the image."
+        "http: the host answered but refused or lost the image. A 403 is hotlink\n"
+        "  protection; a referer retry was already tried for known hosts. Open the\n"
+        "  URL in a browser, and if it loads, save it into the post folder by hand.\n"
+        "  A 404 means it is gone; replace or remove the image."
     ),
     "other": (
         "other: the request failed for some other reason. Check the message above;\n"
@@ -125,10 +125,46 @@ def classify(error):
     return "other"
 
 
-def download(url):
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+# Hosts that serve the image only when the request looks like it came from the
+# site the image was uploaded to. Retrying with the matching referer recovers
+# your own images; it does not reach anything a browser could not.
+REFERERS = {
+    "sinaimg.cn": "https://weibo.com/",
+    "i.loli.net": "https://sm.ms/",
+}
+
+
+def referer_for(url):
+    host = urllib.parse.urlparse(url).netloc.lower()
+    for suffix, referer in REFERERS.items():
+        if host == suffix or host.endswith("." + suffix):
+            return referer
+    return None
+
+
+def download(url, referer=None):
+    headers = {"User-Agent": USER_AGENT}
+    if referer:
+        headers["Referer"] = referer
+    request = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
         return response.read(), response.headers.get("Content-Type", "")
+
+
+def download_with_retry(url):
+    """Fetch url, retrying once with a site-appropriate referer on 403.
+
+    Returns (data, content_type, note).
+    """
+    try:
+        data, content_type = download(url)
+        return data, content_type, ""
+    except urllib.error.HTTPError as error:
+        referer = referer_for(url) if error.code == 403 else None
+        if not referer:
+            raise
+        data, content_type = download(url, referer=referer)
+        return data, content_type, f" (retried with referer {referer})"
 
 
 def process(markdown_path, dry_run):
@@ -154,7 +190,7 @@ def process(markdown_path, dry_run):
             continue
 
         try:
-            data, content_type = download(origin)
+            data, content_type, retry_note = download_with_retry(origin)
         except (urllib.error.URLError, urllib.error.HTTPError, OSError) as error:
             failures.append((markdown_path, url, str(error)))
             print(f"    FAILED  {url}\n            {error}")
@@ -172,7 +208,7 @@ def process(markdown_path, dry_run):
             handle.write(data)
 
         rewrites[url] = name
-        print(f"    saved   {name}  <- {origin}  ({len(data):,} bytes)")
+        print(f"    saved   {name}  <- {origin}  ({len(data):,} bytes){retry_note}")
 
     if dry_run or not any(rewrites.values()):
         return len(rewrites), failures
