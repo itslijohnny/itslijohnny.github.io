@@ -446,9 +446,10 @@
         font-weight: 700;
         line-height: 1;
     }
-    .stat:nth-child(1) .num sup { color: var(--accent-color); }
-    .stat:nth-child(2) .num sup { color: var(--graphic-deep); }
-    .stat:nth-child(3) .num sup { color: var(--graphic-warm); }
+    .stat:nth-child(4n + 1) .num sup { color: var(--accent-color); }
+    .stat:nth-child(4n + 2) .num sup { color: var(--graphic-deep); }
+    .stat:nth-child(4n + 3) .num sup { color: var(--graphic-warm); }
+    .stat:nth-child(4n + 4) .num sup { color: var(--accent-color); }
 
     .label {
         display: block;
