@@ -1,48 +1,22 @@
-<style>
-    .about-skills {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 20px;
-        margin-bottom: 20px;
-    }
-    .about-skills .skill {
-        background: var(--body-background);
-        border-radius: var(--card-border-radius);
-        padding: 28px 24px;
-        text-align: center;
-    }
-    .about-skills .skill img {
-        height: 72px;
-        width: auto;
-    }
-    .about-skills .skill h3 {
-        border-left: 0;
-        padding: 0;
-        margin: 0.8em 0 0.5em;
-        font-size: 1.9rem;
-    }
-    .about-skills .skill p {
-        margin: 0;
-        font-size: 1.4rem;
-        color: var(--card-text-color-secondary);
-        line-height: 1.7;
-    }
-</style>
-
+{{- /* Three pillars, one hue each. Artwork painted in
+       layouts/partials/footer/custom.html. */ -}}
 <div class="about-skills">
-    <div class="skill">
-        <img src="../img/files.png" alt="Data engineering" loading="lazy">
+    <div class="pillar pillar--data">
+        <canvas data-paint="grid" aria-hidden="true"></canvas>
         <h3>Data Engineering</h3>
-        <p>Dimensional modeling, ETL/ELT architecture, Spark, Airflow, dbt, distributed SQL (Presto / Trino), data quality &amp; governance</p>
+        <p>Dimensional modeling, ETL/ELT architecture, distributed processing, data quality &amp; governance.</p>
+        <div class="chips"><span>Spark</span><span>Airflow</span><span>dbt</span><span>Trino</span></div>
     </div>
-    <div class="skill">
-        <img src="../img/sci.png" alt="AI and agents" loading="lazy">
+    <div class="pillar pillar--ai">
+        <canvas data-paint="scatter" aria-hidden="true"></canvas>
         <h3>AI &amp; Agents</h3>
-        <p>Agentic systems — tool use, task planning, memory; LLM evaluation, AI-assisted tooling and orchestration</p>
+        <p>Agentic systems — tool use, task planning, memory — plus LLM evaluation and AI-assisted tooling.</p>
+        <div class="chips"><span>Tool use</span><span>Planning</span><span>LLM eval</span></div>
     </div>
-    <div class="skill">
-        <img src="../img/paint.png" alt="Analytics and BI" loading="lazy">
+    <div class="pillar pillar--bi">
+        <canvas data-paint="wave" aria-hidden="true"></canvas>
         <h3>Analytics &amp; BI</h3>
-        <p>Metric standardization, semantic layers, funnel analytics, Tableau / Power BI / Hex, D3 &amp; SVG visualization</p>
+        <p>Metric standardization, semantic layers, funnel analytics and visualization people actually use.</p>
+        <div class="chips"><span>Tableau</span><span>Power BI</span><span>Hex</span><span>D3</span></div>
     </div>
 </div>

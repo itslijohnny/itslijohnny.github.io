@@ -18,8 +18,11 @@
     /* Ground: cool-tinted neutral instead of flat grey */
     --body-background: #f3f3f7;
 
-    /* One deliberate accent: deep teal */
+    /* One deliberate accent: deep teal, plus a violet used only inside
+       generated graphics (never for text or UI) */
     --accent-color: #137a73;
+    --graphic-deep: #46196b;
+    --graphic-warm: #9a6a06;
     --accent-color-darker: #0d5b56;
     --accent-color-text: #ffffff;
     --body-text-color: #5c6070;
@@ -49,6 +52,8 @@
         --card-separator-color: rgba(255, 255, 255, 0.08);
         --accent-color: #45c5b6;
         --accent-color-darker: #6ad4c8;
+        --graphic-deep: #8a5cc0;
+        --graphic-warm: #e0a83c;
         --accent-color-text: #08211e;
         --body-text-color: #b4b8c7;
         --blockquote-background-color: #1c1f2d;
@@ -200,4 +205,422 @@
 .article-tags a:hover {
     background-color: color-mix(in oklab, var(--accent-color) 22%, var(--card-background)) !important;
     color: var(--accent-color-darker) !important;
+}
+
+/* ------------------------------------------------------------------
+   About page. Hero pairs the statement with a toolkit constellation,
+   then a ruled row of big numbers, then the skill pillars. All artwork
+   is drawn on <canvas> from the palette above (painted in
+   layouts/partials/footer/custom.html), so no image files ship and each
+   colour scheme gets its own version instead of a washed-out copy.
+   ------------------------------------------------------------------ */
+
+/* the readability scrim that lets type sit over a graphic */
+%graphic-card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid var(--card-separator-color);
+    border-radius: 10px;
+
+    canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background:
+            linear-gradient(to top, var(--card-background) 3%,
+                color-mix(in oklab, var(--card-background) 50%, transparent) 38%, transparent 70%),
+            linear-gradient(100deg, var(--card-background) 2%,
+                color-mix(in oklab, var(--card-background) 28%, transparent) 30%, transparent 58%);
+    }
+}
+
+/* --- hero: statement + constellation ----------------------------- */
+.about-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 370px;
+    gap: 26px;
+    align-items: center;
+    margin-bottom: 30px;
+
+    @media (max-width: 900px) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .intro {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .eyebrow {
+        font-family: var(--code-font-family);
+        font-size: 1.2rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+    }
+    .eyebrow::before {
+        content: "";
+        width: 26px;
+        height: 2px;
+        background: var(--accent-color);
+    }
+
+    .statement {
+        font-size: clamp(2.6rem, calc(1.9rem + 2vw), 3.4rem);
+        font-weight: 800;
+        line-height: 1.16;
+        letter-spacing: -0.028em;
+        color: var(--card-text-color-main);
+        text-wrap: balance;
+        border-left: 0;
+        padding: 0;
+        margin: 0;
+    }
+    .statement em {
+        font-style: normal;
+        color: var(--accent-color);
+    }
+
+    .bio {
+        font-size: 1.7rem;
+        line-height: 1.7;
+        color: var(--card-text-color-secondary);
+        margin: 0;
+        text-wrap: pretty;
+    }
+
+    .actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 2px;
+    }
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--accent-color);
+        color: var(--accent-color-text);
+        font-size: 1.6rem;
+        font-weight: 700;
+        line-height: 1;
+        padding: 16px 30px;
+        border-radius: 10px;
+        transition: background-color 0.2s ease;
+    }
+    .btn:hover {
+        background: var(--accent-color-darker);
+        color: var(--accent-color-text);
+    }
+    .ghost {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--card-text-color-secondary);
+        border: 1px solid var(--card-separator-color);
+        border-radius: 8px;
+        padding: 11px 16px;
+        line-height: 1;
+        transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .ghost:hover {
+        color: var(--accent-color);
+        border-color: var(--accent-color);
+    }
+    .icon-link {
+        color: var(--card-text-color-secondary);
+        display: inline-flex;
+    }
+    .icon-link:hover {
+        color: var(--accent-color);
+    }
+}
+
+/* --- toolkit constellation ---------------------------------------
+   Ring = how close a tool is to the daily work, and each ring has its
+   own hue: inner teal (core), middle violet, outer amber (adjacent).
+   The position carries information, which is why the middle holds a
+   label rather than a logo. */
+.about-constellation {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+
+    canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .cnode {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+
+        i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            flex: none;
+        }
+        span {
+            font-family: var(--code-font-family);
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--card-text-color-main);
+        }
+
+        &.flip {
+            flex-direction: row-reverse;
+        }
+        &.band2 {
+            i { width: 5px; height: 5px; background: var(--graphic-deep); }
+            span { font-size: 1.15rem; font-weight: 500; color: var(--card-text-color-secondary); }
+        }
+        &.band3 {
+            i { width: 4px; height: 4px; background: var(--graphic-warm); }
+            span { font-size: 1.05rem; font-weight: 500; color: var(--card-text-color-tertiary); }
+        }
+    }
+
+    .ccore {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-family: var(--code-font-family);
+        font-size: 1.05rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        line-height: 1.6;
+        text-transform: uppercase;
+        color: var(--card-text-color-main);
+    }
+}
+
+/* --- big numbers, ruled row -------------------------------------- */
+.about-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 26px 30px;
+    padding: 28px 0;
+    margin: 0 0 34px;
+    border-top: 1px solid var(--card-separator-color);
+    border-bottom: 1px solid var(--card-separator-color);
+
+    .num {
+        font-size: clamp(3.4rem, calc(2.8rem + 1.4vw), 4.6rem);
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        color: var(--card-text-color-main);
+        font-variant-numeric: tabular-nums;
+        display: flex;
+        align-items: baseline;
+    }
+    .num sup {
+        font-size: 0.42em;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .stat:nth-child(1) .num sup { color: var(--accent-color); }
+    .stat:nth-child(2) .num sup { color: var(--graphic-deep); }
+    .stat:nth-child(3) .num sup { color: var(--graphic-warm); }
+
+    .label {
+        display: block;
+        margin-top: 9px;
+        font-family: var(--code-font-family);
+        font-size: 1.15rem;
+        line-height: 1.5;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--card-text-color-tertiary);
+    }
+}
+
+/* --- skill pillars ----------------------------------------------- */
+.about-skills {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+
+    .pillar {
+        @extend %graphic-card;
+        padding: 20px;
+        min-height: 176px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        h3 {
+            border-left: 0;
+            padding: 0;
+            margin: 0;
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+        }
+        p {
+            margin: 6px 0 0;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: var(--card-text-color-secondary);
+        }
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+        .chips span {
+            font-family: var(--code-font-family);
+            font-size: 1.1rem;
+            border-radius: 999px;
+            padding: 3px 10px;
+        }
+    }
+
+    /* each pillar owns one hue so the row reads as three subjects */
+    .pillar--data .chips span {
+        color: var(--accent-color);
+        border: 1px solid color-mix(in oklab, var(--accent-color) 34%, transparent);
+    }
+    .pillar--ai .chips span {
+        color: var(--graphic-deep);
+        border: 1px solid color-mix(in oklab, var(--graphic-deep) 34%, transparent);
+    }
+    .pillar--bi .chips span {
+        color: var(--graphic-warm);
+        border: 1px solid color-mix(in oklab, var(--graphic-warm) 40%, transparent);
+    }
+}
+
+/* --- experience & education timeline ----------------------------- */
+.about-exp {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 8px 40px;
+
+    .timeline {
+        position: relative;
+        padding: 0 0 26px 24px;
+        border-left: 2px solid var(--card-separator-color);
+
+        &:last-child {
+            padding-bottom: 6px;
+            border-left-color: transparent;
+        }
+        &::before {
+            content: "";
+            position: absolute;
+            left: -6px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-color);
+        }
+        &.is-past::before {
+            background: var(--card-background);
+            box-shadow: 0 0 0 2px var(--card-separator-color) inset,
+                0 0 0 2px var(--accent-color);
+        }
+    }
+
+    .time {
+        font-family: var(--code-font-family);
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: var(--accent-color);
+    }
+    h3 {
+        border-left: 0;
+        padding: 0;
+        margin: 3px 0 1px;
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+    .org {
+        margin: 0;
+        font-size: 1.45rem;
+        font-weight: 600;
+        color: var(--card-text-color-secondary);
+    }
+    .scope {
+        margin: 6px 0 0;
+        font-size: 1.4rem;
+        line-height: 1.65;
+        color: var(--card-text-color-tertiary);
+        max-width: 46ch;
+    }
+}
+
+/* --- "now" strip ------------------------------------------------- */
+.about-now {
+    @extend %graphic-card;
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .lbl {
+        font-family: var(--code-font-family);
+        font-size: 1.15rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent-color);
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-width: 62ch;
+    }
+    li {
+        font-size: 1.55rem;
+        line-height: 1.65;
+        color: var(--card-text-color-secondary);
+        padding-left: 18px;
+        position: relative;
+    }
+    li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.62em;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent-color);
+    }
 }

@@ -1,81 +1,23 @@
 {{- /*
-    Big-numbers strip for the About page.
-    EDIT THE NUMBERS AND LABELS BELOW — they render exactly as written.
-    data-count makes a number count up when scrolled into view; leave it
-    off (like the "2019") for values that shouldn't animate.
+    Big numbers. EDIT THE VALUES AND LABELS BELOW — they render exactly
+    as written. data-count animates a value up when it scrolls into
+    view; leave it off for values that shouldn't tick, like a year.
 */ -}}
-<style>
-    .about-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 26px 32px;
-        margin: 34px 0 10px;
-        padding: 28px 0;
-        border-top: 1px solid var(--card-separator-color);
-        border-bottom: 1px solid var(--card-separator-color);
-    }
-    .about-stats .stat .num {
-        font-size: clamp(3.6rem, 3rem + 1.6vw, 5.2rem);
-        font-weight: 800;
-        line-height: 1;
-        letter-spacing: -0.03em;
-        color: var(--card-text-color-main);
-        font-variant-numeric: tabular-nums;
-    }
-    .about-stats .stat .num sup {
-        font-size: 0.5em;
-        color: var(--accent-color);
-        font-weight: 700;
-    }
-    .about-stats .stat .label {
-        display: block;
-        margin-top: 8px;
-        font-size: 1.3rem;
-        line-height: 1.5;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--card-text-color-tertiary);
-    }
-</style>
-
 <div class="about-stats">
     <div class="stat">
         <span class="num"><span data-count="7">7</span><sup>+</sup></span>
         <span class="label">Years building data platforms</span>
     </div>
     <div class="stat">
-        <span class="num"><span data-count="3">3</span>B<sup>+</sup></span>
-        <span class="label">Records through my pipelines daily</span>
+        <span class="num"><span data-count="1">1</span>B<sup>+</sup></span>
+        <span class="label">Rows of data processed daily</span>
     </div>
     <div class="stat">
         <span class="num"><span data-count="3">3</span></span>
-        <span class="label">Companies — Meta · Amazon · Microsoft</span>
+        <span class="label">Meta · Amazon · Microsoft</span>
     </div>
     <div class="stat">
         <span class="num">2019</span>
         <span class="label">Writing here since</span>
     </div>
 </div>
-
-<script>
-    (function () {
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        var els = document.querySelectorAll(".about-stats [data-count]");
-        var io = new IntersectionObserver(function (entries) {
-            entries.forEach(function (e) {
-                if (!e.isIntersecting) return;
-                io.unobserve(e.target);
-                var target = parseInt(e.target.dataset.count, 10);
-                var t0 = null;
-                function step(t) {
-                    if (!t0) t0 = t;
-                    var p = Math.min((t - t0) / 900, 1);
-                    e.target.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
-                    if (p < 1) requestAnimationFrame(step);
-                }
-                requestAnimationFrame(step);
-            });
-        }, { threshold: 0.4 });
-        els.forEach(function (el) { io.observe(el); });
-    })();
-</script>

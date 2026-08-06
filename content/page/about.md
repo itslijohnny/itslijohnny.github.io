@@ -9,10 +9,15 @@ readingTime = false
 
 {{<about-brief>}}
 {{<about-stats>}}
-## Skills
+
+## What I do
 
 {{<about-skills>}}
 
 ## Experience
 
 {{<about-exp>}}
+
+## Now
+
+{{<about-now>}}

@@ -1,75 +1,38 @@
-<style>
-    .about-exp {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 20px 40px;
-    }
-    .about-exp .timeline {
-        position: relative;
-        padding: 0 0 24px 24px;
-        border-left: 2px solid var(--card-separator-color);
-    }
-    .about-exp .timeline:last-child {
-        padding-bottom: 8px;
-    }
-    .about-exp .timeline::before {
-        content: "";
-        position: absolute;
-        left: -6px;
-        top: 6px;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--accent-color);
-    }
-    .about-exp .time {
-        font-size: 1.3rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        color: var(--accent-color);
-    }
-    .about-exp h3 {
-        border-left: 0;
-        padding: 0;
-        margin: 0.2em 0 0.1em;
-        font-size: 1.8rem;
-    }
-    .about-exp p {
-        margin: 0;
-        padding: 0;
-        color: var(--card-text-color-secondary);
-        font-size: 1.4rem;
-    }
-</style>
-
+{{- /* Experience and education. One line of scope per role — what the
+       work was, not resume bullet points. */ -}}
 <div class="about-exp">
     <div class="col">
         <div class="timeline">
-            <span class="time">2025 – Present</span>
+            <span class="time">2025 — Present</span>
             <h3>Data Engineer</h3>
-            <p>Meta</p>
+            <p class="org">Meta · Signals Growth</p>
+            <p class="scope">Measurement infrastructure for the monetization ecosystem — pipelines, attribution signals, and quality measurement for internal AI agents.</p>
         </div>
-        <div class="timeline">
-            <span class="time">2021 – 2025</span>
+        <div class="timeline is-past">
+            <span class="time">2021 — 2025</span>
             <h3>Business Intelligence Engineer</h3>
-            <p>Amazon</p>
+            <p class="org">Amazon · Store Finance Science</p>
+            <p class="scope">Financial data models and ETL for procurement and P&amp;L reporting, plus data-quality monitoring for forecasting.</p>
         </div>
-        <div class="timeline">
-            <span class="time">2019 – 2021</span>
+        <div class="timeline is-past">
+            <span class="time">2019 — 2021</span>
             <h3>Data Analytics Program Manager</h3>
-            <p>Microsoft Azure Sphere (via Pactera)</p>
+            <p class="org">Microsoft Azure Sphere · via Pactera</p>
+            <p class="scope">ETL pipelines and Power BI reporting for product health and customer support insight, and the report frameworks around them.</p>
         </div>
     </div>
     <div class="col">
-        <div class="timeline">
+        <div class="timeline is-past">
+            <span class="time">2018 — 2019</span>
+            <h3>M.S. Information Systems</h3>
+            <p class="org">University of Washington</p>
+            <p class="scope">Seattle, WA.</p>
+        </div>
+        <div class="timeline is-past">
             <span class="time">2020</span>
             <h3>Data Scientist Nanodegree</h3>
-            <p>Udacity</p>
-        </div>
-        <div class="timeline">
-            <span class="time">2018 – 2019</span>
-            <h3>MS. Information Systems</h3>
-            <p>University of Washington</p>
+            <p class="org">Udacity</p>
+            <p class="scope">The projects from this program are the 2019–2021 posts in the archive.</p>
         </div>
     </div>
 </div>
