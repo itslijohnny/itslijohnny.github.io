@@ -1,0 +1,316 @@
+<script>
+    // Category chip rows on list cards are single-line and horizontally
+    // scrollable with a hidden scrollbar; translate the mouse wheel into
+    // horizontal scrolling when (and only when) a row actually overflows.
+    document.addEventListener("wheel", function (e) {
+        if (!e.target.closest) return;
+        var row = e.target.closest(".article-list .article-category");
+        if (!row || row.scrollWidth <= row.clientWidth) return;
+        var delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+        row.scrollLeft += delta;
+        e.preventDefault();
+    }, { passive: false });
+</script>
+
+{{- if eq .RelPermalink "/about/" }}
+<script>
+/* ------------------------------------------------------------------
+   About page artwork. Every graphic is drawn here from the site
+   palette, so the page ships no image files and both colour schemes
+   get their own version rather than one being a washed-out copy.
+   ------------------------------------------------------------------ */
+(function () {
+    var isDark = function () {
+        return document.documentElement.dataset.scheme === "dark";
+    };
+
+    function palette() {
+        return isDark()
+            ? { accent: "69,197,182", deep: "138,92,192", warm: "224,168,60", ink: "232,233,241" }
+            : { accent: "19,122,115", deep: "70,25,107", warm: "154,106,6", ink: "0,0,0" };
+    }
+
+    // light marks need more alpha to register against paper
+    function A(darkValue) { return isDark() ? darkValue : Math.min(darkValue * 1.85, 0.42); }
+    function rgba(c, a) { return "rgba(" + c + "," + a + ")"; }
+
+    // deterministic RNG so a repaint looks identical to the first paint
+    function rng(seed) { var s = seed; return function () { return (s = s * 16807 % 2147483647) / 2147483647; }; }
+
+    var painters = {
+        mesh: function (ctx, w, h, P) {
+            [[w * 0.1, h * 0.15, w * 0.55, P.accent, A(0.26)],
+             [w * 0.86, h * 0.2, w * 0.4, P.deep, A(0.14)],
+             [w * 0.6, h * 1.0, w * 0.5, P.warm, A(0.1)]].forEach(function (b) {
+                var g = ctx.createRadialGradient(b[0], b[1], 0, b[0], b[1], b[2]);
+                g.addColorStop(0, rgba(b[3], b[4]));
+                g.addColorStop(1, rgba(b[3], 0));
+                ctx.fillStyle = g;
+                ctx.fillRect(0, 0, w, h);
+            });
+            ctx.strokeStyle = rgba(P.ink, A(0.05));
+            for (var x = 0; x <= w; x += 34) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+        },
+
+        banner: function (ctx, w, h, P) {
+            painters.mesh(ctx, w, h, P);
+            var cx = w * 0.84, cy = h * 0.5;
+            ctx.strokeStyle = rgba(P.accent, A(0.22));
+            ctx.setLineDash([3, 5]);
+            [h * 0.3, h * 0.48, h * 0.68].forEach(function (r) {
+                ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+            });
+            ctx.setLineDash([]);
+            var rnd = rng(7);
+            for (var i = 0; i < 26; i++) {
+                var a = rnd() * Math.PI * 2, r = h * (0.28 + rnd() * 0.42);
+                ctx.fillStyle = rgba(rnd() > 0.5 ? P.accent : P.deep, A(0.5));
+                ctx.beginPath();
+                ctx.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 1.6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        },
+
+        bars: function (ctx, w, h, P) {
+            var n = 9, bw = w / (n * 1.9), rnd = rng(11);
+            for (var i = 0; i < n; i++) {
+                var bh = h * (0.18 + rnd() * 0.5) * ((i + 3) / (n + 2));
+                ctx.fillStyle = rgba(P.accent, A(0.2));
+                ctx.fillRect(w - (n - i) * bw * 1.8, h - bh, bw, bh);
+            }
+        },
+
+        flow: function (ctx, w, h, P) {
+            for (var k = 0; k < 5; k++) {
+                ctx.beginPath();
+                for (var x = 0; x <= w; x += 4) {
+                    var y = h * 0.55 + Math.sin(x / w * Math.PI * 2 + k * 0.7) * h * (0.1 + k * 0.045);
+                    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                }
+                ctx.strokeStyle = rgba(k % 2 ? P.deep : P.accent, A(0.3) - k * 0.035);
+                ctx.lineWidth = 1.4;
+                ctx.stroke();
+            }
+        },
+
+        nodes: function (ctx, w, h, P) {
+            var pts = [[0.22, 0.3], [0.55, 0.62], [0.82, 0.26], [0.42, 0.84], [0.72, 0.72]];
+            ctx.strokeStyle = rgba(P.accent, A(0.22));
+            ctx.lineWidth = 1;
+            for (var i = 0; i < pts.length; i++) {
+                for (var j = i + 1; j < pts.length; j++) {
+                    ctx.beginPath();
+                    ctx.moveTo(pts[i][0] * w, pts[i][1] * h);
+                    ctx.lineTo(pts[j][0] * w, pts[j][1] * h);
+                    ctx.stroke();
+                }
+            }
+            pts.forEach(function (pt, i) {
+                ctx.fillStyle = rgba(i < 3 ? P.accent : P.deep, A(0.55));
+                ctx.beginPath();
+                ctx.arc(pt[0] * w, pt[1] * h, i < 3 ? 3.4 : 2.4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        },
+
+        ticks: function (ctx, w, h, P) {
+            for (var i = 0; i < 26; i++) {
+                var x = w - i * (w / 26) - 6, tall = i % 4 === 0;
+                ctx.fillStyle = rgba(tall ? P.accent : P.ink, tall ? A(0.3) : A(0.12));
+                ctx.fillRect(x, h - (tall ? h * 0.3 : h * 0.16), 1.6, tall ? h * 0.3 : h * 0.16);
+            }
+        },
+
+        grid: function (ctx, w, h, P) {
+            var g = ctx.createLinearGradient(0, 0, w, h);
+            g.addColorStop(0, rgba(P.accent, A(0.16)));
+            g.addColorStop(1, rgba(P.accent, 0));
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, w, h);
+            ctx.strokeStyle = rgba(P.accent, A(0.2));
+            ctx.lineWidth = 1;
+            for (var i = 0; i <= 9; i++) {
+                var x = (i / 9) * w * 1.1 - w * 0.05;
+                ctx.beginPath();
+                ctx.moveTo(x, h);
+                ctx.lineTo(w * 0.58 + x * 0.3, h * 0.3);
+                ctx.stroke();
+            }
+            for (var j = 1; j <= 4; j++) {
+                var y = h - Math.pow(j / 5, 1.7) * h * 0.85;
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+            }
+        },
+
+        scatter: function (ctx, w, h, P) {
+            var rnd = rng(23);
+            function gauss() {
+                var u = 0, v = 0;
+                while (!u) u = rnd();
+                while (!v) v = rnd();
+                return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+            }
+            [[w * 0.82, h * 0.24, P.deep], [w * 0.97, h * 0.44, P.warm]].forEach(function (c) {
+                for (var i = 0; i < 200; i++) {
+                    var gx = gauss(), gy = gauss();
+                    var d = Math.min(1, Math.hypot(gx, gy) / 2.6);
+                    ctx.fillStyle = rgba(c[2], A(0.5) * (1 - d) + 0.03);
+                    ctx.beginPath();
+                    ctx.arc(c[0] + gx * w * 0.058, c[1] + gy * h * 0.13, 1.1 + (1 - d) * 1.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+        },
+
+        wave: function (ctx, w, h, P) {
+            for (var k = 3; k >= 0; k--) {
+                ctx.beginPath();
+                ctx.moveTo(0, h);
+                for (var x = 0; x <= w; x += 4) {
+                    ctx.lineTo(x, h * (0.5 + k * 0.1) + Math.sin(x / w * Math.PI * 1.6 + k) * h * 0.12);
+                }
+                ctx.lineTo(w, h);
+                ctx.closePath();
+                ctx.fillStyle = rgba(k % 2 ? P.accent : P.warm, A(0.2) - k * 0.018);
+                ctx.fill();
+            }
+        },
+
+        orbit: function (ctx, w, h, P) {
+            var cx = w / 2, cy = h / 2, R = Math.min(w, h) / 2;
+            var g = ctx.createRadialGradient(cx, cy, R * 0.1, cx, cy, R * 1.05);
+            g.addColorStop(0, rgba(P.accent, A(0.14)));
+            g.addColorStop(0.55, rgba(P.accent, A(0.05)));
+            g.addColorStop(1, rgba(P.accent, 0));
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, w, h);
+            ctx.setLineDash([3, 5]);
+            [[0.32, P.accent], [0.56, P.deep], [0.7, P.warm]].forEach(function (ring, i) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, R * ring[0], 0, Math.PI * 2);
+                ctx.strokeStyle = rgba(ring[1], A(0.3) - i * 0.05);
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+            ctx.setLineDash([]);
+        }
+    };
+
+    function paintAll() {
+        var P = palette();
+        document.querySelectorAll("canvas[data-paint]").forEach(function (cv) {
+            var r = cv.getBoundingClientRect();
+            if (!r.width || !r.height) return;
+            var d = Math.min(window.devicePixelRatio || 1, 2);
+            cv.width = Math.round(r.width * d);
+            cv.height = Math.round(r.height * d);
+            var ctx = cv.getContext("2d");
+            ctx.setTransform(d, 0, 0, d, 0, 0);
+            ctx.clearRect(0, 0, r.width, r.height);
+            (painters[cv.dataset.paint] || painters.mesh)(ctx, r.width, r.height, P);
+        });
+    }
+
+    /* --- toolkit constellation ---------------------------------------
+       Ring = how close the tool is to the daily work, so the position
+       carries information instead of just filling space. */
+    var BANDS = [
+        { r: 0.32, cls: "", items: [["Python", 205], ["SQL", 342], ["Spark", 78]] },
+        { r: 0.56, cls: "band2", items: [["Airflow", 250], ["dbt", 18], ["Trino", 140], ["Kubernetes", 308]] },
+        { r: 0.7, cls: "band3", items: [["Agentic AI", 224], ["LLM eval", 296], ["D3 / SVG", 48], ["React / TS", 116], ["Modeling", 170], ["AWS", 350]] }
+    ];
+
+    function buildConstellation(box) {
+        box.querySelectorAll(".cnode, .ccore").forEach(function (n) { n.remove(); });
+        var w = box.clientWidth, h = box.clientHeight;
+        if (!w || !h) return;
+        var cx = w / 2, cy = h / 2, R = Math.min(w, h) / 2;
+
+        BANDS.forEach(function (band) {
+            band.items.forEach(function (item) {
+                var a = item[1] * Math.PI / 180;
+                var x = cx + Math.cos(a) * R * band.r;
+                var y = cy + Math.sin(a) * R * band.r;
+                var el = document.createElement("div");
+                el.className = "cnode " + band.cls + (Math.cos(a) < 0 ? " flip" : "");
+                el.innerHTML = '<i></i><span>' + item[0] + "</span>";
+                el.style.top = y + "px";
+                el.style.transform = "translateY(-50%)";
+                if (Math.cos(a) < 0) { el.style.right = (w - x) + "px"; }
+                else { el.style.left = x + "px"; }
+                box.appendChild(el);
+            });
+        });
+
+        // a clipped keyword reads as a bug — clamp every label inside the panel
+        box.querySelectorAll(".cnode").forEach(function (el) {
+            var ew = el.offsetWidth;
+            if (el.style.left) {
+                var L = parseFloat(el.style.left);
+                if (L + ew > w - 6) el.style.left = Math.max(6, w - ew - 6) + "px";
+            } else if (el.style.right) {
+                var Rr = parseFloat(el.style.right);
+                if (Rr + ew > w - 6) el.style.right = Math.max(6, w - ew - 6) + "px";
+            }
+        });
+
+        var core = document.createElement("div");
+        core.className = "ccore";
+        core.innerHTML = "Data<br>platforms";
+        box.appendChild(core);
+    }
+
+    function buildAll() {
+        document.querySelectorAll("[data-constellation]").forEach(buildConstellation);
+    }
+
+    function render() { buildAll(); paintAll(); }
+
+    /* count the big numbers up once they're on screen */
+    function countUp() {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        var els = document.querySelectorAll(".about-stats [data-count]");
+        if (!els.length || !window.IntersectionObserver) return;
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                io.unobserve(e.target);
+                var target = parseInt(e.target.dataset.count, 10), t0 = null;
+                function step(t) {
+                    if (!t0) t0 = t;
+                    var p = Math.min((t - t0) / 900, 1);
+                    e.target.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+                    if (p < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            });
+        }, { threshold: 0.4 });
+        els.forEach(function (el) { io.observe(el); });
+    }
+
+    var t;
+    function schedule() { clearTimeout(t); t = setTimeout(render, 60); }
+
+    // The footer runs before layout has settled in some browsers, and a
+    // zero-height box would build nothing — so render now, again after
+    // load, and whenever the boxes actually get a size.
+    render();
+    countUp();
+    requestAnimationFrame(render);
+    window.addEventListener("load", schedule);
+
+    if (window.ResizeObserver) {
+        var ro = new ResizeObserver(schedule);
+        document.querySelectorAll("[data-constellation], canvas[data-paint]").forEach(function (el) {
+            ro.observe(el.dataset.paint ? el.parentElement : el);
+        });
+    }
+
+    // repaint on the colour-scheme toggle
+    new MutationObserver(render).observe(document.documentElement, {
+        attributes: true, attributeFilter: ["data-scheme"]
+    });
+    window.addEventListener("resize", schedule);
+})();
+</script>
+{{- end }}

@@ -1,76 +1,22 @@
-<style>
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-right: -15px;
-        margin-left: -15px;
-    }
-    @media (min-width: 1519px) {
-    .col-md-4 {
-        -ms-flex: 0 0 33.333333%;
-        flex: 0 0 33.333333%;
-        max-width: 33.333333%;
-    }
-    }   
-    .col-md-4 {
-        position: relative;
-        width: 100%;
-        padding-right: 15px;
-        padding-left: 15px;
-        display: block;
-    }
-    .skill {
-        padding: 30px;
-        border-radius: 20px !important;
-        transition: all 0.3s ease-in-out;
-        text-align: center!important;
-    }
-    .skill h3 {
-        border-left: 0;
-    }
-    
-    
-</style>
-
-    
-
-<div class="about-skills  fadeIn animated">
-
-    <div class="row">
-        <div class="col-md-4">
-
-            <div class="skill">
-                <img src="../img/sci.png" alt="UI/UX design" style="height: 80px">
-                <h3 class="mb-3 mt-0">Data Scientist</h3>
-                <p class="mb-0">SQL, Python, R, Power BI, Tableau, ETL Pipeline, Excel, HTML Dashboard Machine Learning, Nature Language Processing, Web Crawler, Keras</p>
-            </div>
-            <div class="spacer d-md-none d-lg-none" data-height="30" style="height: 30px;"></div>
-        </div>
-        <div class="col-md-4">
-
-            <div class="skill">
-                <img src="../img/files.png" alt="UI/UX design" style="height: 80px">	
-                <h3 class="mb-3 mt-0">Project Management</h3>
-                <p class="mb-0">Agile, Lean, Six Sigma, Azure Devops, Jira, Business Process Mapping, Process Optimization, KPI/ORK</p>
-            </div>
-            <div class="spacer d-md-none d-lg-none" data-height="30" style="height: 30px;"></div>
-        </div>
-        <div class="col-md-4">
-            
-            <div class="skill">
-                <img src="../img/paint.png" alt="UI/UX design" style="height: 80px">
-                <h3 class="mb-3 mt-0">UX Research</h3>
-                <p class="mb-0">User Research, A/B Testing, Journey Map, Usability Test, Funnel analysis, Google Analytics</p>
-            </div>
-            <div class="spacer d-md-none d-lg-none" data-height="30" style="height: 30px;"></div>
-        </div>
-
-
+{{- /* Three pillars, one hue each. Artwork painted in
+       layouts/partials/footer/custom.html. */ -}}
+<div class="about-skills">
+    <div class="pillar pillar--data">
+        <canvas data-paint="grid" aria-hidden="true"></canvas>
+        <h3>Data Engineering</h3>
+        <p>Dimensional modeling, ETL/ELT architecture, distributed processing, data quality &amp; governance.</p>
+        <div class="chips"><span>Spark</span><span>Airflow</span><span>dbt</span><span>Trino</span></div>
     </div>
-
+    <div class="pillar pillar--ai">
+        <canvas data-paint="scatter" aria-hidden="true"></canvas>
+        <h3>AI &amp; Agents</h3>
+        <p>Agentic systems — tool use, task planning, memory — plus LLM evaluation and AI-assisted tooling.</p>
+        <div class="chips"><span>Tool use</span><span>Planning</span><span>LLM eval</span></div>
+    </div>
+    <div class="pillar pillar--bi">
+        <canvas data-paint="wave" aria-hidden="true"></canvas>
+        <h3>Analytics &amp; BI</h3>
+        <p>Metric standardization, semantic layers, funnel analytics and visualization people actually use.</p>
+        <div class="chips"><span>Tableau</span><span>Power BI</span><span>Hex</span><span>D3</span></div>
+    </div>
 </div>
-
-
-<script>
-
-</script>

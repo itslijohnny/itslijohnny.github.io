@@ -1,6 +1,9 @@
-<div class="mermaid" style="
-margin: 1.5em 0;
-padding: 0 var(--card-padding);
-">
-    {{.Inner}}
-</div>
+{{- /*
+    Renders through the theme's native Mermaid v11 support (same output
+    as a ```mermaid code fence), replacing the old runtime loader that
+    fetched mermaid 8.2.3 from unpkg.
+*/ -}}
+<pre class="mermaid" style="visibility:hidden">
+{{- .Inner | safeHTML -}}
+</pre>
+{{- .Page.Store.Set "hasMermaid" true -}}

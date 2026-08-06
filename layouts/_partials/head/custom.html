@@ -1,0 +1,44 @@
+<meta name="keywords" content="{{ delimit .Keywords " " }}" />
+<meta name="tags" content="{{ with .Params.Tags }}{{ delimit . ", " }}{{ else }}{{ .Site.Params.keywords }}{{ end }}" />
+
+{{- if .IsPage }}
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "{{ .Permalink }}"
+        },
+        "headline": {{ .Title | jsonify }},
+        "description": {{ (or .Description .Summary) | plainify | jsonify }},
+        "inLanguage": "en-US",
+        "author": {
+            "@type": "Person",
+            "name": {{ .Site.Params.author.name | jsonify }}
+        },
+        "publisher": {
+            "@type": "Person",
+            "name": {{ .Site.Params.author.name | jsonify }}
+        },
+        "datePublished": {{ .Date.Format "2006-01-02T15:04:05Z07:00" | jsonify }},
+        "dateModified": {{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" | jsonify }},
+        "url": "{{ .Permalink }}",
+        "wordCount": {{ .WordCount }},
+        "keywords": {{ (append (.Params.tags | default slice) (slice "Blog")) | jsonify }}
+    }
+</script>
+{{- else if .IsHome }}
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": {{ .Site.Title | jsonify }},
+        "url": "{{ .Site.BaseURL }}",
+        "author": {
+            "@type": "Person",
+            "name": {{ .Site.Params.author.name | jsonify }}
+        }
+    }
+</script>
+{{- end }}
