@@ -1,14 +1,14 @@
 +++
 title = "About"
 description = ""
-date = "2021-03-03"
 aliases = ["about-us", "about-me", "contact"]
 author = "Johnny Li"
 license = "CC BY-NC-ND"
-lastmod = "2021-03-03"
+readingTime = false
 +++
 
 {{<about-brief>}}
+{{<about-stats>}}
 ## Skills
 
 {{<about-skills>}}
