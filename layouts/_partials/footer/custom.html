@@ -199,6 +199,7 @@
     function paintAll() {
         var P = palette();
         document.querySelectorAll("canvas[data-paint]").forEach(function (cv) {
+            if (cv.dataset.paint === "orbit") return; // driven by the constellation loop
             var r = cv.getBoundingClientRect();
             if (!r.width || !r.height) return;
             var d = Math.min(window.devicePixelRatio || 1, 2);
@@ -213,54 +214,200 @@
 
     /* --- toolkit constellation ---------------------------------------
        Ring = how close the tool is to the daily work, so the position
-       carries information instead of just filling space. */
+       carries information instead of just filling space. The field
+       drifts slowly and answers the cursor: parallax by ring depth,
+       and hovering a tool draws its line back to the centre. */
     var BANDS = [
-        { r: 0.32, cls: "", items: [["Python", 205], ["SQL", 342], ["Spark", 78]] },
-        { r: 0.56, cls: "band2", items: [["Airflow", 250], ["dbt", 18], ["Trino", 140], ["Kubernetes", 308]] },
-        { r: 0.7, cls: "band3", items: [["Agentic AI", 224], ["LLM eval", 296], ["D3 / SVG", 48], ["React / TS", 116], ["Modeling", 170], ["AWS", 350]] }
+        { r: 0.32, cls: "", depth: 0.45, items: [["Python", 205], ["SQL", 342], ["Spark", 78]] },
+        { r: 0.56, cls: "band2", depth: 0.75, items: [["Airflow", 250], ["dbt", 18], ["Trino", 140], ["Kubernetes", 308]] },
+        { r: 0.7, cls: "band3", depth: 1, items: [["Agentic AI", 224], ["LLM eval", 296], ["D3 / SVG", 48], ["React / TS", 116], ["Modeling", 170], ["AWS", 350]] }
     ];
+
+    var DRIFT = 3.5 * Math.PI / 180;   // how far a tool wanders along its ring
+    var PARALLAX = 6;                   // px the outer ring shifts with the cursor
+    var CLAMP_PAD = 18;                 // leaves room for drift without clipping
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var fields = [];
 
     function buildConstellation(box) {
         box.querySelectorAll(".cnode, .ccore").forEach(function (n) { n.remove(); });
         var w = box.clientWidth, h = box.clientHeight;
         if (!w || !h) return;
         var cx = w / 2, cy = h / 2, R = Math.min(w, h) / 2;
+        var nodes = [];
 
-        BANDS.forEach(function (band) {
-            band.items.forEach(function (item) {
+        BANDS.forEach(function (band, bi) {
+            band.items.forEach(function (item, ii) {
                 var a = item[1] * Math.PI / 180;
                 var x = cx + Math.cos(a) * R * band.r;
                 var y = cy + Math.sin(a) * R * band.r;
+                var flip = Math.cos(a) < 0;
                 var el = document.createElement("div");
-                el.className = "cnode " + band.cls + (Math.cos(a) < 0 ? " flip" : "");
+                el.className = "cnode " + band.cls + (flip ? " flip" : "");
                 el.innerHTML = '<i></i><span>' + item[0] + "</span>";
                 el.style.top = y + "px";
-                el.style.transform = "translateY(-50%)";
-                if (Math.cos(a) < 0) { el.style.right = (w - x) + "px"; }
-                else { el.style.left = x + "px"; }
+                if (flip) { el.style.right = (w - x) + "px"; } else { el.style.left = x + "px"; }
                 box.appendChild(el);
-            });
-        });
 
-        // a clipped keyword reads as a bug — clamp every label inside the panel
-        box.querySelectorAll(".cnode").forEach(function (el) {
-            var ew = el.offsetWidth;
-            if (el.style.left) {
-                var L = parseFloat(el.style.left);
-                if (L + ew > w - 6) el.style.left = Math.max(6, w - ew - 6) + "px";
-            } else if (el.style.right) {
-                var Rr = parseFloat(el.style.right);
-                if (Rr + ew > w - 6) el.style.right = Math.max(6, w - ew - 6) + "px";
-            }
+                // a clipped keyword reads as a bug — keep every label inside
+                var ew = el.offsetWidth;
+                if (flip) {
+                    var rr = parseFloat(el.style.right);
+                    if (rr + ew > w - CLAMP_PAD) {
+                        el.style.right = Math.max(CLAMP_PAD, w - ew - CLAMP_PAD) + "px";
+                    }
+                    x = w - parseFloat(el.style.right) - 3;
+                } else {
+                    var ll = parseFloat(el.style.left);
+                    if (ll + ew > w - CLAMP_PAD) {
+                        el.style.left = Math.max(CLAMP_PAD, w - ew - CLAMP_PAD) + "px";
+                    }
+                    x = parseFloat(el.style.left) + 3;
+                }
+
+                nodes.push({
+                    el: el, ax: x, ay: y, ring: bi, depth: band.depth,
+                    phase: (bi * 2.1) + (ii * 1.37),
+                    speed: 0.00016 + bi * 0.00005,
+                    radius: R * band.r, base: a
+                });
+            });
         });
 
         var core = document.createElement("div");
         core.className = "ccore";
         core.innerHTML = "Data<br>platforms";
         box.appendChild(core);
+
+        var cv = box.querySelector('canvas[data-paint="orbit"]');
+        var st = {
+            box: box, cv: cv, nodes: nodes, w: w, h: h, cx: cx, cy: cy, R: R,
+            mx: 0, my: 0, tmx: 0, tmy: 0, hot: -1, visible: true
+        };
+
+        nodes.forEach(function (n, i) {
+            n.el.addEventListener("mouseenter", function () {
+                if (st.hot === i) return;
+                if (st.hot >= 0) nodes[st.hot].el.classList.remove("is-hot");
+                st.hot = i;
+                n.el.classList.add("is-hot");
+                box.classList.add("has-hot");
+                if (reduce) drawField(st, performance.now());
+            });
+            n.el.addEventListener("mouseleave", function () {
+                if (st.hot !== i) return;
+                st.hot = -1;
+                n.el.classList.remove("is-hot");
+                box.classList.remove("has-hot");
+                if (reduce) drawField(st, performance.now());
+            });
+        });
+
+        box.addEventListener("pointermove", function (e) {
+            var r = box.getBoundingClientRect();
+            st.tmx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+            st.tmy = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        });
+        box.addEventListener("pointerleave", function () { st.tmx = 0; st.tmy = 0; });
+
+        if (window.IntersectionObserver) {
+            new IntersectionObserver(function (es) {
+                st.visible = es[0].isIntersecting;
+            }, { threshold: 0 }).observe(box);
+        }
+
+        fields.push(st);
+        drawField(st, performance.now());
+        if (reduce) placeNodes(st, performance.now());
+    }
+
+    function placeNodes(st, t) {
+        st.nodes.forEach(function (n) {
+            var wobble = reduce ? 0 : Math.sin(t * n.speed + n.phase) * DRIFT;
+            var a = n.base + wobble;
+            var dx = (Math.cos(a) - Math.cos(n.base)) * n.radius + st.mx * PARALLAX * n.depth;
+            var dy = (Math.sin(a) - Math.sin(n.base)) * n.radius + st.my * PARALLAX * n.depth;
+            n.dx = dx;
+            n.dy = dy;
+            n.el.style.transform = "translate(" + dx.toFixed(2) + "px," + dy.toFixed(2) + "px) translateY(-50%)";
+        });
+    }
+
+    function drawField(st, t) {
+        var cv = st.cv;
+        if (!cv) return;
+        var P = palette(), w = st.w, h = st.h;
+        var d = Math.min(window.devicePixelRatio || 1, 2);
+        if (cv.width !== Math.round(w * d)) {
+            cv.width = Math.round(w * d);
+            cv.height = Math.round(h * d);
+        }
+        var ctx = cv.getContext("2d");
+        ctx.setTransform(d, 0, 0, d, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+
+        var cx = st.cx + st.mx * PARALLAX * 0.5;
+        var cy = st.cy + st.my * PARALLAX * 0.5;
+        var R = st.R;
+
+        var g = ctx.createRadialGradient(cx, cy, R * 0.1, cx, cy, R * 1.05);
+        g.addColorStop(0, rgba(P.accent, A(0.14)));
+        g.addColorStop(0.55, rgba(P.accent, A(0.05)));
+        g.addColorStop(1, rgba(P.accent, 0));
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+
+        var hotRing = st.hot >= 0 ? st.nodes[st.hot].ring : -1;
+        var hues = [P.accent, P.deep, P.warm];
+        [0.32, 0.56, 0.7].forEach(function (rf, i) {
+            ctx.save();
+            ctx.setLineDash([3, 5]);
+            // the dashes travel, so the rings read as turning without moving
+            ctx.lineDashOffset = (reduce ? 0 : t * 0.006 * (i % 2 ? -1 : 1) * (1 + i * 0.4));
+            ctx.beginPath();
+            ctx.arc(cx, cy, R * rf * (1 + st.my * 0.004 * BANDS[i].depth), 0, Math.PI * 2);
+            ctx.strokeStyle = rgba(hues[i], (i === hotRing ? A(0.55) : A(0.3) - i * 0.05));
+            ctx.lineWidth = i === hotRing ? 1.4 : 1;
+            ctx.stroke();
+            ctx.restore();
+        });
+
+        if (st.hot >= 0) {
+            var n = st.nodes[st.hot];
+            var nx = n.ax + (n.dx || 0), ny = n.ay + (n.dy || 0);
+            // start outside the core label so the line never crosses the text
+            var vx = nx - cx, vy = ny - cy, len = Math.hypot(vx, vy) || 1;
+            var inset = Math.min(R * 0.26, len - 8);
+            ctx.beginPath();
+            ctx.moveTo(cx + vx / len * inset, cy + vy / len * inset);
+            ctx.lineTo(nx, ny);
+            ctx.strokeStyle = rgba(hues[n.ring], A(0.6));
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+        }
+    }
+
+    var looping = false;
+    function startLoop() {
+        if (looping || reduce) return;
+        looping = true;
+        requestAnimationFrame(frame);
+    }
+
+    function frame(t) {
+        for (var i = 0; i < fields.length; i++) {
+            var st = fields[i];
+            if (!st.visible) continue;
+            st.mx += (st.tmx - st.mx) * 0.08;
+            st.my += (st.tmy - st.my) * 0.08;
+            placeNodes(st, t);
+            drawField(st, t);
+        }
+        requestAnimationFrame(frame);
     }
 
     function buildAll() {
+        fields = [];
         document.querySelectorAll("[data-constellation]").forEach(buildConstellation);
     }
 
@@ -297,6 +444,7 @@
     render();
     countUp();
     requestAnimationFrame(render);
+    startLoop();
     window.addEventListener("load", schedule);
 
     if (window.ResizeObserver) {

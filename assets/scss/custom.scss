@@ -376,6 +376,9 @@
         align-items: center;
         gap: 6px;
         white-space: nowrap;
+        will-change: transform;
+        transition: opacity 0.22s ease;
+        cursor: default;
 
         i {
             width: 6px;
@@ -405,10 +408,35 @@
         }
     }
 
+    .cnode i {
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .cnode.is-hot {
+        z-index: 3;
+    }
+    .cnode.is-hot i {
+        transform: scale(1.7);
+        box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent-color) 20%, transparent);
+    }
+    .cnode.is-hot span {
+        color: var(--card-text-color-main);
+        font-weight: 700;
+    }
+    .cnode.band2.is-hot i {
+        box-shadow: 0 0 0 5px color-mix(in oklab, var(--graphic-deep) 22%, transparent);
+    }
+    .cnode.band3.is-hot i {
+        box-shadow: 0 0 0 5px color-mix(in oklab, var(--graphic-warm) 24%, transparent);
+    }
+    &.has-hot .cnode:not(.is-hot) {
+        opacity: 0.38;
+    }
+
     .ccore {
         position: absolute;
         left: 50%;
         top: 50%;
+        transition: opacity 0.22s ease;
         transform: translate(-50%, -50%);
         text-align: center;
         font-family: var(--code-font-family);
