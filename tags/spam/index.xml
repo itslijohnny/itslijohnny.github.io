@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spam on Johnny's Blog</title><link>https://johnnyli.cc/tags/spam/</link><description>Recent content in Spam on Johnny's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Johnny Li</copyright><lastBuildDate>Thu, 09 May 2019 21:47:43 +0000</lastBuildDate><atom:link href="https://johnnyli.cc/tags/spam/index.xml" rel="self" type="application/rss+xml"/><item><title>Spam Detection and Analysis (Part 2 - Analysis with R)</title><link>https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/</link><pubDate>Thu, 09 May 2019 21:47:43 +0000</pubDate><guid>https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/</guid><description>&lt;img src="https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png" alt="Featured image of post Spam Detection and Analysis (Part 2 - Analysis with R)" /&gt;&lt;p&gt;Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p&gt;
+&lt;!-- more --&gt;
 
  &lt;blockquote&gt;
  &lt;p&gt;This is the Part 2 of the series. For how to parsing email, please check &lt;a class="link" href="https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/" &gt;Part 1&lt;/a&gt;&lt;/p&gt;
@@ -468,6 +469,7 @@ Prediction 0 1
 
  'Positive' Class : 1 
 &lt;/code&gt;&lt;/pre&gt;</description></item><item><title>Spam Detection and Analysis (Part 1 - Parsing)</title><link>https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/</link><pubDate>Fri, 19 Apr 2019 01:24:59 +0000</pubDate><guid>https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/</guid><description>&lt;img src="https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f.png" alt="Featured image of post Spam Detection and Analysis (Part 1 - Parsing)" /&gt;&lt;p&gt;Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p&gt;
+&lt;!-- more --&gt;
 &lt;h2 id="get-email-header-information"&gt;Get Email Header information
 &lt;/h2&gt;&lt;p&gt;First thing we need to do is the get the data. Email Header contents a lots of information that usually a email client do not show that to the users. However, most of those informations reveal more information about the sender. Therefore, we need to get Email Headers and parsing them for analysis.
 I use Python&amp;rsquo;s &lt;code&gt;imaplib&lt;/code&gt; library to get email headers from my Gmail account Spam folder.&lt;/p&gt;
@@ -565,7 +567,7 @@ I use Python&amp;rsquo;s &lt;code&gt;imaplib&lt;/code&gt; library to get email h
 &lt;li&gt;Parsing email&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Usually an email header looks like this:
-&lt;!-- raw HTML omitted --&gt;
+&lt;img src='https://ws4.sinaimg.cn/large/006tNc79ly1g28pgwknggj30lo0ca75r.jpg' width="600" /&gt;
 What we want are:&lt;/p&gt;
 &lt;table&gt;
 	&lt;thead&gt;

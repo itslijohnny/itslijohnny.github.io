@@ -126,6 +126,7 @@ Run &lt;code&gt;pip install -r requirements.txt&lt;/code&gt;&lt;/p&gt;
 &lt;/ul&gt;
 &lt;h2 id="screen-shot"&gt;Screen Shot
 &lt;/h2&gt;&lt;p&gt;&lt;img class="gallery-image" data-flex-basis="316px" data-flex-grow="131" height="905" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="https://johnnyli.cc/p/disaster-response-web-app/newplot1.png" srcset="https://johnnyli.cc/p/disaster-response-web-app/newplot1_hu_a2853171248be145.png 800w, https://johnnyli.cc/p/disaster-response-web-app/newplot1.png 1192w" width="1192"&gt;&lt;/p&gt;
+&lt;!-- ![](newplot2.png) --&gt;
 &lt;p&gt;&lt;img class="gallery-image" data-flex-basis="374px" data-flex-grow="155" height="777" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="https://johnnyli.cc/p/disaster-response-web-app/newplot3.png" srcset="https://johnnyli.cc/p/disaster-response-web-app/newplot3_hu_f9ad4481766037d9.png 800w, https://johnnyli.cc/p/disaster-response-web-app/newplot3.png 1211w" width="1211"&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=""&gt;&lt;style&gt;
@@ -778,11 +779,7 @@ My goal is to extract features from reviews, identify each feature&amp;rsquo;s o
 &lt;img class="gallery-image" data-flex-basis="750px" data-flex-grow="312" height="375" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewdate.png" srcset="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewdate_hu_8092c7667f3f7b3b.png 800w, https://johnnyli.cc/p/price-strategy-based-on-features-reputation/reviewdate.png 1173w" width="1173"&gt;&lt;/p&gt;
 &lt;h2 id="methodology"&gt;Methodology
 &lt;/h2&gt;&lt;p&gt;My approach includes 9 steps.&lt;/p&gt;
-&lt;div class="mermaid" style="
-margin: 1.5em 0;
-padding: 0 var(--card-padding);
-"&gt;
- 
+&lt;pre class="mermaid" style="visibility:hidden"&gt;
 graph TD
 A( Amazon Review Raw Data ) --&gt; B( Data Cleaning )
 B --&gt; C( Sentences Separation )
@@ -793,8 +790,7 @@ E --&gt; G( Feature Reputation )
 F --&gt; G( Feature Reputation )
 G --&gt; H( Sentiment Quantifying )
 H --&gt; I( Price Premiums Prediction )
-
-&lt;/div&gt;
+&lt;/pre&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;p&gt;&lt;img class="gallery-image" data-flex-basis="313px" data-flex-grow="130" height="487" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="https://johnnyli.cc/p/price-strategy-based-on-features-reputation/2021-03-15-09-44-30.png" width="636"&gt;&lt;/p&gt;
 &lt;p&gt;To Be Continued.&lt;/p&gt;</description></item><item><title>Identify Customer Segments</title><link>https://johnnyli.cc/p/identify-customer-segments/</link><pubDate>Fri, 12 Mar 2021 21:42:22 -0800</pubDate><guid>https://johnnyli.cc/p/identify-customer-segments/</guid><description>&lt;img src="https://johnnyli.cc/p/identify-customer-segments/7dfc3OoaYZAnejX.jpg" alt="Featured image of post Identify Customer Segments" /&gt;&lt;p&gt;This is one of the Udacity Data Scientist Nanodegree Project. This project aims to use unsupervised learning techniques to identify segments of the population from the core customer base for a mail-order sales company in Germany. Therefore, these segments can then be used to direct marketing campaigns towards audiences with the highest expected rate of returns.&lt;/p&gt;
@@ -923,6 +919,7 @@ Udacity partners at Bertelsmann Arvato Analytics provided the data.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;Once it launched, you can drag and drop any image on it.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;automator.py&lt;/code&gt; can be used in Mac&amp;rsquo;s Automator. By building a server with Automator, I can right click on any image and run the script, or use a shortcut to run the script.&lt;/p&gt;</description></item><item><title>Spam Detection and Analysis (Part 2 - Analysis with R)</title><link>https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/</link><pubDate>Thu, 09 May 2019 21:47:43 +0000</pubDate><guid>https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/</guid><description>&lt;img src="https://johnnyli.cc/p/spam-detection-and-analysis-part-2-analysis-with-r/5cd5051a0e1f9.png" alt="Featured image of post Spam Detection and Analysis (Part 2 - Analysis with R)" /&gt;&lt;p&gt;Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p&gt;
+&lt;!-- more --&gt;
 
  &lt;blockquote&gt;
  &lt;p&gt;This is the Part 2 of the series. For how to parsing email, please check &lt;a class="link" href="https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/" &gt;Part 1&lt;/a&gt;&lt;/p&gt;
@@ -1392,6 +1389,7 @@ Prediction 0 1
 
  'Positive' Class : 1 
 &lt;/code&gt;&lt;/pre&gt;</description></item><item><title>Spam Detection and Analysis (Part 1 - Parsing)</title><link>https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/</link><pubDate>Fri, 19 Apr 2019 01:24:59 +0000</pubDate><guid>https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/</guid><description>&lt;img src="https://johnnyli.cc/p/spam-detection-and-analysis-part-1-parsing/5cd50420b955f.png" alt="Featured image of post Spam Detection and Analysis (Part 1 - Parsing)" /&gt;&lt;p&gt;Spam is still a common attack method. Most of the email services have spam filters that can help us block and filter out most of the emails with commercial, fraudulent and malicious content. The purpose of the project is to explore and analyze the email header to identify the features that can tell us which emails are malicious.&lt;/p&gt;
+&lt;!-- more --&gt;
 &lt;h2 id="get-email-header-information"&gt;Get Email Header information
 &lt;/h2&gt;&lt;p&gt;First thing we need to do is the get the data. Email Header contents a lots of information that usually a email client do not show that to the users. However, most of those informations reveal more information about the sender. Therefore, we need to get Email Headers and parsing them for analysis.
 I use Python&amp;rsquo;s &lt;code&gt;imaplib&lt;/code&gt; library to get email headers from my Gmail account Spam folder.&lt;/p&gt;
@@ -1489,7 +1487,7 @@ I use Python&amp;rsquo;s &lt;code&gt;imaplib&lt;/code&gt; library to get email h
 &lt;li&gt;Parsing email&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Usually an email header looks like this:
-&lt;!-- raw HTML omitted --&gt;
+&lt;img src='https://ws4.sinaimg.cn/large/006tNc79ly1g28pgwknggj30lo0ca75r.jpg' width="600" /&gt;
 What we want are:&lt;/p&gt;
 &lt;table&gt;
 	&lt;thead&gt;
@@ -1736,7 +1734,9 @@ What we want are:&lt;/p&gt;
  &lt;/blockquote&gt;</description></item><item><title>Solve the Problem in a April Fool's Joke</title><link>https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/</link><pubDate>Sat, 06 Apr 2019 14:35:05 +0000</pubDate><guid>https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/</guid><description>&lt;img src="https://johnnyli.cc/p/solve-the-problem-in-a-april-fools-joke/5cc38cc539c01.jpg" alt="Featured image of post Solve the Problem in a April Fool's Joke" /&gt;&lt;p&gt;On April 1st, one of the post on &lt;a class="link" href="https://www.v2ex.com/t/550870" target="_blank" rel="noopener"
  &gt;v2ex&lt;/a&gt; (An online community of developers and designers in China&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;) become viral. The &lt;a class="link" href="https://www.v2ex.com/t/550870" target="_blank" rel="noopener"
  &gt;post&lt;/a&gt; title is &amp;ldquo;Seeking Dates&amp;rdquo; and it is posted on April 1st, so most reactions of this post are pointing out that this is the &amp;ldquo;new trap&amp;rdquo; of the recruiters.&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;!-- more --&gt;
+&lt;img src="https://i.loli.net/2019/04/27/5cc38cc160d0f.jpg" alt="It's a trap" width="400"/&gt;
+&lt;/br&gt;
 &lt;p&gt;Here is the translation:&lt;/p&gt;
 
  &lt;blockquote&gt;
@@ -1805,6 +1805,7 @@ Here is my solution.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</description></item><item><title>Data Analysis with Docker</title><link>https://johnnyli.cc/p/data-analysis-with-docker/</link><pubDate>Wed, 20 Mar 2019 02:02:28 +0000</pubDate><guid>https://johnnyli.cc/p/data-analysis-with-docker/</guid><description>&lt;img src="https://johnnyli.cc/p/data-analysis-with-docker/5cc38cc0066e1.jpg" alt="Featured image of post Data Analysis with Docker" /&gt;&lt;p&gt;Data Analysis is not all about reports or visualization. The correctness and reproducibility are also important for scientific research. A consistent environment is critical for reproducibility. There are several ways to achieve that. However, I find out using &lt;a class="link" href="%28https://www.docker.com/why-docker%29" &gt;Docker&lt;/a&gt; at any time can repeat the experiment in the same environment. It is easy to scale up and scale horizontally.&lt;/p&gt;
+&lt;!-- more --&gt;
 &lt;p&gt;My docker image is based on Ubuntu. It includes common Data Science tools such as Jupyter Notebook wiht Python 3 and R kernel. With the help of R Magic, I can run both Python and R in the same .ipynb file. To learn more about R Magic, you can click &lt;a class="link" href="https://www.datacamp.com/community/blog/jupyter-notebook-r?utm_source=adwords_ppc&amp;amp;utm_campaignid=1565261270&amp;amp;utm_adgroupid=67750485268&amp;amp;utm_device=c&amp;amp;utm_keyword=&amp;amp;utm_matchtype=b&amp;amp;utm_network=g&amp;amp;utm_adpostion=1t1&amp;amp;utm_creative=295208661496&amp;amp;utm_targetid=dsa-473406574235&amp;amp;utm_loc_interest_ms=&amp;amp;utm_loc_physical_ms=9033309&amp;amp;gclid=EAIaIQobChMIt5Xy39jq4AIVbiCtBh3FdQ4IEAAYASAAEgLEZ_D_BwE" target="_blank" rel="noopener"
  &gt;here&lt;/a&gt;.
 I also installed Nbextensions for Jupyter Notebook. For more information, you can click &lt;a class="link" href="https://github.com/ipython-contrib/jupyter_contrib_nbextensions" target="_blank" rel="noopener"
