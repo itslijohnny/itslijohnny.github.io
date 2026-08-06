@@ -64,9 +64,6 @@ params:
         homepage:
             - type: search
             - type: categories
-              params: 
-                  limit: 10
-            - type: tag-cloud
               params:
                   limit: 10
         # page:
@@ -160,6 +157,11 @@ related:
           weight: 200
 
 markup:
+    goldmark:
+        renderer:
+            # Old posts contain raw HTML (<img>, <br>) written in the Hexo
+            # era; without this Hugo silently drops those elements.
+            unsafe: true
     highlight:
         noClasses: false
         codeFences: true

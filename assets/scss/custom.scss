@@ -1,0 +1,108 @@
+/* ------------------------------------------------------------------
+   2026 polish pass — token overrides only.
+   This file is imported after the theme's variables.scss, so
+   same-specificity declarations here win. No layout overrides;
+   the theme stays upgradable.
+   ------------------------------------------------------------------ */
+
+:root {
+    /* Type: system stacks, zero webfonts. CJK falls back to the
+       reader's own system face instead of a downloaded subset. */
+    --sys-font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Noto Sans SC", "PingFang SC", "Hiragino Sans GB",
+        "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    --base-font-family: var(--sys-font-family);
+    --code-font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo,
+        Consolas, "Liberation Mono", "Courier New", monospace;
+
+    /* Ground: cool-tinted neutral instead of flat grey */
+    --body-background: #f3f3f7;
+
+    /* One deliberate accent: deep teal */
+    --accent-color: #137a73;
+    --accent-color-darker: #0d5b56;
+    --accent-color-text: #ffffff;
+    --body-text-color: #5c6070;
+
+    /* Cards: crisper radius, hairline + soft shadow instead of blur */
+    --card-border-radius: 8px;
+    --tag-border-radius: 999px;
+    --shadow-l1: 0 0 0 1px rgba(23, 25, 35, 0.05),
+        0 1px 2px rgba(23, 25, 35, 0.04),
+        0 8px 24px -12px rgba(23, 25, 35, 0.12);
+    --shadow-l2: 0 0 0 1px rgba(23, 25, 35, 0.05),
+        0 2px 4px rgba(23, 25, 35, 0.05),
+        0 16px 32px -16px rgba(23, 25, 35, 0.16);
+
+    /* Reading */
+    --article-font-size: 1.7rem;
+    --article-line-height: 1.8;
+
+    &[data-scheme="dark"] {
+        /* A designed dark scheme, not inverted grey */
+        --body-background: #10111a;
+        --card-background: #181a26;
+        --card-background-selected: rgba(255, 255, 255, 0.08);
+        --card-text-color-main: #e8e9f1;
+        --card-text-color-secondary: #b4b8c7;
+        --card-text-color-tertiary: #868b9f;
+        --card-separator-color: rgba(255, 255, 255, 0.08);
+        --accent-color: #45c5b6;
+        --accent-color-darker: #6ad4c8;
+        --accent-color-text: #08211e;
+        --body-text-color: #b4b8c7;
+        --blockquote-background-color: #1c1f2d;
+        --shadow-l1: 0 0 0 1px rgba(255, 255, 255, 0.06),
+            0 1px 2px rgba(0, 0, 0, 0.4),
+            0 8px 24px -12px rgba(0, 0, 0, 0.6);
+        --shadow-l2: 0 0 0 1px rgba(255, 255, 255, 0.06),
+            0 2px 4px rgba(0, 0, 0, 0.4),
+            0 16px 32px -16px rgba(0, 0, 0, 0.7);
+    }
+}
+
+/* Native cross-document page transitions (progressive: browsers
+   without support simply navigate) */
+@view-transition {
+    navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    @view-transition {
+        navigation: none;
+    }
+}
+
+/* Typography niceties */
+.article-title,
+.article-content h1,
+.article-content h2,
+.article-content h3 {
+    text-wrap: balance;
+}
+
+.article-title {
+    letter-spacing: -0.02em;
+}
+
+.article-content p {
+    text-wrap: pretty;
+}
+
+/* Quiet chips: one tinted style for categories and tags.
+   Category links carry per-term inline colors from the theme,
+   hence the !important. */
+.article-category a,
+.article-tags a {
+    background-color: color-mix(in oklab, var(--accent-color) 12%, var(--card-background)) !important;
+    color: var(--accent-color) !important;
+    font-size: 1.3rem;
+    font-weight: 500;
+    padding: 4px 14px;
+}
+
+.article-category a:hover,
+.article-tags a:hover {
+    background-color: color-mix(in oklab, var(--accent-color) 22%, var(--card-background)) !important;
+    color: var(--accent-color-darker) !important;
+}
