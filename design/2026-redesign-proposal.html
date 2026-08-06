@@ -1,0 +1,1272 @@
+<title>johnnyli.cc — 2026 Redesign Proposal</title>
+
+<style>
+  /* ============================================================
+     TOKENS — palette derived from viridis, the default colormap
+     in matplotlib. Neutrals carry a violet-blue bias so they
+     read as chosen rather than inherited.
+     ============================================================ */
+  :root {
+    color-scheme: light dark;
+
+    --ground:        #F3F3F6;
+    --ground-sunk:   #EAEAEF;
+    --surface:       #FBFBFD;
+    --ink:           #181A24;
+    --ink-2:         #3D414F;
+    --muted:         #676B7D;
+    --rule:          #D9DAE2;
+    --rule-soft:     #E6E7ED;
+
+    --accent:        #137A73;   /* viridis teal, darkened to pass on paper */
+    --accent-quiet:  #E1EFED;
+    --deep:          #46196B;   /* viridis violet — data marks only */
+    --signal:        #C79A05;   /* viridis yellow, darkened for light ground */
+    --signal-mark:   #F2D024;
+
+    --plot-track:    #E2E3EA;
+
+    --shadow: 0 1px 2px rgba(24, 26, 36, .04), 0 12px 32px -18px rgba(24, 26, 36, .22);
+
+    /* Type roles. No webfonts: nothing to download, nothing to
+       shift, nothing to fall back from. */
+    --display: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display",
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --body:    "Iowan Old Style", "Charter", "Bitstream Charter", "Source Serif 4",
+               "Palatino Linotype", Palatino, Georgia, serif;
+    --mono:    ui-monospace, "SF Mono", SFMono-Regular, Menlo, "Cascadia Code",
+               "JetBrains Mono", "DejaVu Sans Mono", monospace;
+
+    --step--1: .8125rem;
+    --step-0:  1rem;
+    --step-1:  1.1875rem;
+    --step-2:  1.4375rem;
+    --step-3:  1.8125rem;
+    --step-4:  2.375rem;
+    --step-5:  clamp(2.5rem, 1.6rem + 3.4vw, 3.75rem);
+
+    --u: 8px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground:      #0F1017;
+      --ground-sunk: #0A0B10;
+      --surface:     #171924;
+      --ink:         #E8E9F1;
+      --ink-2:       #C0C3D1;
+      --muted:       #8D91A4;
+      --rule:        #2A2D3C;
+      --rule-soft:   #22242F;
+
+      --accent:      #43C2B4;
+      --accent-quiet:#13312F;
+      --deep:        #8A5CC0;
+      --signal:      #F2D024;
+      --signal-mark: #FDE725;
+
+      --plot-track:  #24263210;
+      --plot-track:  #242632;
+
+      --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 16px 40px -20px rgba(0, 0, 0, .8);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0F1017;
+    --ground-sunk: #0A0B10;
+    --surface:     #171924;
+    --ink:         #E8E9F1;
+    --ink-2:       #C0C3D1;
+    --muted:       #8D91A4;
+    --rule:        #2A2D3C;
+    --rule-soft:   #22242F;
+    --accent:      #43C2B4;
+    --accent-quiet:#13312F;
+    --deep:        #8A5CC0;
+    --signal:      #F2D024;
+    --signal-mark: #FDE725;
+    --plot-track:  #242632;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 16px 40px -20px rgba(0, 0, 0, .8);
+  }
+
+  :root[data-theme="light"] {
+    --ground:      #F3F3F6;
+    --ground-sunk: #EAEAEF;
+    --surface:     #FBFBFD;
+    --ink:         #181A24;
+    --ink-2:       #3D414F;
+    --muted:       #676B7D;
+    --rule:        #D9DAE2;
+    --rule-soft:   #E6E7ED;
+    --accent:      #137A73;
+    --accent-quiet:#E1EFED;
+    --deep:        #46196B;
+    --signal:      #C79A05;
+    --signal-mark: #F2D024;
+    --plot-track:  #E2E3EA;
+    --shadow: 0 1px 2px rgba(24, 26, 36, .04), 0 12px 32px -18px rgba(24, 26, 36, .22);
+  }
+
+  /* ============================================================
+     PAGE SHELL
+     ============================================================ */
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: var(--step-0);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: calc(var(--u) * 7) calc(var(--u) * 3) calc(var(--u) * 12);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--u) * 11);
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: .6875rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: var(--u);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--accent);
+    flex: none;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--display);
+    color: var(--ink);
+    text-wrap: balance;
+    line-height: 1.1;
+    letter-spacing: -.022em;
+    font-weight: 700;
+  }
+
+  /* --- masthead --- */
+  .masthead { display: flex; flex-direction: column; gap: calc(var(--u) * 3); }
+  .masthead h1 {
+    font-size: var(--step-5);
+    letter-spacing: -.035em;
+    font-weight: 800;
+    max-width: 22ch;
+  }
+  .masthead h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .thesis {
+    font-size: var(--step-1);
+    line-height: 1.55;
+    max-width: 62ch;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--u) * 4);
+    border-top: 1px solid var(--rule);
+    padding-top: calc(var(--u) * 2);
+    font-family: var(--mono);
+    font-size: var(--step--1);
+  }
+  .facts div { display: flex; flex-direction: column; gap: 2px; }
+  .facts dt, .facts .k {
+    font-size: .625rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .facts .v { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  /* --- section headers --- */
+  .sec { display: flex; flex-direction: column; gap: calc(var(--u) * 4); }
+  .sec-head { display: flex; flex-direction: column; gap: calc(var(--u) * 1.5); }
+  .sec-head h2 { font-size: var(--step-4); }
+  .sec-head p {
+    max-width: 68ch;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
+  /* --- principles --- */
+  /* 1px gaps + a 1px outline per cell: rules appear only around real
+     cells, so a short final row never leaves a filled gap block. */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1px;
+  }
+  .principles article {
+    background: var(--ground);
+    outline: 1px solid var(--rule);
+    padding: calc(var(--u) * 3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--u);
+  }
+  .principles h3 { font-size: var(--step-1); }
+  .principles p { font-size: var(--step--1); color: var(--muted); line-height: 1.6; }
+
+  /* ============================================================
+     MOCKUP CHROME
+     ============================================================ */
+  .mock { display: flex; flex-direction: column; gap: var(--u); }
+  .mock-label {
+    font-family: var(--mono);
+    font-size: .625rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--u);
+  }
+  .mock-frame {
+    container-type: inline-size;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* --- the proposed screen: rail + feed --- */
+  .mk {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    font-family: var(--display);
+  }
+  @container (max-width: 720px) {
+    .mk { grid-template-columns: minmax(0, 1fr); }
+    .mk-rail { border-right: 0 !important; border-bottom: 1px solid var(--rule); }
+    .mk-rail-sticky { flex-direction: row !important; align-items: center; flex-wrap: wrap; }
+    .mk-nav { flex-direction: row !important; flex-wrap: wrap; }
+  }
+
+  .mk-rail {
+    border-right: 1px solid var(--rule);
+    padding: calc(var(--u) * 3);
+    background: var(--ground-sunk);
+  }
+  .mk-rail-sticky {
+    position: sticky;
+    top: calc(var(--u) * 3);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--u) * 3);
+  }
+  .mk-id { display: flex; align-items: center; gap: calc(var(--u) * 1.5); }
+  .mk-avatar {
+    width: 40px; height: 40px;
+    flex: none;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--mono);
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--surface);
+    background: var(--ink);
+    box-shadow: 0 0 0 1px var(--rule), 0 0 0 3px var(--surface), 0 0 0 4px var(--accent);
+  }
+  .mk-name { font-size: .875rem; font-weight: 700; letter-spacing: -.01em; }
+  .mk-role {
+    font-family: var(--mono);
+    font-size: .625rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mk-nav { display: flex; flex-direction: column; gap: 2px; }
+  .mk-nav a {
+    font-size: .8125rem;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 5px var(--u);
+    margin-left: calc(var(--u) * -1);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    gap: var(--u);
+    transition: color .16s ease, background-color .16s ease;
+  }
+  .mk-nav a::before {
+    content: "";
+    width: 3px; height: 12px;
+    background: transparent;
+    flex: none;
+  }
+  .mk-nav a:hover { color: var(--ink); background: var(--accent-quiet); }
+  .mk-nav a[aria-current] { color: var(--ink); font-weight: 600; }
+  .mk-nav a[aria-current]::before { background: var(--accent); }
+
+  .mk-cmd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--u);
+    font-size: .75rem;
+    color: var(--muted);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 6px var(--u);
+    background: var(--surface);
+    cursor: default;
+  }
+  .mk-kbd {
+    font-family: var(--mono);
+    font-size: .625rem;
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    padding: 1px 4px;
+    color: var(--ink-2);
+  }
+  .mk-rail-foot {
+    font-family: var(--mono);
+    font-size: .625rem;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+    padding-top: var(--u);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .mk-feed { padding: calc(var(--u) * 4); display: flex; flex-direction: column; gap: calc(var(--u) * 5); }
+
+  /* --- lead entry --- */
+  .mk-lead { display: flex; flex-direction: column; gap: calc(var(--u) * 2); }
+  .mk-cover {
+    position: relative;
+    border: 1px solid var(--rule);
+    background: var(--ground-sunk);
+    aspect-ratio: 21 / 9;
+    overflow: hidden;
+  }
+  .mk-cover canvas { display: block; width: 100%; height: 100%; }
+  .mk-cover figcaption {
+    position: absolute;
+    left: 0; bottom: 0;
+    font-family: var(--mono);
+    font-size: .5625rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--surface);
+    background: color-mix(in oklab, var(--deep) 82%, black);
+    padding: 3px 6px;
+  }
+  .mk-lead h3 {
+    font-size: clamp(1.5rem, 1rem + 1.9cqi + .4vw, 2.125rem);
+    letter-spacing: -.03em;
+    max-width: 26ch;
+  }
+  .mk-lead .dek {
+    font-family: var(--body);
+    font-size: .9375rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 64ch;
+    text-wrap: pretty;
+  }
+  .mk-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--u) calc(var(--u) * 1.5);
+    font-family: var(--mono);
+    font-size: .6875rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .mk-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--rule); }
+  .mk-new {
+    color: color-mix(in oklab, var(--signal) 88%, var(--ink));
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .625rem;
+  }
+  .mk-new::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--signal-mark);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--signal-mark) 22%, transparent);
+  }
+  .chip {
+    font-family: var(--mono);
+    font-size: .625rem;
+    letter-spacing: .04em;
+    color: var(--accent);
+    border: 1px solid color-mix(in oklab, var(--accent) 32%, transparent);
+    border-radius: 2px;
+    padding: 1px 5px;
+    text-decoration: none;
+  }
+  .chip:hover { background: var(--accent-quiet); }
+
+  /* --- ruled index --- */
+  .mk-index-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--u);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 5px;
+  }
+  .mk-index-head span {
+    font-family: var(--mono);
+    font-size: .625rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mk-index-head span:first-child { color: var(--ink); }
+  .mk-index { list-style: none; display: flex; flex-direction: column; }
+  .mk-index li { border-bottom: 1px solid var(--rule-soft); }
+  .mk-row {
+    display: grid;
+    grid-template-columns: 84px minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: calc(var(--u) * 2);
+    padding: calc(var(--u) * 1.5) 0 calc(var(--u) * 1.5) var(--u);
+    border-left: 2px solid transparent;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .16s ease, padding-left .16s ease, background-color .16s ease;
+  }
+  .mk-row:hover, .mk-row:focus-visible {
+    border-left-color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 5%, transparent);
+    padding-left: calc(var(--u) * 1.5);
+    outline: none;
+  }
+  .mk-row:hover .mk-title { color: var(--accent); }
+  .mk-date {
+    font-family: var(--mono);
+    font-size: .6875rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .mk-title {
+    font-size: .9375rem;
+    font-weight: 600;
+    letter-spacing: -.012em;
+    line-height: 1.35;
+    transition: color .16s ease;
+  }
+  .mk-sub {
+    font-family: var(--mono);
+    font-size: .625rem;
+    color: var(--muted);
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--u);
+  }
+  .mk-read {
+    font-family: var(--mono);
+    font-size: .6875rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  @container (max-width: 560px) {
+    .mk-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .mk-read { display: none; }
+  }
+
+  /* --- topic bar chart (replaces the tag cloud) --- */
+  .plot { display: flex; flex-direction: column; gap: calc(var(--u) * 1.5); }
+  .plot-head { display: flex; flex-direction: column; gap: 2px; }
+  .plot-title { font-size: .875rem; font-weight: 700; letter-spacing: -.01em; }
+  .plot-note { font-family: var(--mono); font-size: .625rem; color: var(--muted); letter-spacing: .04em; }
+  .bars { display: flex; flex-direction: column; gap: 5px; max-width: 560px; }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 116px minmax(0, 1fr) 26px;
+    align-items: center;
+    gap: var(--u);
+    background: none;
+    border: 0;
+    padding: 2px 0;
+    font: inherit;
+    text-align: left;
+    color: inherit;
+    cursor: default;
+    position: relative;
+  }
+  .bar-name {
+    font-family: var(--mono);
+    font-size: .6875rem;
+    color: var(--ink-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bar-track { display: block; height: 10px; background: var(--plot-track); border-radius: 0 2px 2px 0; }
+  .bar-fill {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+    transform-origin: left center;
+    animation: grow .7s cubic-bezier(.22,.8,.3,1) both;
+  }
+  .bar-row:hover .bar-fill { background: color-mix(in oklab, var(--accent) 84%, var(--ink)); }
+  .bar-val {
+    font-family: var(--mono);
+    font-size: .6875rem;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .bar-row .tip {
+    position: absolute;
+    left: 124px;
+    bottom: 100%;
+    margin-bottom: 4px;
+    font-family: var(--mono);
+    font-size: .625rem;
+    white-space: nowrap;
+    background: var(--ink);
+    color: var(--surface);
+    padding: 3px 6px;
+    border-radius: 2px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .14s ease;
+    z-index: 2;
+  }
+  .bar-row:hover .tip, .bar-row:focus-visible .tip { opacity: 1; }
+  @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  /* ============================================================
+     ARTICLE MOCKUP
+     ============================================================ */
+  .mk-article { display: grid; grid-template-columns: minmax(0, 1fr) 180px; }
+  @container (max-width: 720px) {
+    .mk-article { grid-template-columns: minmax(0, 1fr); }
+    .mk-toc { display: none; }
+  }
+  .mk-progress { height: 2px; background: var(--rule-soft); grid-column: 1 / -1; }
+  .mk-progress span { display: block; height: 100%; width: 38%; background: var(--signal-mark); }
+  .mk-art-body { padding: calc(var(--u) * 4); display: flex; flex-direction: column; gap: calc(var(--u) * 2); }
+  .mk-art-body h3 {
+    font-size: clamp(1.5rem, 1rem + 2cqi, 2rem);
+    letter-spacing: -.032em;
+    max-width: 28ch;
+  }
+  .mk-art-body .prose {
+    font-family: var(--body);
+    font-size: 1.0625rem;
+    line-height: 1.72;
+    max-width: 65ch;
+    color: var(--ink);
+    hanging-punctuation: first;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1em;
+    text-wrap: pretty;
+  }
+  .mk-art-body .prose > p:first-of-type::first-line {
+    font-variant-caps: all-small-caps;
+    letter-spacing: .06em;
+  }
+  .mk-art-body .prose a { color: var(--accent); text-underline-offset: 3px; }
+  .mk-note {
+    font-family: var(--mono);
+    font-size: .6875rem;
+    line-height: 1.6;
+    color: var(--muted);
+    border-left: 2px solid var(--deep);
+    padding-left: calc(var(--u) * 1.5);
+    max-width: 46ch;
+  }
+  .mk-code {
+    font-family: var(--mono);
+    font-size: .75rem;
+    line-height: 1.7;
+    background: var(--ground-sunk);
+    border: 1px solid var(--rule);
+    border-left: 2px solid var(--accent);
+    padding: calc(var(--u) * 1.5) calc(var(--u) * 2);
+    overflow-x: auto;
+    max-width: 100%;
+    color: var(--ink-2);
+  }
+  .mk-code .c { color: var(--muted); }
+  .mk-code .k { color: var(--deep); font-weight: 600; }
+  .mk-code .s { color: var(--accent); }
+  .mk-toc {
+    border-left: 1px solid var(--rule);
+    padding: calc(var(--u) * 4) calc(var(--u) * 2);
+    font-family: var(--mono);
+    font-size: .6875rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--u);
+    align-self: start;
+    position: sticky;
+    top: 0;
+  }
+  .mk-toc .lbl { font-size: .5625rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .mk-toc ol { list-style: none; display: flex; flex-direction: column; gap: 6px; counter-reset: t; }
+  .mk-toc a { color: var(--muted); text-decoration: none; display: block; border-left: 2px solid var(--rule); padding-left: var(--u); }
+  .mk-toc a:hover { color: var(--ink); }
+  .mk-toc a[aria-current] { color: var(--ink); border-left-color: var(--signal-mark); }
+
+  /* ============================================================
+     SPEC BLOCKS
+     ============================================================ */
+  .spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: calc(var(--u) * 4); }
+  .spec-card { display: flex; flex-direction: column; gap: calc(var(--u) * 2); }
+  .spec-card h3 { font-size: var(--step-1); }
+
+  .swatches { display: flex; flex-direction: column; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .sw {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: calc(var(--u) * 1.5);
+    background: var(--ground);
+    padding: 6px var(--u);
+    font-family: var(--mono);
+    font-size: .6875rem;
+  }
+  .sw i { display: block; height: 22px; border: 1px solid var(--rule); }
+  .sw b { font-weight: 400; color: var(--ink); }
+  .sw span { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .typespec { display: flex; flex-direction: column; gap: calc(var(--u) * 2); }
+  .typerow { border-top: 1px solid var(--rule); padding-top: var(--u); display: flex; flex-direction: column; gap: 4px; }
+  .typerow .lbl { font-family: var(--mono); font-size: .5625rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .t-display { font-family: var(--display); font-size: var(--step-3); font-weight: 800; letter-spacing: -.035em; }
+  .t-body { font-family: var(--body); font-size: 1.0625rem; line-height: 1.6; }
+  .t-mono { font-family: var(--mono); font-size: .8125rem; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+
+  /* --- decisions table --- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--rule); }
+  table { border-collapse: collapse; width: 100%; min-width: 680px; }
+  caption { text-align: left; font-family: var(--mono); font-size: .625rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: var(--u) calc(var(--u) * 2); border-bottom: 1px solid var(--rule); background: var(--ground-sunk); }
+  th, td { text-align: left; vertical-align: top; padding: calc(var(--u) * 1.5) calc(var(--u) * 2); border-bottom: 1px solid var(--rule-soft); font-size: .875rem; }
+  th { font-family: var(--mono); font-size: .625rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td:first-child { font-family: var(--display); font-weight: 600; letter-spacing: -.01em; width: 22%; }
+  td code, p code, li code {
+    font-family: var(--mono);
+    font-size: .8em;
+    background: var(--ground-sunk);
+    border: 1px solid var(--rule-soft);
+    border-radius: 2px;
+    padding: 1px 4px;
+    white-space: nowrap;
+  }
+
+  /* --- cut list --- */
+  .cuts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; }
+  .cut { background: var(--ground); outline: 1px solid var(--rule); padding: calc(var(--u) * 2); display: flex; flex-direction: column; gap: 5px; }
+  .cut .what { font-family: var(--mono); font-size: .75rem; color: var(--ink); }
+  .cut .why { font-size: .8125rem; color: var(--muted); line-height: 1.55; }
+  .cut .why b { color: var(--accent); font-weight: 600; }
+
+  /* --- build order (a real sequence, so it is numbered) --- */
+  .steps { list-style: none; counter-reset: s; display: flex; flex-direction: column; }
+  .steps li {
+    counter-increment: s;
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: calc(var(--u) * 2);
+    padding: calc(var(--u) * 2) 0;
+    border-top: 1px solid var(--rule);
+  }
+  .steps li::before {
+    content: counter(s, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: .6875rem;
+    color: var(--accent);
+    padding-top: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+  .steps h3 { font-size: var(--step-0); margin-bottom: 3px; }
+  .steps p { font-size: .875rem; color: var(--muted); line-height: 1.6; max-width: 70ch; }
+
+  footer.close {
+    border-top: 1px solid var(--rule);
+    padding-top: calc(var(--u) * 2);
+    font-family: var(--mono);
+    font-size: .6875rem;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--u) calc(var(--u) * 3);
+    justify-content: space-between;
+  }
+
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+
+<div class="wrap">
+
+  <!-- ========================= MASTHEAD ========================= -->
+  <header class="masthead">
+    <p class="eyebrow">Design proposal · johnnyli.cc · Aug 2026</p>
+    <h1>A blog that looks like the work it&rsquo;s <em>about</em>.</h1>
+    <p class="thesis">
+      Your posts are notebooks: parsers, classifiers, pipelines, plots. So the site should read like an
+      instrument, not a card grid. This proposal keeps Hugo and keeps Stack&rsquo;s bones, and replaces
+      the surface with a quiet, dense, typographically-driven index built on 2026 platform CSS &mdash;
+      no webfonts, no jQuery, no framework.
+    </p>
+    <dl class="facts">
+      <div><dt class="k">Direction</dt><dd class="v">Instrument</dd></div>
+      <div><dt class="k">Palette source</dt><dd class="v">viridis</dd></div>
+      <div><dt class="k">Font payload</dt><dd class="v">0 KB</dd></div>
+      <div><dt class="k">JS shipped</dt><dd class="v">~2 KB</dd></div>
+      <div><dt class="k">Posts in mockup</dt><dd class="v">12 &mdash; real</dd></div>
+    </dl>
+  </header>
+
+  <!-- ========================= PRINCIPLES ========================= -->
+  <section class="sec">
+    <div class="sec-head">
+      <p class="eyebrow">The three calls everything else follows from</p>
+      <h2>Direction</h2>
+    </div>
+    <div class="principles">
+      <article>
+        <h3>Borrow the instrument</h3>
+        <p>The palette is sampled from viridis &mdash; matplotlib&rsquo;s default colormap, and something you
+          have literally shipped in your own figures. Teal carries interaction, violet carries structure,
+          and the yellow end is spent in exactly one place: what&rsquo;s new.</p>
+      </article>
+      <article>
+        <h3>Rules, not cards</h3>
+        <p>Twelve posts on a card grid is twelve boxes of chrome around eight words of information. Hairline
+          rules, a fixed date column and mono metadata let the whole archive be scanned in one screen
+          without a single shadow.</p>
+      </article>
+      <article>
+        <h3>Ship no fonts</h3>
+        <p>Three system stacks &mdash; a grotesque for headlines, a text serif for reading, mono for anything
+          measured. Nothing to download, no layout shift, and CJK falls back to the reader&rsquo;s own
+          system face instead of a 4 MB subset.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ========================= HOME MOCKUP ========================= -->
+  <section class="sec">
+    <div class="sec-head">
+      <p class="eyebrow">Mockup 01</p>
+      <h2>Home &mdash; the index</h2>
+      <p>One lead entry earns the image. Everything else becomes a ruled, dated, scannable index &mdash;
+        and the tag cloud is replaced by a ranked bar list, because size-encoded text is the worst way
+        to compare counts. Drag this page narrower: the mockup responds to <em>its own</em> width via
+        container queries, not the viewport.</p>
+    </div>
+
+    <div class="mock">
+      <div class="mock-label"><span>index.html</span><span>1240 &times; 900 · light &amp; dark</span></div>
+      <div class="mock-frame">
+        <div class="mk">
+
+          <aside class="mk-rail">
+            <div class="mk-rail-sticky">
+              <div class="mk-id">
+                <div class="mk-avatar" aria-hidden="true">JL</div>
+                <div>
+                  <div class="mk-name">Johnny Li</div>
+                  <div class="mk-role">Data Science · UX</div>
+                </div>
+              </div>
+
+              <nav class="mk-nav" aria-label="Site (mockup)">
+                <a href="#home-mockup" aria-current="page">Index</a>
+                <a href="#home-mockup">Topics</a>
+                <a href="#home-mockup">Archive</a>
+                <a href="#home-mockup">Today I Learned</a>
+                <a href="#home-mockup">About</a>
+              </nav>
+
+              <div class="mk-cmd"><span>Search</span><span class="mk-kbd">&#8984;K</span></div>
+
+              <div class="mk-rail-foot">
+                <span>12 posts · 2019&ndash;2021</span>
+                <span>CC BY-NC-SA 4.0</span>
+                <span>RSS · JSON · llms.txt</span>
+              </div>
+            </div>
+          </aside>
+
+          <main class="mk-feed" id="home-mockup">
+
+            <article class="mk-lead">
+              <figure class="mk-cover">
+                <canvas id="coverPlot" width="840" height="360" aria-label="Decorative density plot standing in for the post cover image"></canvas>
+                <figcaption>cover slot · 21:9</figcaption>
+              </figure>
+              <p class="mk-meta"><span class="mk-new">Latest</span></p>
+              <h3>Disaster Response Web App</h3>
+              <p class="dek">A web app that classifies incoming messages into aid categories during a disaster
+                event &mdash; NLP features into a random-forest multi-output classifier, served with Flask.</p>
+              <p class="mk-meta">
+                <span>May 02, 2021</span><span class="dot"></span><span>14 min</span><span class="dot"></span>
+                <a class="chip" href="#home-mockup">Machine Learning</a>
+                <a class="chip" href="#home-mockup">Python</a>
+              </p>
+            </article>
+
+            <section>
+              <div class="mk-index-head"><span>Index</span><span>11 more</span></div>
+              <ol class="mk-index">
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2021 · Mar 19</span>
+                  <span><span class="mk-title">Pyforest &mdash; Automate Package Import for Your Data Science Project</span>
+                    <span class="mk-sub"><span>Blog</span><span>Python</span></span></span>
+                  <span class="mk-read">6 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2021 · Mar 14</span>
+                  <span><span class="mk-title">Price Strategy Based on Features Reputation</span>
+                    <span class="mk-sub"><span>Data Analysis</span><span>Machine Learning</span></span></span>
+                  <span class="mk-read">11 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2021 · Mar 12</span>
+                  <span><span class="mk-title">Identify Customer Segments</span>
+                    <span class="mk-sub"><span>Data Analysis</span><span>Machine Learning</span></span></span>
+                  <span class="mk-read">13 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2021 · Mar 03</span>
+                  <span><span class="mk-title">Switch from Hexo to Hugo</span>
+                    <span class="mk-sub"><span>Blog</span></span></span>
+                  <span class="mk-read">5 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2019 · May 30</span>
+                  <span><span class="mk-title">Donors Identification for CharityML</span>
+                    <span class="mk-sub"><span>Data Analysis</span><span>Python</span></span></span>
+                  <span class="mk-read">12 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2019 · May 11</span>
+                  <span><span class="mk-title">Automate Image Processing for My Blog</span>
+                    <span class="mk-sub"><span>Blog</span><span>Python</span></span></span>
+                  <span class="mk-read">7 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2019 · May 09</span>
+                  <span><span class="mk-title">Spam Detection and Analysis &mdash; Part 2, Analysis with R</span>
+                    <span class="mk-sub"><span>Data</span><span>R</span></span></span>
+                  <span class="mk-read">10 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2019 · Apr 19</span>
+                  <span><span class="mk-title">Spam Detection and Analysis &mdash; Part 1, Parsing</span>
+                    <span class="mk-sub"><span>Data</span><span>Python</span></span></span>
+                  <span class="mk-read">9 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2019 · Apr 06</span>
+                  <span><span class="mk-title">Solve the Problem in an April Fool&rsquo;s Joke</span>
+                    <span class="mk-sub"><span>Blog</span><span>Coding Challenge</span></span></span>
+                  <span class="mk-read">8 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2019 · Mar 20</span>
+                  <span><span class="mk-title">Data Analysis with Docker</span>
+                    <span class="mk-sub"><span>Data</span><span>Dev Env</span></span></span>
+                  <span class="mk-read">6 min</span></a></li>
+                <li><a class="mk-row" href="#home-mockup">
+                  <span class="mk-date">2019 · Feb 12</span>
+                  <span><span class="mk-title">Craigslist Vacation House Data Crawling</span>
+                    <span class="mk-sub"><span>Python</span><span>Tutorial</span></span></span>
+                  <span class="mk-read">5 min</span></a></li>
+              </ol>
+            </section>
+
+            <section class="plot">
+              <div class="plot-head">
+                <h4 class="plot-title">What this blog is actually about</h4>
+                <p class="plot-note">Posts per category · n = 12 · a post can sit in two</p>
+              </div>
+              <div class="bars" id="bars"></div>
+            </section>
+
+          </main>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= ARTICLE MOCKUP ========================= -->
+  <section class="sec">
+    <div class="sec-head">
+      <p class="eyebrow">Mockup 02</p>
+      <h2>Article &mdash; the reading surface</h2>
+      <p>The one place the design gets out of the way completely: a 65-character serif measure, a margin
+        rail for the table of contents, and code set on the mono face with a single teal edge instead of a
+        boxed-in highlight theme. The progress bar at the top is CSS
+        <code>animation-timeline: scroll()</code> &mdash; no scroll listener.</p>
+    </div>
+
+    <div class="mock">
+      <div class="mock-label"><span>/p/data-analysis-with-docker/</span><span>reading view</span></div>
+      <div class="mock-frame">
+        <div class="mk-article">
+          <div class="mk-progress"><span></span></div>
+
+          <div class="mk-art-body">
+            <p class="mk-meta">
+              <span>Mar 20, 2019</span><span class="dot"></span><span>6 min</span><span class="dot"></span>
+              <a class="chip" href="#article-mockup">Data</a><a class="chip" href="#article-mockup">Dev Env</a>
+            </p>
+            <h3 id="article-mockup">Data Analysis with Docker</h3>
+            <div class="prose">
+              <p>Data analysis is not all about reports or visualization. Correctness and reproducibility
+                matter just as much, and a consistent environment is what makes reproducibility possible.
+                There are several ways to get one &mdash; I found that <a href="#article-mockup">Docker</a>
+                lets me repeat an experiment in the same environment at any time, and scale it out when
+                the data grows.</p>
+              <p>The image is based on Ubuntu and ships the usual tools: Jupyter Notebook with both a
+                Python 3 and an R kernel, so R Magic can run both languages inside one
+                <code>.ipynb</code>.</p>
+            </div>
+            <pre class="mk-code"><code><span class="c"># build once, mount your notebooks, work anywhere</span>
+<span class="k">docker</span> build -t <span class="s">jl/notebook</span> .
+<span class="k">docker</span> run -p <span class="s">8888:8888</span> -v <span class="s">"$PWD:/home/jovyan/work"</span> jl/notebook</code></pre>
+            <p class="mk-note">Margin note &mdash; where footnotes, the license line and the &ldquo;this post is
+              five years old&rdquo; staleness notice live. Anchored with CSS anchor positioning, so it sits
+              beside its reference on wide screens and collapses inline on narrow ones.</p>
+          </div>
+
+          <nav class="mk-toc" aria-label="On this page (mockup)">
+            <span class="lbl">On this page</span>
+            <ol>
+              <li><a href="#article-mockup" aria-current="true">Why a container</a></li>
+              <li><a href="#article-mockup">What&rsquo;s in the image</a></li>
+              <li><a href="#article-mockup">How to use the Dockerfile</a></li>
+              <li><a href="#article-mockup">R Magic &amp; nbextensions</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= SYSTEM ========================= -->
+  <section class="sec">
+    <div class="sec-head">
+      <p class="eyebrow">The system</p>
+      <h2>Tokens</h2>
+      <p>Everything above is drawn from these values. Dark mode is a second set of steps chosen against a
+        violet-black ground &mdash; not an inversion of the light one.</p>
+    </div>
+    <div class="spec">
+      <div class="spec-card">
+        <h3>Color</h3>
+        <div class="swatches">
+          <div class="sw"><i style="background:#137A73"></i><b>accent · teal</b><span>#137A73 / #43C2B4</span></div>
+          <div class="sw"><i style="background:#46196B"></i><b>structure · violet</b><span>#46196B / #8A5CC0</span></div>
+          <div class="sw"><i style="background:#F2D024"></i><b>signal · yellow</b><span>#F2D024 / #FDE725</span></div>
+          <div class="sw"><i style="background:#181A24"></i><b>ink</b><span>#181A24 / #E8E9F1</span></div>
+          <div class="sw"><i style="background:#676B7D"></i><b>muted</b><span>#676B7D / #8D91A4</span></div>
+          <div class="sw"><i style="background:#F3F3F6"></i><b>ground</b><span>#F3F3F6 / #0F1017</span></div>
+        </div>
+        <p class="plot-note">Neutrals are pulled toward violet-blue so they sit under the accent instead of
+          fighting it. Yellow appears twice on the whole site: the &ldquo;latest&rdquo; dot and the reading bar.</p>
+      </div>
+
+      <div class="spec-card">
+        <h3>Type</h3>
+        <div class="typespec">
+          <div class="typerow">
+            <span class="lbl">Display · system grotesque · 700/800 · &minus;0.035em</span>
+            <span class="t-display">Spam Detection and Analysis</span>
+          </div>
+          <div class="typerow">
+            <span class="lbl">Body · Iowan Old Style → Charter → Palatino → Georgia</span>
+            <span class="t-body">A consistent environment is what makes reproducibility possible &mdash; set at 17px on a 65-character measure.</span>
+          </div>
+          <div class="typerow">
+            <span class="lbl">Utility · system mono · tabular · +0.02em</span>
+            <span class="t-mono">2021 · Mar 12 &nbsp; 13 min &nbsp; n = 12</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= WHY THIS IS 2026 ========================= -->
+  <section class="sec">
+    <div class="sec-head">
+      <p class="eyebrow">Trend, translated into a decision</p>
+      <h2>What makes it 2026 and not 2021</h2>
+      <p>&ldquo;On trend&rdquo; is worth nothing as a mood board, so here is each one as a mechanism you can
+        actually merge.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <caption>2026 direction → what it means here → how it ships</caption>
+        <thead>
+          <tr><th scope="col">Trend</th><th scope="col">The decision on your site</th><th scope="col">Mechanism</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Quiet, content-first UI</td>
+            <td>Cards, shadows and hover-lifts come off the index. Hierarchy is carried by type size, a fixed date column and hairline rules.</td>
+            <td>Override Stack&rsquo;s article-list partial; delete the card shadow tokens</td>
+          </tr>
+          <tr>
+            <td>Perceptual color</td>
+            <td>One accent, interpolated and mixed perceptually so hover and tint states stay in-family in both themes.</td>
+            <td><code>oklch()</code> tokens, <code>color-mix(in oklab, …)</code></td>
+          </tr>
+          <tr>
+            <td>Component-level responsive</td>
+            <td>The index rows, cover figure and TOC rail respond to the space they&rsquo;re in, so the same partial works in the feed, in a related-posts strip and on a phone.</td>
+            <td><code>container-type: inline-size</code>, <code>@container</code>, <code>cqi</code> units</td>
+          </tr>
+          <tr>
+            <td>Native page transitions</td>
+            <td>Index → post animates the title into place instead of a white flash. Progressive: browsers without it just navigate.</td>
+            <td><code>@view-transition { navigation: auto }</code>, <code>view-transition-name</code></td>
+          </tr>
+          <tr>
+            <td>Scroll effects without JS</td>
+            <td>Reading progress and the TOC&rsquo;s active section are CSS-driven, so there is no scroll handler on the main thread.</td>
+            <td><code>animation-timeline: scroll()</code>, <code>view()</code></td>
+          </tr>
+          <tr>
+            <td>Command-palette navigation</td>
+            <td>Search becomes ⌘K over titles, tags and categories &mdash; a dialog, not a separate <code>/search</code> page.</td>
+            <td><code>&lt;dialog&gt;</code> + <code>popover</code>, Hugo-generated JSON index, ~2 KB of JS</td>
+          </tr>
+          <tr>
+            <td>Typography as the payload</td>
+            <td>Zero font requests. Real hierarchy from three system stacks, plus proper text-wrapping and hanging punctuation.</td>
+            <td><code>text-wrap: balance</code> / <code>pretty</code>, <code>hanging-punctuation</code>, <code>font-variant-numeric</code></td>
+          </tr>
+          <tr>
+            <td>Designed dark mode</td>
+            <td>Both themes are token sets; the toggle keeps working and OS preference is the default. Cover images get a slight dark-mode dim rather than glaring.</td>
+            <td><code>light-dark()</code>, <code>color-scheme</code>, <code>:root[data-theme]</code></td>
+          </tr>
+          <tr>
+            <td>Honest data marks</td>
+            <td>The tag cloud goes. Topics become a ranked bar list with real counts &mdash; the same charting standards you&rsquo;d apply in a notebook.</td>
+            <td>New <code>topics</code> widget partial over <code>.Site.Taxonomies</code></td>
+          </tr>
+          <tr>
+            <td>Machine readers are readers</td>
+            <td>Agents and models now quote sites the way search engines used to link them. Full-text RSS stays, plus a clean text mirror and per-post structured data.</td>
+            <td><code>llms.txt</code>, JSON feed, <code>Article</code> JSON-LD replacing the hand-rolled block</td>
+          </tr>
+          <tr>
+            <td>Aging content, marked</td>
+            <td>A 2019 post says so, quietly, above the fold. Nothing looks more dated than a stale post pretending to be current.</td>
+            <td>Date-diff in the article partial &rarr; margin note</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ========================= CUTS ========================= -->
+  <section class="sec">
+    <div class="sec-head">
+      <p class="eyebrow">Subtraction first</p>
+      <h2>What I&rsquo;d delete from the repo</h2>
+      <p>Half the redesign is removal. These are all in your tree today, loaded on every page.</p>
+    </div>
+    <div class="cuts">
+      <div class="cut">
+        <span class="what">jquery 1.11.0 + morphext</span>
+        <span class="why">Loaded from a Google CDN on <b>every page</b> to rotate three words on one page. Replace with a 15-line CSS keyframe cycle, or cut the effect.</span>
+      </div>
+      <div class="cut">
+        <span class="what">static/webfonts/fa-*</span>
+        <span class="why">Six formats of Font Awesome for <b>two</b> icons on the About page. Stack already inlines SVG icons from <code>assets/icons</code> &mdash; add two SVGs and drop the folder.</span>
+      </div>
+      <div class="cut">
+        <span class="what">scss/all.min.css + animate.css</span>
+        <span class="why">A whole second stylesheet from the old Hexo theme, cascading against Stack&rsquo;s. This is where the <b>unpredictable spacing</b> comes from.</span>
+      </div>
+      <div class="cut">
+        <span class="what">&lt;style&gt; inside shortcodes</span>
+        <span class="why"><code>about-brief.html</code> ships hardcoded <b>#FF4C60</b> and pixel margins per render. Moves into the token layer so it themes correctly in dark mode.</span>
+      </div>
+      <div class="cut">
+        <span class="what">mermaid 8.2.3 from unpkg</span>
+        <span class="why">Six years old and fetched at runtime. Render diagrams at build time, or pin a current version locally.</span>
+      </div>
+      <div class="cut">
+        <span class="what">The tag cloud widget</span>
+        <span class="why">Font-size-as-quantity is the least accurate encoding available, and with <b>12 posts</b> it&rsquo;s noise. Replaced by the ranked topic bars.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= BUILD ORDER ========================= -->
+  <section class="sec">
+    <div class="sec-head">
+      <p class="eyebrow">Sequenced so the site is never broken mid-way</p>
+      <h2>How I&rsquo;d build it</h2>
+    </div>
+    <ol class="steps">
+      <li><div><h3>Pin the theme, then stop fighting it</h3>
+        <p>The <code>hugo-theme-stack</code> submodule isn&rsquo;t checked out in this working copy, so exact partial paths need confirming against your pinned v4.0.3 tag. Everything below lives in <em>your</em> repo as overrides &mdash; the submodule stays untouched and upgradable.</p></div></li>
+      <li><div><h3>Token layer</h3>
+        <p>One <code>custom.scss</code> defining the palette, type stacks and spacing scale as custom properties for both themes. Nothing visual changes yet &mdash; but every later step reads from here instead of hardcoding.</p></div></li>
+      <li><div><h3>Delete the legacy layer</h3>
+        <p>Remove the jQuery/Morphext/Font Awesome/all.min.css block from <code>head/custom.html</code> and rewrite the About shortcodes against the tokens. This alone drops several hundred KB and three third-party requests.</p></div></li>
+      <li><div><h3>Rebuild the index</h3>
+        <p>Override the article-list partial into the lead-plus-ruled-index layout, add the topic-bars widget, retire the tag cloud.</p></div></li>
+      <li><div><h3>Rebuild the article</h3>
+        <p>Serif measure, margin rail, TOC as a sticky mono list, CSS reading progress, staleness note, code blocks restyled from the token palette.</p></div></li>
+      <li><div><h3>Motion &amp; search last</h3>
+        <p>View transitions between index and post, then the ⌘K palette over a Hugo-generated JSON index. Both are additive &mdash; if either is cut, the site still works.</p></div></li>
+      <li><div><h3>Check the numbers, not the vibes</h3>
+        <p>Lighthouse and a byte count before/after, contrast audit on both themes, and a pass with reduced motion and keyboard only.</p></div></li>
+    </ol>
+  </section>
+
+  <footer class="close">
+    <span>Proposal for johnnyli.cc · Hugo + hugo-theme-stack v4.0.3</span>
+    <span>Mockups use real posts, dates and categories from the repo. Reading times are estimates.</span>
+  </footer>
+</div>
+
+<script>
+  /* ---------- topic bars: single series, magnitude, real counts ---------- */
+  const topics = [
+    ["Python", 8], ["Blog", 4], ["Data", 3], ["Data Analysis", 3],
+    ["Machine Learning", 3], ["Tutorial", 1], ["Dev Env", 1],
+    ["Coding Challenge", 1], ["R", 1]
+  ];
+  const max = Math.max(...topics.map(t => t[1]));
+  const bars = document.getElementById("bars");
+  topics.forEach(([name, n], i) => {
+    const row = document.createElement("div");
+    row.className = "bar-row";
+    row.tabIndex = 0;
+    row.innerHTML =
+      '<span class="bar-name">' + name + '</span>' +
+      '<span class="bar-track"><span class="bar-fill" style="width:' + (n / max * 100).toFixed(1) +
+        '%; animation-delay:' + (i * 45) + 'ms"></span></span>' +
+      '<span class="bar-val">' + n + '</span>' +
+      '<span class="tip" role="tooltip">' + name + ' — ' + n + (n === 1 ? ' post' : ' posts') + '</span>';
+    bars.appendChild(row);
+  });
+
+  /* ---------- cover stand-in: a viridis density field ---------- */
+  (function () {
+    const cv = document.getElementById("coverPlot");
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    const W = cv.width, H = cv.height;
+
+    // viridis control points
+    const stops = [[68,1,84],[59,82,139],[33,145,140],[94,201,98],[253,231,37]];
+    const ramp = t => {
+      t = Math.max(0, Math.min(1, t)) * (stops.length - 1);
+      const i = Math.min(Math.floor(t), stops.length - 2), f = t - i;
+      const a = stops[i], b = stops[i + 1];
+      return [0, 1, 2].map(k => Math.round(a[k] + (b[k] - a[k]) * f));
+    };
+
+    const dark = () => {
+      const attr = document.documentElement.getAttribute("data-theme");
+      if (attr) return attr === "dark";
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    };
+
+    // deterministic pseudo-random so the plot is stable across renders
+    let seed = 20260806;
+    const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+    const gauss = () => {
+      let u = 0, v = 0;
+      while (u === 0) u = rnd();
+      while (v === 0) v = rnd();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    };
+
+    function draw() {
+      const isDark = dark();
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = isDark ? "#0C0D13" : "#EFEFF3";
+      ctx.fillRect(0, 0, W, H);
+
+      // faint measurement grid
+      ctx.strokeStyle = isDark ? "rgba(255,255,255,.05)" : "rgba(24,26,36,.06)";
+      ctx.lineWidth = 1;
+      for (let x = 0; x <= W; x += W / 24) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = 0; y <= H; y += H / 10) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+      // two clusters — the shape of a classifier's decision space
+      seed = 20260806;
+      const clusters = [
+        { cx: W * 0.34, cy: H * 0.56, sx: W * 0.10, sy: H * 0.20, n: 900, t0: 0.18 },
+        { cx: W * 0.66, cy: H * 0.42, sx: W * 0.13, sy: H * 0.17, n: 900, t0: 0.62 }
+      ];
+      // On paper, sit the marks in the dark half of the ramp; on the
+      // violet-black ground, use the bright half. Same colormap, opposite ends.
+      const shift = isDark ? 0 : -0.26;
+      const a0 = isDark ? 0.06 : 0.12, a1 = isDark ? 0.42 : 0.52;
+
+      clusters.forEach(c => {
+        for (let i = 0; i < c.n; i++) {
+          const gx = gauss(), gy = gauss();
+          const x = c.cx + gx * c.sx, y = c.cy + gy * c.sy;
+          const d = Math.min(1, Math.hypot(gx, gy) / 2.6);
+          const [r, g, b] = ramp(c.t0 + shift + (1 - d) * 0.30);
+          ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a0 + (1 - d) * a1).toFixed(3) + ")";
+          ctx.beginPath();
+          ctx.arc(x, y, 1.1 + (1 - d) * 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+
+      // decision boundary
+      ctx.strokeStyle = isDark ? "rgba(253,231,37,.55)" : "rgba(70,25,107,.5)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      for (let y = 0; y <= H; y += 4) {
+        const x = W * 0.5 + Math.sin(y / H * Math.PI * 1.6) * W * 0.055;
+        y === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    draw();
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+    new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  })();
+</script>
