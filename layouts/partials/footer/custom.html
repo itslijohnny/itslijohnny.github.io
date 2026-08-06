@@ -1,0 +1,13 @@
+<script>
+    // Category chip rows on list cards are single-line and horizontally
+    // scrollable with a hidden scrollbar; translate the mouse wheel into
+    // horizontal scrolling when (and only when) a row actually overflows.
+    document.addEventListener("wheel", function (e) {
+        if (!e.target.closest) return;
+        var row = e.target.closest(".article-list .article-category");
+        if (!row || row.scrollWidth <= row.clientWidth) return;
+        var delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+        row.scrollLeft += delta;
+        e.preventDefault();
+    }, { passive: false });
+</script>
