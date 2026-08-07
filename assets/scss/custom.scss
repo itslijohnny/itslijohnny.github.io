@@ -382,8 +382,12 @@
         letter-spacing: 0.14em;
         text-transform: uppercase;
     }
-    .graph-head .lbl { color: var(--card-text-color-tertiary); }
+    .graph-head .lbl {
+        color: var(--card-text-color-tertiary);
+        white-space: nowrap;
+    }
     .graph-head .hint {
+        white-space: nowrap;
         letter-spacing: 0.06em;
         text-transform: none;
         font-size: 1.05rem;

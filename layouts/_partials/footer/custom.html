@@ -262,7 +262,7 @@
             box: box, cv: cv, readout: readout, nodes: nodes, edges: edges,
             yaw: 0.6, pitch: -0.18, spin: reduce ? 0 : 0.00013,
             vy: 0, vp: 0, drag: null, moved: 0,
-            hover: null, pick: null, aim: null, visible: true, w: 0, h: 0
+            hover: null, pick: null, aim: null, over: false, slow: 1, visible: true, w: 0, h: 0
         };
 
         function aimAt(n) {
@@ -345,7 +345,10 @@
             }
         });
 
+        cv.addEventListener("pointerenter", function () { st.over = true; });
+
         cv.addEventListener("pointerleave", function () {
+            st.over = false;
             if (st.drag || !st.hover) return;
             st.hover = null;
             say(st);
@@ -454,13 +457,18 @@
             var state = lit ? (lit[n.id] || 0) : 1;
             var dim = lit && !state;
             var dotA = dim ? A(0.16) * n.t : A(0.6) * (0.35 + 0.65 * n.t);
-            var rad = (1.5 + 1.7 * n.t) * n.k * (state === 2 ? 1.9 : 1);
+            var rad = (1.5 + 1.7 * n.t) * n.k * (state === 2 ? 2.15 : 1);
 
             if (state === 2) {
                 ctx.beginPath();
-                ctx.arc(n.sx, n.sy, rad + 5, 0, Math.PI * 2);
-                ctx.fillStyle = rgba(hue, A(0.18));
+                ctx.arc(n.sx, n.sy, rad + 7, 0, Math.PI * 2);
+                ctx.fillStyle = rgba(hue, A(0.2));
                 ctx.fill();
+                ctx.beginPath();
+                ctx.arc(n.sx, n.sy, rad + 4.5, 0, Math.PI * 2);
+                ctx.strokeStyle = rgba(hue, A(0.8));
+                ctx.lineWidth = 1.2;
+                ctx.stroke();
             }
             ctx.beginPath();
             ctx.arc(n.sx, n.sy, rad, 0, Math.PI * 2);
@@ -523,7 +531,12 @@
                     st.pitch = Math.max(-1.1, Math.min(1.1, st.pitch + dp * 0.1));
                     if (Math.abs(dy) < 0.02 && Math.abs(dp) < 0.02) st.aim = null;
                 } else {
-                    st.yaw += st.spin * 16 + st.vy;
+                    // The pointer eases the spin down to a crawl rather than
+                    // stopping it: aiming at a fast-moving target is the one
+                    // thing that makes this annoying, but a dead globe looks
+                    // broken. Eased so the change in speed is never abrupt.
+                    st.slow += ((st.over ? 0.12 : 1) - st.slow) * 0.08;
+                    st.yaw += st.spin * 16 * st.slow + st.vy;
                     st.pitch = Math.max(-1.1, Math.min(1.1, st.pitch + st.vp));
                     st.vy *= 0.94;
                     st.vp *= 0.94;
