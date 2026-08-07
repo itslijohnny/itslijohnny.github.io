@@ -248,8 +248,10 @@
 /* --- hero: statement + constellation ----------------------------- */
 .about-hero {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 370px;
-    gap: 26px;
+    /* the graph column grows with the page instead of sitting at a fixed
+       370px — there was slack here, and the graph is what needs the room */
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.92fr);
+    gap: 28px;
     align-items: center;
     margin-bottom: 30px;
 
@@ -303,6 +305,7 @@
         line-height: 1.7;
         color: var(--card-text-color-secondary);
         margin: 0;
+        max-width: 52ch;   /* keep the reading measure sane as the page grows */
         text-wrap: pretty;
     }
 
