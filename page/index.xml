@@ -18,9 +18,53 @@
  &lt;/div&gt;
  &lt;/div&gt;
 
- &lt;div class="about-constellation" data-constellation&gt;
- &lt;canvas data-paint="orbit" aria-hidden="true"&gt;&lt;/canvas&gt;
+ &lt;div class="about-graph" data-skill-graph&gt;
+ &lt;div class="graph-head"&gt;
+ &lt;span class="lbl"&gt;Skill graph&lt;/span&gt;
+ &lt;span class="hint"&gt;Drag · click a skill&lt;/span&gt;
  &lt;/div&gt;
+
+ &lt;canvas class="graph-canvas" role="img"
+ aria-label="Rotating graph of Johnny Li's skills, grouped into data and platform, AI and agents, and analytics and visualization."&gt;&lt;/canvas&gt;
+
+ &lt;p class="graph-readout" data-graph-readout aria-live="polite"&gt;&lt;/p&gt;
+
+ &lt;ul class="graph-legend" aria-hidden="true"&gt;
+ &lt;li class="g-data"&gt;Data &amp;amp; platform&lt;/li&gt;
+ &lt;li class="g-ai"&gt;AI &amp;amp; agents&lt;/li&gt;
+ &lt;li class="g-viz"&gt;Analytics &amp;amp; viz&lt;/li&gt;
+ &lt;/ul&gt;
+
+ &lt;ul class="graph-data"&gt;
+ &lt;li data-id="python" data-group="data" data-rel="spark etl automation agentic-ai ml"&gt;Python&lt;/li&gt;
+ &lt;li data-id="sql" data-group="data" data-rel="dbt trino modeling analytics"&gt;SQL&lt;/li&gt;
+ &lt;li data-id="spark" data-group="data" data-rel="etl streaming modeling"&gt;Spark&lt;/li&gt;
+ &lt;li data-id="airflow" data-group="data" data-rel="etl dbt automation k8s"&gt;Airflow&lt;/li&gt;
+ &lt;li data-id="dbt" data-group="data" data-rel="modeling etl"&gt;dbt&lt;/li&gt;
+ &lt;li data-id="trino" data-group="data" data-rel="analytics modeling"&gt;Trino&lt;/li&gt;
+ &lt;li data-id="kafka" data-group="data" data-rel="streaming etl sysdesign"&gt;Kafka&lt;/li&gt;
+ &lt;li data-id="streaming" data-group="data" data-rel="sysdesign spark"&gt;Streaming&lt;/li&gt;
+ &lt;li data-id="etl" data-group="data" data-rel="quality"&gt;ETL / ELT&lt;/li&gt;
+ &lt;li data-id="modeling" data-group="data" data-rel="sysdesign analytics"&gt;Data modeling&lt;/li&gt;
+ &lt;li data-id="sysdesign" data-group="data" data-rel="k8s aws"&gt;System design&lt;/li&gt;
+ &lt;li data-id="quality" data-group="data" data-rel="analytics llm-eval"&gt;Data quality&lt;/li&gt;
+ &lt;li data-id="aws" data-group="data" data-rel="k8s etl"&gt;AWS&lt;/li&gt;
+ &lt;li data-id="k8s" data-group="data" data-rel="automation"&gt;Kubernetes&lt;/li&gt;
+
+ &lt;li data-id="agentic-ai" data-group="ai" data-rel="llm-eval automation ml"&gt;Agentic AI&lt;/li&gt;
+ &lt;li data-id="llm-eval" data-group="ai" data-rel="agentic-ai"&gt;LLM eval&lt;/li&gt;
+ &lt;li data-id="ml" data-group="ai" data-rel="analytics"&gt;Machine learning&lt;/li&gt;
+ &lt;li data-id="automation" data-group="ai" data-rel=""&gt;Automation&lt;/li&gt;
+
+ &lt;li data-id="analytics" data-group="viz" data-rel="tableau powerbi dashboards"&gt;Analytics&lt;/li&gt;
+ &lt;li data-id="dashboards" data-group="viz" data-rel="d3 tableau powerbi frontend"&gt;Dashboards&lt;/li&gt;
+ &lt;li data-id="d3" data-group="viz" data-rel="frontend"&gt;D3 / SVG&lt;/li&gt;
+ &lt;li data-id="frontend" data-group="viz" data-rel=""&gt;React / TS&lt;/li&gt;
+ &lt;li data-id="tableau" data-group="viz" data-rel=""&gt;Tableau&lt;/li&gt;
+ &lt;li data-id="powerbi" data-group="viz" data-rel=""&gt;Power BI&lt;/li&gt;
+ &lt;/ul&gt;
+&lt;/div&gt;
+
 &lt;/div&gt;
 
 &lt;div class="about-stats"&gt;
