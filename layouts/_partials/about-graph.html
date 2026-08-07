@@ -1,0 +1,59 @@
+{{- /*
+    Skill graph — the source of truth is the list below, so adding a skill
+    is one <li>. Fields:
+      data-id     unique slug
+      data-group  data | ai | viz   (drives the colour)
+      data-rel    space-separated ids this skill connects to; the edge is
+                  drawn if either side names the other, so you only need
+                  to write each relationship once
+    The graph is drawn on canvas (rotating sphere, perspective, hover and
+    click highlighting) by layouts/_partials/footer/custom.html. The list
+    itself stays in the DOM for search engines and screen readers.
+    Rendered from layouts/shortcodes/about-brief.html.
+*/ -}}
+<div class="about-graph" data-skill-graph>
+    <div class="graph-head">
+        <span class="lbl">Skill graph</span>
+        <span class="hint">Drag to rotate · click a skill</span>
+    </div>
+
+    <canvas class="graph-canvas" role="img"
+            aria-label="Rotating graph of Johnny Li's skills, grouped into data and platform, AI and agents, and analytics and visualization."></canvas>
+
+    <p class="graph-readout" data-graph-readout aria-live="polite"></p>
+
+    <ul class="graph-legend" aria-hidden="true">
+        <li class="g-data">Data &amp; platform</li>
+        <li class="g-ai">AI &amp; agents</li>
+        <li class="g-viz">Analytics &amp; viz</li>
+    </ul>
+
+    <ul class="graph-data">
+        <li data-id="python"     data-group="data" data-rel="spark etl automation agentic-ai ml">Python</li>
+        <li data-id="sql"        data-group="data" data-rel="dbt trino modeling analytics">SQL</li>
+        <li data-id="spark"      data-group="data" data-rel="etl streaming modeling">Spark</li>
+        <li data-id="airflow"    data-group="data" data-rel="etl dbt automation k8s">Airflow</li>
+        <li data-id="dbt"        data-group="data" data-rel="modeling etl">dbt</li>
+        <li data-id="trino"      data-group="data" data-rel="analytics modeling">Trino</li>
+        <li data-id="kafka"      data-group="data" data-rel="streaming etl sysdesign">Kafka</li>
+        <li data-id="streaming"  data-group="data" data-rel="sysdesign spark">Streaming</li>
+        <li data-id="etl"        data-group="data" data-rel="quality">ETL / ELT</li>
+        <li data-id="modeling"   data-group="data" data-rel="sysdesign analytics">Data modeling</li>
+        <li data-id="sysdesign"  data-group="data" data-rel="k8s aws">System design</li>
+        <li data-id="quality"    data-group="data" data-rel="analytics llm-eval">Data quality</li>
+        <li data-id="aws"        data-group="data" data-rel="k8s etl">AWS</li>
+        <li data-id="k8s"        data-group="data" data-rel="automation">Kubernetes</li>
+
+        <li data-id="agentic-ai" data-group="ai"   data-rel="llm-eval automation ml">Agentic AI</li>
+        <li data-id="llm-eval"   data-group="ai"   data-rel="agentic-ai">LLM eval</li>
+        <li data-id="ml"         data-group="ai"   data-rel="analytics">Machine learning</li>
+        <li data-id="automation" data-group="ai"   data-rel="">Automation</li>
+
+        <li data-id="analytics"  data-group="viz"  data-rel="tableau powerbi dashboards">Analytics</li>
+        <li data-id="dashboards" data-group="viz"  data-rel="d3 tableau powerbi frontend">Dashboards</li>
+        <li data-id="d3"         data-group="viz"  data-rel="frontend">D3 / SVG</li>
+        <li data-id="frontend"   data-group="viz"  data-rel="">React / TS</li>
+        <li data-id="tableau"    data-group="viz"  data-rel="">Tableau</li>
+        <li data-id="powerbi"    data-group="viz"  data-rel="">Power BI</li>
+    </ul>
+</div>

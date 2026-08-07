@@ -174,32 +174,12 @@
                 ctx.fillStyle = rgba(k % 2 ? P.accent : P.warm, A(0.2) - k * 0.018);
                 ctx.fill();
             }
-        },
-
-        orbit: function (ctx, w, h, P) {
-            var cx = w / 2, cy = h / 2, R = Math.min(w, h) / 2;
-            var g = ctx.createRadialGradient(cx, cy, R * 0.1, cx, cy, R * 1.05);
-            g.addColorStop(0, rgba(P.accent, A(0.14)));
-            g.addColorStop(0.55, rgba(P.accent, A(0.05)));
-            g.addColorStop(1, rgba(P.accent, 0));
-            ctx.fillStyle = g;
-            ctx.fillRect(0, 0, w, h);
-            ctx.setLineDash([3, 5]);
-            [[0.32, P.accent], [0.56, P.deep], [0.7, P.warm]].forEach(function (ring, i) {
-                ctx.beginPath();
-                ctx.arc(cx, cy, R * ring[0], 0, Math.PI * 2);
-                ctx.strokeStyle = rgba(ring[1], A(0.3) - i * 0.05);
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            });
-            ctx.setLineDash([]);
         }
     };
 
     function paintAll() {
         var P = palette();
         document.querySelectorAll("canvas[data-paint]").forEach(function (cv) {
-            if (cv.dataset.paint === "orbit") return; // driven by the constellation loop
             var r = cv.getBoundingClientRect();
             if (!r.width || !r.height) return;
             var d = Math.min(window.devicePixelRatio || 1, 2);
@@ -212,103 +192,177 @@
         });
     }
 
-    /* --- toolkit constellation ---------------------------------------
-       Ring = how close the tool is to the daily work, so the position
-       carries information instead of just filling space. The field
-       drifts slowly and answers the cursor: parallax by ring depth,
-       and hovering a tool draws its line back to the centre. */
-    var BANDS = [
-        { r: 0.32, cls: "", depth: 0.45, items: [["Python", 205], ["SQL", 342], ["Spark", 78]] },
-        { r: 0.56, cls: "band2", depth: 0.75, items: [["Airflow", 250], ["dbt", 18], ["Trino", 140], ["Kubernetes", 308]] },
-        { r: 0.7, cls: "band3", depth: 1, items: [["Agentic AI", 224], ["LLM eval", 296], ["D3 / SVG", 48], ["React / TS", 116], ["Modeling", 170], ["AWS", 350]] }
-    ];
-
-    var DRIFT = 3.5 * Math.PI / 180;   // how far a tool wanders along its ring
-    var PARALLAX = 6;                   // px the outer ring shifts with the cursor
-    var CLAMP_PAD = 18;                 // leaves room for drift without clipping
+    /* --- skill graph --------------------------------------------------
+       A sphere of skills: hue = domain, lines = relationships. It turns
+       slowly, answers the pointer, and selecting a skill lights up
+       everything it connects to — which is the only reason the edges are
+       worth drawing at all. Data comes from the <li> list in the
+       shortcode, so adding a skill never means touching this file.
+       ----------------------------------------------------------------- */
+    var GROUP_KEY = { data: "accent", ai: "deep", viz: "warm" };
+    var DEPTH = 2.4;                   // camera distance in sphere radii
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var fields = [];
+    var graphs = [];
 
-    function buildConstellation(box) {
-        box.querySelectorAll(".cnode, .ccore").forEach(function (n) { n.remove(); });
-        var w = box.clientWidth, h = box.clientHeight;
-        if (!w || !h) return;
-        var cx = w / 2, cy = h / 2, R = Math.min(w, h) / 2;
-        var nodes = [];
+    function buildGraph(box) {
+        // build once per element: render() runs again on load and resize, and
+        // re-attaching listeners would leave stale copies bound to the canvas
+        if (box.__graph) { graphs.push(box.__graph); return; }
+        var cv = box.querySelector(".graph-canvas");
+        var readout = box.querySelector("[data-graph-readout]");
+        var items = [].slice.call(box.querySelectorAll(".graph-data li"));
+        if (!cv || !items.length) return;
 
-        BANDS.forEach(function (band, bi) {
-            band.items.forEach(function (item, ii) {
-                var a = item[1] * Math.PI / 180;
-                var x = cx + Math.cos(a) * R * band.r;
-                var y = cy + Math.sin(a) * R * band.r;
-                var flip = Math.cos(a) < 0;
-                var el = document.createElement("div");
-                el.className = "cnode " + band.cls + (flip ? " flip" : "");
-                el.innerHTML = '<i></i><span>' + item[0] + "</span>";
-                el.style.top = y + "px";
-                if (flip) { el.style.right = (w - x) + "px"; } else { el.style.left = x + "px"; }
-                box.appendChild(el);
+        var byId = {}, nodes = [], groups = {};
+        items.forEach(function (li) {
+            var g = li.dataset.group || "data";
+            var n = {
+                id: li.dataset.id,
+                label: (li.textContent || "").trim(),
+                group: g,
+                rel: (li.dataset.rel || "").split(/\s+/).filter(Boolean),
+                nb: []
+            };
+            byId[n.id] = n;
+            nodes.push(n);
+            (groups[g] = groups[g] || []).push(n);
+        });
 
-                // a clipped keyword reads as a bug — keep every label inside
-                var ew = el.offsetWidth;
-                if (flip) {
-                    var rr = parseFloat(el.style.right);
-                    if (rr + ew > w - CLAMP_PAD) {
-                        el.style.right = Math.max(CLAMP_PAD, w - ew - CLAMP_PAD) + "px";
-                    }
-                    x = w - parseFloat(el.style.right) - 3;
-                } else {
-                    var ll = parseFloat(el.style.left);
-                    if (ll + ew > w - CLAMP_PAD) {
-                        el.style.left = Math.max(CLAMP_PAD, w - ew - CLAMP_PAD) + "px";
-                    }
-                    x = parseFloat(el.style.left) + 3;
-                }
-
-                nodes.push({
-                    el: el, ax: x, ay: y, ring: bi, depth: band.depth,
-                    phase: (bi * 2.1) + (ii * 1.37),
-                    speed: 0.00016 + bi * 0.00005,
-                    radius: R * band.r, base: a
-                });
+        // relationships are mutual: naming one direction is enough
+        var edges = [], seen = {};
+        nodes.forEach(function (n) {
+            n.rel.forEach(function (id) {
+                var m = byId[id];
+                if (!m || m === n) return;
+                var key = [n.id, m.id].sort().join("|");
+                if (seen[key]) return;
+                seen[key] = 1;
+                edges.push([n, m]);
+                n.nb.push(m);
+                m.nb.push(n);
             });
         });
 
-        var core = document.createElement("div");
-        core.className = "ccore";
-        core.innerHTML = "Data<br>platforms";
-        box.appendChild(core);
+        // Fibonacci sphere over every node, ordered by domain — even
+        // coverage (so it reads as a globe) with each domain occupying a
+        // contiguous band rather than a lopsided cluster.
+        var GOLDEN = Math.PI * (3 - Math.sqrt(5));
+        var ORDER = { data: 0, ai: 1, viz: 2 };
+        var placed = nodes.slice().sort(function (a, b) {
+            return (ORDER[a.group] - ORDER[b.group]) || 0;
+        });
+        placed.forEach(function (n, i) {
+            var y = 1 - ((i + 0.5) / placed.length) * 2;
+            var rr = Math.sqrt(Math.max(0, 1 - y * y));
+            var th = i * GOLDEN;
+            n.p = [Math.cos(th) * rr, y, Math.sin(th) * rr];
+        });
 
-        var cv = box.querySelector('canvas[data-paint="orbit"]');
         var st = {
-            box: box, cv: cv, nodes: nodes, w: w, h: h, cx: cx, cy: cy, R: R,
-            mx: 0, my: 0, tmx: 0, tmy: 0, hot: -1, visible: true
+            box: box, cv: cv, readout: readout, nodes: nodes, edges: edges,
+            yaw: 0.6, pitch: -0.18, spin: reduce ? 0 : 0.00013,
+            vy: 0, vp: 0, drag: null, moved: 0,
+            hover: null, pick: null, aim: null, visible: true, w: 0, h: 0
         };
 
-        nodes.forEach(function (n, i) {
-            n.el.addEventListener("mouseenter", function () {
-                if (st.hot === i) return;
-                if (st.hot >= 0) nodes[st.hot].el.classList.remove("is-hot");
-                st.hot = i;
-                n.el.classList.add("is-hot");
-                box.classList.add("has-hot");
-                if (reduce) drawField(st, performance.now());
-            });
-            n.el.addEventListener("mouseleave", function () {
-                if (st.hot !== i) return;
-                st.hot = -1;
-                n.el.classList.remove("is-hot");
-                box.classList.remove("has-hot");
-                if (reduce) drawField(st, performance.now());
-            });
+        function aimAt(n) {
+            if (!n) { st.aim = null; return; }
+            // yaw swings the node's x/z into +z; pitch then lifts y onto it.
+            // Clamped inside the pitch limit so polar nodes still settle.
+            st.aim = {
+                yaw: -Math.atan2(n.p[0], n.p[2]),
+                pitch: Math.max(-1, Math.min(1, Math.asin(Math.max(-1, Math.min(1, n.p[1])))))
+            };
+            st.vy = st.vp = 0;
+        }
+        st.aimAt = aimAt;
+
+        cv.tabIndex = 0;
+
+        function nodeAt(px, py) {
+            var best = null, bestD = 22;
+            for (var i = 0; i < nodes.length; i++) {
+                var n = nodes[i];
+                if (n.sx == null) continue;
+                var d = Math.hypot(n.sx - px, n.sy - py);
+                // front-facing nodes win ties, they are what the eye is on
+                if (d < bestD * (0.6 + 0.6 * n.t)) { bestD = d; best = n; }
+            }
+            return best;
+        }
+
+        function localPoint(e) {
+            var r = cv.getBoundingClientRect();
+            return [e.clientX - r.left, e.clientY - r.top];
+        }
+
+        // Pointer capture fires spurious boundary events that wiped the
+        // hover state, so the drag is tracked on window instead.
+        function onMove(e) {
+            var pt = localPoint(e);
+            var dx = pt[0] - st.drag[0], dy = pt[1] - st.drag[1];
+            st.moved += Math.abs(dx) + Math.abs(dy);
+            st.yaw += dx * 0.008;
+            st.pitch = Math.max(-1.1, Math.min(1.1, st.pitch + dy * 0.006));
+            st.vy = dx * 0.008;
+            st.vp = dy * 0.006;
+            st.drag = pt;
+            if (reduce) draw(st, performance.now());
+        }
+
+        function onUp(e) {
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+            var wasDrag = st.moved > 6;
+            st.drag = null;
+            if (wasDrag) return;
+            var pt = localPoint(e);
+            var hit = nodeAt(pt[0], pt[1]);
+            st.pick = (hit && hit === st.pick) ? null : hit;   // click again to clear
+            st.hover = hit;
+            aimAt(st.pick);
+            say(st);
+            if (reduce) draw(st, performance.now());
+        }
+
+        cv.addEventListener("pointerdown", function (e) {
+            st.drag = localPoint(e);
+            st.moved = 0;
+            st.vy = st.vp = 0;
+            window.addEventListener("pointermove", onMove);
+            window.addEventListener("pointerup", onUp);
         });
 
-        box.addEventListener("pointermove", function (e) {
-            var r = box.getBoundingClientRect();
-            st.tmx = ((e.clientX - r.left) / r.width - 0.5) * 2;
-            st.tmy = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        cv.addEventListener("pointermove", function (e) {
+            if (st.drag) return;
+            var pt = localPoint(e);
+            var hit = nodeAt(pt[0], pt[1]);
+            if (hit !== st.hover) {
+                st.hover = hit;
+                cv.style.cursor = hit ? "pointer" : "grab";
+                say(st);
+                if (reduce) draw(st, performance.now());
+            }
         });
-        box.addEventListener("pointerleave", function () { st.tmx = 0; st.tmy = 0; });
+
+        cv.addEventListener("pointerleave", function () {
+            if (st.drag || !st.hover) return;
+            st.hover = null;
+            say(st);
+            if (reduce) draw(st, performance.now());
+        });
+
+        cv.addEventListener("keydown", function (e) {
+            if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+            e.preventDefault();
+            var i = st.pick ? nodes.indexOf(st.pick) : -1;
+            i = (i + (e.key === "ArrowRight" ? 1 : nodes.length - 1) + nodes.length) % nodes.length;
+            st.pick = nodes[i];
+            aimAt(st.pick);   // turn the globe so the choice faces the viewer
+            say(st);
+            if (reduce) draw(st, performance.now());
+        });
+        cv.addEventListener("blur", function () { st.pick = null; say(st); });
 
         if (window.IntersectionObserver) {
             new IntersectionObserver(function (es) {
@@ -316,99 +370,180 @@
             }, { threshold: 0 }).observe(box);
         }
 
-        fields.push(st);
-        drawField(st, performance.now());
-        if (reduce) placeNodes(st, performance.now());
+        box.__graph = st;
+        graphs.push(st);
+        say(st);
+        draw(st, performance.now());
     }
 
-    function placeNodes(st, t) {
-        st.nodes.forEach(function (n) {
-            var wobble = reduce ? 0 : Math.sin(t * n.speed + n.phase) * DRIFT;
-            var a = n.base + wobble;
-            var dx = (Math.cos(a) - Math.cos(n.base)) * n.radius + st.mx * PARALLAX * n.depth;
-            var dy = (Math.sin(a) - Math.sin(n.base)) * n.radius + st.my * PARALLAX * n.depth;
-            n.dx = dx;
-            n.dy = dy;
-            n.el.style.transform = "translate(" + dx.toFixed(2) + "px," + dy.toFixed(2) + "px) translateY(-50%)";
-        });
-    }
-
-    function drawField(st, t) {
-        var cv = st.cv;
-        if (!cv) return;
-        var P = palette(), w = st.w, h = st.h;
-        var d = Math.min(window.devicePixelRatio || 1, 2);
-        if (cv.width !== Math.round(w * d)) {
-            cv.width = Math.round(w * d);
-            cv.height = Math.round(h * d);
+    function say(st) {
+        if (!st.readout) return;
+        var n = st.pick || st.hover;
+        if (!n) {
+            st.readout.innerHTML = '<span class="muted">' + st.nodes.length +
+                " skills · hover or click one to see what it connects to</span>";
+            return;
         }
+        var names = n.nb.map(function (m) { return m.label; });
+        st.readout.innerHTML = "<b>" + n.label + "</b> " +
+            (names.length ? '<span class="muted">→ ' + names.join(" · ") + "</span>"
+                          : '<span class="muted">→ standalone</span>');
+    }
+
+    function draw(st, t) {
+        var cv = st.cv, r = cv.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        var d = Math.min(window.devicePixelRatio || 1, 2);
+        if (cv.width !== Math.round(r.width * d)) {
+            cv.width = Math.round(r.width * d);
+            cv.height = Math.round(r.height * d);
+        }
+        st.w = r.width; st.h = r.height;
         var ctx = cv.getContext("2d");
         ctx.setTransform(d, 0, 0, d, 0, 0);
-        ctx.clearRect(0, 0, w, h);
+        ctx.clearRect(0, 0, r.width, r.height);
 
-        var cx = st.cx + st.mx * PARALLAX * 0.5;
-        var cy = st.cy + st.my * PARALLAX * 0.5;
-        var R = st.R;
+        var P = palette();
+        var hues = { accent: P.accent, deep: P.deep, warm: P.warm };
+        var cx = r.width / 2, cy = r.height / 2;
+        var R = Math.min(r.width, r.height) * 0.37;
+        var cosY = Math.cos(st.yaw), sinY = Math.sin(st.yaw);
+        var cosP = Math.cos(st.pitch), sinP = Math.sin(st.pitch);
 
-        var g = ctx.createRadialGradient(cx, cy, R * 0.1, cx, cy, R * 1.05);
-        g.addColorStop(0, rgba(P.accent, A(0.14)));
-        g.addColorStop(0.55, rgba(P.accent, A(0.05)));
-        g.addColorStop(1, rgba(P.accent, 0));
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, w, h);
-
-        var hotRing = st.hot >= 0 ? st.nodes[st.hot].ring : -1;
-        var hues = [P.accent, P.deep, P.warm];
-        [0.32, 0.56, 0.7].forEach(function (rf, i) {
-            ctx.save();
-            ctx.setLineDash([3, 5]);
-            // the dashes travel, so the rings read as turning without moving
-            ctx.lineDashOffset = (reduce ? 0 : t * 0.006 * (i % 2 ? -1 : 1) * (1 + i * 0.4));
-            ctx.beginPath();
-            ctx.arc(cx, cy, R * rf * (1 + st.my * 0.004 * BANDS[i].depth), 0, Math.PI * 2);
-            ctx.strokeStyle = rgba(hues[i], (i === hotRing ? A(0.55) : A(0.3) - i * 0.05));
-            ctx.lineWidth = i === hotRing ? 1.4 : 1;
-            ctx.stroke();
-            ctx.restore();
+        st.nodes.forEach(function (n) {
+            var x = n.p[0], y = n.p[1], z = n.p[2];
+            var x1 = x * cosY + z * sinY, z1 = -x * sinY + z * cosY;
+            var y2 = y * cosP - z1 * sinP, z2 = y * sinP + z1 * cosP;
+            var k = DEPTH / (DEPTH - z2);
+            n.sx = cx + x1 * R * k;
+            n.sy = cy + y2 * R * k;
+            n.sz = z2;
+            n.k = k;
+            n.t = (z2 + 1) / 2;                  // 0 at the back, 1 at the front
         });
 
-        if (st.hot >= 0) {
-            var n = st.nodes[st.hot];
-            var nx = n.ax + (n.dx || 0), ny = n.ay + (n.dy || 0);
-            // start outside the core label so the line never crosses the text
-            var vx = nx - cx, vy = ny - cy, len = Math.hypot(vx, vy) || 1;
-            var inset = Math.min(R * 0.26, len - 8);
-            ctx.beginPath();
-            ctx.moveTo(cx + vx / len * inset, cy + vy / len * inset);
-            ctx.lineTo(nx, ny);
-            ctx.strokeStyle = rgba(hues[n.ring], A(0.6));
-            ctx.lineWidth = 1.2;
-            ctx.stroke();
+        var focus = st.pick || st.hover;
+        var lit = null;
+        if (focus) {
+            lit = {};
+            lit[focus.id] = 2;
+            focus.nb.forEach(function (m) { if (!lit[m.id]) lit[m.id] = 1; });
         }
+
+        // edges first, so the dots sit on top of their own connections
+        st.edges.forEach(function (e) {
+            var a = e[0], b = e[1];
+            var near = Math.max(a.t, b.t);
+            var on = lit ? (lit[a.id] && lit[b.id] && (lit[a.id] === 2 || lit[b.id] === 2)) : false;
+            var alpha = lit
+                ? (on ? A(0.55) * (0.45 + 0.55 * near) : A(0.06) * near)
+                : A(0.26) * (0.2 + 0.8 * near);
+            if (alpha < 0.012) return;
+            ctx.beginPath();
+            ctx.moveTo(a.sx, a.sy);
+            ctx.lineTo(b.sx, b.sy);
+            ctx.strokeStyle = rgba(hues[GROUP_KEY[on ? focus.group : a.group]], alpha);
+            ctx.lineWidth = on ? 1.3 : 0.9;
+            ctx.stroke();
+        });
+
+        // then nodes, back to front
+        var order = st.nodes.slice().sort(function (m, n) { return m.sz - n.sz; });
+        order.forEach(function (n) {
+            var hue = hues[GROUP_KEY[n.group]];
+            var state = lit ? (lit[n.id] || 0) : 1;
+            var dim = lit && !state;
+            var dotA = dim ? A(0.16) * n.t : A(0.6) * (0.35 + 0.65 * n.t);
+            var rad = (1.5 + 1.7 * n.t) * n.k * (state === 2 ? 1.9 : 1);
+
+            if (state === 2) {
+                ctx.beginPath();
+                ctx.arc(n.sx, n.sy, rad + 5, 0, Math.PI * 2);
+                ctx.fillStyle = rgba(hue, A(0.18));
+                ctx.fill();
+            }
+            ctx.beginPath();
+            ctx.arc(n.sx, n.sy, rad, 0, Math.PI * 2);
+            ctx.fillStyle = rgba(hue, state === 2 ? A(0.95) : dotA);
+            ctx.fill();
+        });
+
+        // labels last, nearest first, and any that would collide with one
+        // already drawn is skipped — it becomes readable as the globe turns
+        var taken = [];
+        st.nodes.slice()
+            .sort(function (m, n) {
+                var ms = lit ? (lit[m.id] || 0) : 0, ns = lit ? (lit[n.id] || 0) : 0;
+                return (ns - ms) || (n.t - m.t);          // selection first, then nearest
+            })
+            .forEach(function (n) {
+                var state = lit ? (lit[n.id] || 0) : 1;
+                var dim = lit && !state;
+                if (!state && n.t < 0.5) return;
+                if (dim && n.t < 0.7) return;
+                if (!lit && n.t < 0.42) return;
+
+                var size = (9.6 + 3.2 * n.t) * (state === 2 ? 1.14 : 1);
+                ctx.font = (state === 2 ? "700 " : "500 ") + size.toFixed(1) +
+                    'px ui-monospace, SFMono-Regular, Menlo, monospace';
+                var tw = ctx.measureText(n.label).width;
+                var rad = (1.5 + 1.7 * n.t) * n.k * (state === 2 ? 1.9 : 1);
+                var toRight = n.sx <= cx;                 // text goes to the roomier side
+                var tx = toRight ? n.sx + rad + 6 : n.sx - rad - 6 - tw;
+                if (tx < 2 || tx + tw > r.width - 2) return;
+
+                var box = [tx - 2, n.sy - size * 0.72, tx + tw + 2, n.sy + size * 0.72];
+                for (var i = 0; i < taken.length; i++) {
+                    var q = taken[i];
+                    if (box[0] < q[2] && box[2] > q[0] && box[1] < q[3] && box[3] > q[1]) return;
+                }
+                taken.push(box);
+
+                var labA = state === 2 ? A(0.98)
+                         : dim ? A(0.16)
+                         : lit ? Math.max(A(0.55), A(0.72) * Math.pow(n.t, 1.1))
+                         : A(0.72) * Math.pow(n.t, 1.1);
+                if (labA < 0.06) return;
+                ctx.fillStyle = rgba(P.ink, Math.min(labA, 1));
+                ctx.textBaseline = "middle";
+                ctx.fillText(n.label, tx, n.sy);
+            });
+    }
+
+    function frameLoop(t) {
+        for (var i = 0; i < graphs.length; i++) {
+            var st = graphs[i];
+            if (!st.visible) continue;
+            if (!st.drag) {
+                if (st.aim) {
+                    // shortest way round to the skill that was clicked
+                    var dy = ((st.aim.yaw - st.yaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+                    var dp = st.aim.pitch - st.pitch;
+                    st.yaw += dy * 0.1;
+                    st.pitch = Math.max(-1.1, Math.min(1.1, st.pitch + dp * 0.1));
+                    if (Math.abs(dy) < 0.02 && Math.abs(dp) < 0.02) st.aim = null;
+                } else {
+                    st.yaw += st.spin * 16 + st.vy;
+                    st.pitch = Math.max(-1.1, Math.min(1.1, st.pitch + st.vp));
+                    st.vy *= 0.94;
+                    st.vp *= 0.94;
+                }
+            }
+            draw(st, t);
+        }
+        requestAnimationFrame(frameLoop);
     }
 
     var looping = false;
     function startLoop() {
         if (looping || reduce) return;
         looping = true;
-        requestAnimationFrame(frame);
-    }
-
-    function frame(t) {
-        for (var i = 0; i < fields.length; i++) {
-            var st = fields[i];
-            if (!st.visible) continue;
-            st.mx += (st.tmx - st.mx) * 0.08;
-            st.my += (st.tmy - st.my) * 0.08;
-            placeNodes(st, t);
-            drawField(st, t);
-        }
-        requestAnimationFrame(frame);
+        requestAnimationFrame(frameLoop);
     }
 
     function buildAll() {
-        fields = [];
-        document.querySelectorAll("[data-constellation]").forEach(buildConstellation);
+        graphs = [];
+        document.querySelectorAll("[data-skill-graph]").forEach(buildGraph);
     }
 
     function render() { buildAll(); paintAll(); }
@@ -449,7 +584,7 @@
 
     if (window.ResizeObserver) {
         var ro = new ResizeObserver(schedule);
-        document.querySelectorAll("[data-constellation], canvas[data-paint]").forEach(function (el) {
+        document.querySelectorAll("[data-skill-graph], canvas[data-paint]").forEach(function (el) {
             ro.observe(el.dataset.paint ? el.parentElement : el);
         });
     }

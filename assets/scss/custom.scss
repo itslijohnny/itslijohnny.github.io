@@ -353,99 +353,111 @@
     }
 }
 
-/* --- toolkit constellation ---------------------------------------
-   Ring = how close a tool is to the daily work, and each ring has its
-   own hue: inner teal (core), middle violet, outer amber (adjacent).
-   The position carries information, which is why the middle holds a
-   label rather than a logo. */
-.about-constellation {
+/* --- skill graph ---------------------------------------------------
+   A rotating sphere of skills drawn on canvas: hue = domain, edges =
+   relationships, and selecting a skill lights up everything it connects
+   to. The <li> list in the shortcode is the data and stays in the DOM
+   for search engines and screen readers.
+   ------------------------------------------------------------------ */
+.about-graph {
     position: relative;
-    aspect-ratio: 1 / 1;
-    width: 100%;
+    border: 1px solid var(--card-separator-color);
+    border-radius: 10px;
+    padding: 14px 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background:
+        radial-gradient(120% 90% at 50% 45%,
+            color-mix(in oklab, var(--accent-color) 7%, transparent) 0%,
+            transparent 70%);
 
-    canvas {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    .cnode {
-        position: absolute;
+    .graph-head {
         display: flex;
-        align-items: center;
-        gap: 6px;
-        white-space: nowrap;
-        will-change: transform;
-        transition: opacity 0.22s ease;
-        cursor: default;
-
-        i {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            flex: none;
-        }
-        span {
-            font-family: var(--code-font-family);
-            font-size: 1.25rem;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            color: var(--card-text-color-main);
-        }
-
-        &.flip {
-            flex-direction: row-reverse;
-        }
-        &.band2 {
-            i { width: 5px; height: 5px; background: var(--graphic-deep); }
-            span { font-size: 1.15rem; font-weight: 500; color: var(--card-text-color-secondary); }
-        }
-        &.band3 {
-            i { width: 4px; height: 4px; background: var(--graphic-warm); }
-            span { font-size: 1.05rem; font-weight: 500; color: var(--card-text-color-tertiary); }
-        }
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        font-family: var(--code-font-family);
+        font-size: 1.1rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+    .graph-head .lbl { color: var(--card-text-color-tertiary); }
+    .graph-head .hint {
+        letter-spacing: 0.06em;
+        text-transform: none;
+        font-size: 1.05rem;
+        color: color-mix(in oklab, var(--card-text-color-tertiary) 75%, transparent);
     }
 
-    .cnode i {
-        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    .graph-canvas {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        /* let vertical scrolling through the panel still work on touch */
+        touch-action: pan-y;
+        cursor: grab;
+        border-radius: 8px;
     }
-    .cnode.is-hot {
-        z-index: 3;
+    .graph-canvas:active { cursor: grabbing; }
+    .graph-canvas:focus-visible {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
     }
-    .cnode.is-hot i {
-        transform: scale(1.7);
-        box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent-color) 20%, transparent);
+
+    /* what the current selection connects to, in words */
+    .graph-readout {
+        margin: 0;
+        min-height: 3.4em;
+        font-family: var(--code-font-family);
+        font-size: 1.15rem;
+        line-height: 1.55;
+        color: var(--card-text-color-secondary);
     }
-    .cnode.is-hot span {
+    .graph-readout b {
         color: var(--card-text-color-main);
         font-weight: 700;
     }
-    .cnode.band2.is-hot i {
-        box-shadow: 0 0 0 5px color-mix(in oklab, var(--graphic-deep) 22%, transparent);
-    }
-    .cnode.band3.is-hot i {
-        box-shadow: 0 0 0 5px color-mix(in oklab, var(--graphic-warm) 24%, transparent);
-    }
-    &.has-hot .cnode:not(.is-hot) {
-        opacity: 0.38;
-    }
+    .graph-readout .muted { color: var(--card-text-color-tertiary); }
 
-    .ccore {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transition: opacity 0.22s ease;
-        transform: translate(-50%, -50%);
-        text-align: center;
+    .graph-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 12px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
         font-family: var(--code-font-family);
         font-size: 1.05rem;
-        font-weight: 700;
-        letter-spacing: 0.18em;
-        line-height: 1.6;
-        text-transform: uppercase;
-        color: var(--card-text-color-main);
+        color: var(--card-text-color-tertiary);
+    }
+    .graph-legend li {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .graph-legend li::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex: none;
+    }
+    .graph-legend .g-data::before { background: var(--accent-color); }
+    .graph-legend .g-ai::before { background: var(--graphic-deep); }
+    .graph-legend .g-viz::before { background: var(--graphic-warm); }
+
+    /* the data list: available to crawlers and assistive tech, not drawn */
+    .graph-data {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: 0;
     }
 }
 
